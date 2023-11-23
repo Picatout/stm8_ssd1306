@@ -3,7 +3,12 @@
 # based on ssd1306
 # 128x64 graphic display 
 #############################
+
+ifdef DEBUG
 NAME=display-test
+else 
+NAME=app
+endif 
 SDAS=sdasstm8
 SDCC=sdcc
 SDAR=sdar
@@ -17,7 +22,6 @@ OBJECT=$(BUILD_DIR)$(NAME).rel
 OBJECTS=$(BUILD_DIR)$(SRC:.asm=.rel)
 LIST=$(BUILD_DIR)$(NAME).lst
 FLASH=stm8flash
-
 
 .PHONY: all
 

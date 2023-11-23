@@ -20,58 +20,7 @@
 ; SSD1306 OLED display 128x64
 ;------------------------------
 
-DISP_HEIGHT=64 ; pixels 
-DISP_WIDTH=128 ; pixels 
-
-;-------------------------------
-;  SSD1306 commands set 
-;-------------------------------
-; display on/off commands 
-DISP_OFF=0XAE      ; turn off display 
-DISP_ON=0XAF       ; turn on display 
-DISP_CONTRAST=0X81 ; adjust contrast 0..127
-DISP_RAM=0XA4     ; diplay RAM bits 
-DISP_ALL_ON=0XA5  ; all pixel on 
-DISP_NORMAL=0XA6  ; normal display, i.e. bit set oled light 
-DISP_INVERSE=0XA7 ; inverted display 
-DISP_CHARGE_PUMP=0X8D ; enable charge pump 
-; scrolling commands 
-SCROLL_RIGHT=0X26  ; scroll pages range right 
-SCROLL_LEFT=0X27   ; scroll pages range left 
-SCROLL_VRIGHT=0X29 ; scroll vertical and right  
-SCROLL_VLEFT=0X2A ; scroll vertical and left 
-SCROLL_STOP=0X2E   ; stop scrolling 
-SCROLL_START=0X2F  ; start scrolling 
-VERT_SCROLL_AREA=0XA3  ; set vertical scrolling area 
-; addressing setting commands 
-; 0x00-0x0f set lower nibble for column start address, page mode  
-; 0x10-0x1f set high nibble for column start address, page mode 
-ADR_MODE=0X20 ; 0-> horz mode, 1-> vert mode, 2->page mode 
-COL_WND=0X21 ; set column window for horz and vert mode 
-PAG_WND=0X22 ; set page window for horz and vert mode 
-; 0xb0-0xb7 set start page for page mode 
-START_LINE=0X40 ; 0x40-0x7f set display start line 
-MAP_SEG0_COL0=0XA0 ; map segment 0 to column 0 
-MAP_SEG0_COL128=0XA1 ; inverse mapping segment 0 to col 127   
-MUX_RATIO=0XA8 ; reset to 64 
-SCAN_TOP_DOWN=0XC0 ; scan from COM0 to COM63 
-SCAN_REVERSE=0XC8 ; scan from COM63 to COM0 
-DISP_OFFSET=0XD3 ; display offset to COMx 
-COM_CFG=0XDA ; set COM pins hardware configuration 
-;Timing & Driving Scheme Setting Command Table
-CLK_FREQ_DIV=0xD5 ; clock frequency and divisor 
-PRE_CHARGE=0xD9 ; set pre-charge period 
-VCOM_DESEL=0XDB ; set Vcomh deselect level 
-OLED_NOP=0xE3 
-
-; switch charge pump on/off 
-CP_OFF=0x10 
-CP_ON=0x14 
-
-
-OLED_CMD=0x80 
-OLED_DATA=0x40 
-
+    .include "inc/ssd1306.inc"
 
 ;----------------------------
 ; initialize OLED display
@@ -89,29 +38,30 @@ oled_init::
     _send_cmd SCAN_TOP_DOWN
 ; common pins config, bit 5=0, 4=1 
     _send_cmd COM_CFG 
-    _send_cmd 0x12
-; constrast level 0x7f half-way 
+    _send_cmd COM_DISABLE_REMAP+COM_ALTERNATE
+; constrast level 1, lowest 
     _send_cmd DISP_CONTRAST
-    _send_cmd 0x1 
+    _send_cmd 1
 ; display RAM 
     _send_cmd DISP_RAM
 ; display normal 
     _send_cmd DISP_NORMAL
-; clock frequency=std and display divisor=1 
+; clock frequency=maximum and display divisor=1 
     _send_cmd CLK_FREQ_DIV
-    _send_cmd 0xF0 
-; pre-charge phase1=1 and phase2=15 
+    _send_cmd ((15<<CLK_FREQ)+(0<<DISP_DIV)) 
+; pre-charge phase1=1 and phase2=15
+; reducing phase2 value dim display  
     _send_cmd PRE_CHARGE
-    _send_cmd 0xf1 
-; page addressing mode       
+    _send_cmd ((1<<PHASE1_PERIOD)+(15<<PHASE2_PERIOD))
+; RAM addressing mode       
     _send_cmd ADR_MODE 
-    _send_cmd 2
+    _send_cmd PAGE_MODE
 ; Vcomh deselect level 0.83volt 
-    _send_cmd VCOM_DESEL 
-    _send_cmd #0x30 
+    _send_cmd VCOMH_DSEL 
+    _send_cmd VCOMH_DSEL_83
 ; enable charge pump 
     _send_cmd DISP_CHARGE_PUMP
-    _send_cmd 0x14
+    _send_cmd CP_ON 
 ; disable scrolling 
     _send_cmd SCROLL_STOP
 ; diplay row from 0 

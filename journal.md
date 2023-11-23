@@ -1,3 +1,9 @@
+### 2023-11-23
+
+* Réorganisation du code et nettoyage.
+
+* Création du fichier [inc/ssd1306.inc](inc/ssd1306.inc).
+
 ### 2023-11-22
 
 * Création de la branche *text_only* pour tester un nouveau modèle suportant en priorité le texte plutôt que les graphiques.

@@ -71,7 +71,7 @@ stack_unf: ; stack underflow ; control_stack bottom
 	int NonHandledInterrupt	; irq18
 	int I2cIntHandler  		; irq19
 	int NonHandledInterrupt	; irq20
-.if WANT_TERMINAL
+.if DEBUG 
 	int UartRxHandler   	; irq21
 .else 
 	int NonHandledInterrupt	; irq21
@@ -112,7 +112,7 @@ cur_y: .blkb 1 ; text cursor x coord in char position {0..20}
 cur_x: .blkb 1 ;  text cursor y coord  in line position {0..7}
 start_page: .blkb 1 ; display start page 
 
-.if WANT_TERMINAL
+.if DEBUG 
 ; usart queue 
 rx1_queue: .ds RX_QUEUE_SIZE ; UART1 receive circular queue 
 rx1_head:  .blkb 1 ; rx1_queue head pointer
@@ -120,17 +120,13 @@ rx1_tail:   .blkb 1 ; rx1_queue tail pointer
 ; transaction input buffer 
 tib: .ds TIB_SIZE
 count: .blkb 1 ; character count in tib  
-.endif 
+.endif ; DEBUG 
 
 	.org 0x100
 co_code: .blkb 1	
 disp_buffer: .ds DISPLAY_BUFFER_SIZE ; oled display page buffer 
 
 free_ram: ; from here RAM free up to free_ram_end 
-
-
-
-
 
 
 	.area CODE 
@@ -218,7 +214,7 @@ timer2_init:
 	bres TIM2_CCER1,#TIM2_CCER1_CC1E
 	ret 
 
-
+.if 0
 ;--------------------------
 ; set software interrupt 
 ; priority 
@@ -267,8 +263,77 @@ set_int_priority::
 	ldw x,(SPR_ADDR,sp)
 	ld (x),a 
 	_drop VSIZE 
+	ret
+.endif ;DEBUG 
+
+;------------------------
+; suspend execution 
+; input:
+;   A     n/60 seconds  
+;-------------------------
+pause:
+	_straz delay_timer 
+	bset flags,#F_GAME_TMR 
+1$: wfi 	
+	btjt flags,#F_GAME_TMR,1$ 
 	ret 
 
+;--------------------------
+; sound timer blocking 
+; delay 
+; input:
+;   A    n*10 msec
+;--------------------------
+sound_pause:
+	_straz sound_timer  
+	bset flags,#F_SOUND_TMR 
+1$: wfi 
+	btjt flags,#F_SOUND_TMR,1$
+	bres TIM2_CR1,#TIM2_CR1_CEN 
+	bres TIM2_CCER1,#TIM2_CCER1_CC1E
+	bset TIM2_EGR,#TIM2_EGR_UG
+9$:	ret 
+
+;-----------------------
+; tone generator 
+; Ft2clk=62500 hertz 
+; input:
+;   A   duration n*10 msec    
+;   X   frequency 
+;------------------------
+FR_T2_CLK=62500
+tone:
+	pushw y 
+	push a 
+	ldw y,x 
+	ldw x,#FR_T2_CLK 
+	divw x,y 
+	ld a,xh 
+	ld TIM2_ARRH,a 
+	ld a,xl 
+	ld TIM2_ARRL,a 
+	srlw x 
+	ld a,xh 
+	ld TIM2_CCR1H,a 
+	ld a,xl 
+	ld TIM2_CCR1L,a 
+	bset TIM2_CCER1,#TIM2_CCER1_CC1E
+	bset TIM2_CR1,#TIM2_CR1_CEN 
+	pop a 
+	call sound_pause 
+	popw y 
+	ret 
+
+;-----------------
+; 1Khz beep 
+;-----------------
+beep:
+	ldw x,#1000 ; hertz 
+	ld a,#20
+	call tone  
+	ret 
+
+.if DEBUG 
 ;---------------------------------
 ; Pseudo Random Number Generator 
 ; XORShift algorithm.
@@ -406,7 +471,7 @@ wait_key:
 	btjt flags,#F_GAME_TMR,2$ 
 	pop a  
 	ret 
-
+.endif ; DEBUG 
 
 ;-------------------------------------
 ;  initialization entry point 
@@ -420,27 +485,35 @@ cold_start:
 	decw x 
 	jrne 0$
     call clock_init 
+.if DEBUG 
 ; set pull up on PC_IDR (buttons input)
 	cLr BTN_PORT+GPIO_DDR
 	mov BTN_PORT+GPIO_CR1,#255
+.endif ; DEBUG 
 ; set sound output 	
 	bset SOUND_PORT+GPIO_DDR,#SOUND_BIT 
 	bset SOUND_PORT+GPIO_CR1,#SOUND_BIT 
+.if DEBUG 
 	call uart_init 
+.endif ;DEBUG 	
 	call timer4_init ; msec ticks timer 
 	call timer2_init ; tone generator 
 	ld a,#I2C_FAST   
 	call i2c_init 
 	rim ; enable interrupts
+.if DEBUG 
 ; RND function seed 
 ; must be initialized 
 ; to value other than 0.
 ; take values from FLASH space 
 	ldw x,#I2cIntHandler
 	ldw seedy,x  
-	ldw x,#main 
+	ldw x,#test_code 
 	ldw seedx,x  
-    jp main 	
+    jp test_code  	
+.else 
+	jp app 
+.endif ; DEBUG 
 
 
 

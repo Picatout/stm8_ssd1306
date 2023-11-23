@@ -13,7 +13,7 @@
 ; master clock frequency in Mhz 
 	FMSTR=16 
 
-DEBUG=1 ; set to 0 for final version 
+DEBUG=0 ; set to 0 for final version 
 
 WANT_TERMINAL=1 ; to have support for usart terminal  
 

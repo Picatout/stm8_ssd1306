@@ -16,7 +16,7 @@
 ;     along with stm8_ssd1306.  If not, see <http://www.gnu.org/licenses/>.
 ;;
 
- 
+.if DEBUG 
     .module STM8_MON 
 
 ;--------------------------------------
@@ -458,3 +458,4 @@ uart_init:
 	bset UART,#UART_CR1_PIEN
 	ret
 
+.endif ; DEBUG

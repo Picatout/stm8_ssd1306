@@ -16,6 +16,7 @@
 ;     along with stm8_ssd1306.  If not, see <http://www.gnu.org/licenses/>.
 ;;
 
+.if DEBUG 
 ;---------------------------------------
 ; move memory block 
 ; input:
@@ -86,72 +87,6 @@ strlen::
 9$:	popw x 
 	ret 
 
-;------------------------
-; suspend execution 
-; input:
-;   A     n/60 seconds  
-;-------------------------
-pause:
-	_straz delay_timer 
-	bset flags,#F_GAME_TMR 
-1$: wfi 	
-	btjt flags,#F_GAME_TMR,1$ 
-	ret 
-
-;--------------------------
-; sound timer blocking 
-; delay 
-; input:
-;   A    n*10 msec
-;--------------------------
-sound_pause:
-	_straz sound_timer  
-	bset flags,#F_SOUND_TMR 
-1$: wfi 
-	btjt flags,#F_SOUND_TMR,1$
-	bres TIM2_CR1,#TIM2_CR1_CEN 
-	bres TIM2_CCER1,#TIM2_CCER1_CC1E
-	bset TIM2_EGR,#TIM2_EGR_UG
-9$:	ret 
-
-;-----------------------
-; tone generator 
-; Ft2clk=62500 hertz 
-; input:
-;   A   duration n*10 msec    
-;   X   frequency 
-;------------------------
-FR_T2_CLK=62500
-tone:
-	pushw y 
-	push a 
-	ldw y,x 
-	ldw x,#FR_T2_CLK 
-	divw x,y 
-	ld a,xh 
-	ld TIM2_ARRH,a 
-	ld a,xl 
-	ld TIM2_ARRL,a 
-	srlw x 
-	ld a,xh 
-	ld TIM2_CCR1H,a 
-	ld a,xl 
-	ld TIM2_CCR1L,a 
-	bset TIM2_CCER1,#TIM2_CCER1_CC1E
-	bset TIM2_CR1,#TIM2_CR1_CEN 
-	pop a 
-	call sound_pause 
-	popw y 
-	ret 
-
-;-----------------
-; 1Khz beep 
-;-----------------
-beep:
-	ldw x,#1000 ; hertz 
-	ld a,#20
-	call tone  
-	ret 
 
 ; tempered scale 
 scale: 
@@ -190,7 +125,6 @@ noise:
 	popw x 
 	ret 
 
-.if DEBUG 
 ; print x,y,a 
 debug_print:
     pushw x
@@ -211,14 +145,11 @@ debug_print:
 	popw y 
     popw x 
     ret 
-.endif 
 
-
-main:
+test_code:
 	call beep 
 	call oled_init	
 	call display_clear 
-.if DEBUG
 	ld a,#ESC 
 	call putchar 
 	ld a,#'c 
@@ -244,5 +175,5 @@ test4: ; loop qbf message
 	jra 0$ 
 qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG\n" 
 end_test: 	 
-.endif 
 
+.endif ; DEBUG 
