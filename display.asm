@@ -127,18 +127,6 @@ crlf:
 6$: _straz start_page  
     ret 
 
-;----------------------------
-; set text cursor position 
-; input:
-;    XL   coloumn {0..20}
-;    XH   line {0..7}
-;----------------------------
-curpos:
-    _strxz cur_y 
-    ld a,xh 
-    call set_page 
-    ret 
-
 ;-----------------------
 ; move cursor right 
 ; 1 character position
