@@ -234,16 +234,12 @@ test1:
 	call print_word
 	ld a,#CR 
 	call putchar 	
-test4: ; echo character from usart  
+test4: ; loop qbf message   
 	call display_clear 
 0$:	 
-	call uart_getc
-	cp a,#'a 
-	jrmi 1$ 
-	and a,#0xDF  
-1$:	call put_char
+	ldw x,#qbf 
+	call put_string 
 	jra 0$ 
-hello: .asciz "HELLO "
 qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG.\n" 
 end_test: 	 
 .endif 

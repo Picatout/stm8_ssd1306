@@ -3,6 +3,8 @@
 * Création de la branche *text_only* pour tester un nouveau modèle suportant en priorité le texte plutôt que les graphiques.
     * le ssd1306 est configuré en mode PAGE 
 
+* Mode texte complété.
+
 
 * -------------------
 
