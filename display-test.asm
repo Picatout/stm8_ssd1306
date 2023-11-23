@@ -216,69 +216,24 @@ debug_print:
 
 main:
 	call beep 
-	call oled_init
+	call oled_init	
+	call display_clear 
 .if DEBUG
 	ld a,#ESC 
 	call putchar 
 	ld a,#'c 
 	call putchar 
-test1:  
-	_ldxz ticks 
-	pushw x 
-	push #21*8 
-1$: ld a,#'1 
-	call put_char 
-	dec (1,sp)
-	jrne 1$
-	_drop 1 
-	call display_refresh 
-	_ldxz ticks 
-	subw x,(1,sp)
-	call print_word
-	ld a,#SPACE 
-	call putchar 
-test2: 
-	call display_clear
-	_ldxz ticks 
-	ldw (1,sp),x 
-	push #21*8
-1$:	ld a,#'2 
-	call put_char 
-	dec (1,sp)
-	jrne 1$
-	_drop 1 
-	call display_refresh
-	_ldxz ticks 
-	subw x,(1,sp)
-	call print_word
-	ld a,#SPACE 
-	call putchar 
-test3: ; display_refresh time 
-	_ldxz ticks 
-	ldw (1,sp),x 
-	call display_refresh
-	_ldxz ticks  
-	subw x,(1,sp)
-	call print_word
-	_drop 2 
-test4: ; print all char in loop 
+test4: ; echo character from usart  
 	call display_clear 
-	push #SPACE 
-1$:	ld a,(1,sp)
-	cp a,#128 
-	jreq test5
-	call put_char
-	call display_refresh
-	inc (1,sp)
-	jra 1$ 
-test5:
-	_drop 1 
-	call display_clear 
-1$: ldw y,#hello 
-	call put_string 
-	call display_refresh
-	jra 1$ 
+0$:	 
+	call uart_getc
+	cp a,#'a 
+	jrmi 1$ 
+	and a,#0xDF  
+1$:	call put_char
+	jra 0$ 
 hello: .asciz "HELLO "
+qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG.\n" 
 end_test: 	 
 .endif 
 

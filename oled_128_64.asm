@@ -103,9 +103,9 @@ oled_init::
 ; pre-charge phase1=1 and phase2=15 
     _send_cmd PRE_CHARGE
     _send_cmd 0xf1 
-; horizontal addressing mode       
+; page addressing mode       
     _send_cmd ADR_MODE 
-    _send_cmd 0 
+    _send_cmd 2
 ; Vcomh deselect level 0.83volt 
     _send_cmd VCOM_DESEL 
     _send_cmd #0x30 
@@ -173,17 +173,18 @@ charge_pump_switch:
 ;---------------------------------
 ; send command to OLED 
 ; parameters:
-;     A     count bytes to send 
-;     X     buffer address 
+;     A     command code  
 ;---------------------------------
 oled_cmd:
-    ldw x,#2 
-    _strxz i2c_count 
-    ldw x,#cmd_buffer 
+;    ldw x,#2 
+;    _strxz i2c_count 
+    _clrz i2c_count 
+    mov i2c_count+1,#2
+    ldw x,#co_code 
     ld (1,x),a 
     ld a,#OLED_CMD 
 oled_send:
-    ld (x),a 
+    ld (x),a   
     _strxz i2c_buf 
     mov i2c_devid,#OLED_DEVID 
     _clrz i2c_status
@@ -193,11 +194,13 @@ oled_send:
 ;---------------------------------
 ; send data to OLED GDDRAM
 ; parameters:
-;     X     buffer address 
-;     Y     count bytes to send 
+;     X     byte count  
 ;---------------------------------
 oled_data:
-    _stryz i2c_count 
+    incw x   
+    _strxz i2c_count 
+    ldw x,#co_code 
     ld a,#OLED_DATA 
     jra oled_send  
+
 

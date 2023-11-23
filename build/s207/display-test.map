@@ -17,11 +17,11 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000000  s__CODE                         
      00000001  s_DATA                          
      00000007  l_DATA                          
-     00000052  l_DATA1                         
+     00000053  l_DATA1                         
      00000080  l_HOME                          
+     00000080  l_SSEG0                         
      00000081  l_DATA2                         
-     00000481  l_SSEG0                         
-     00000C2F  l_CODE                          
+     00000B1F  l_CODE                          
      00008000  s_HOME                          
      00008080  s_CODE                          
 
@@ -30,7 +30,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-SSEG0                               00000000    00000481 =        1153. bytes (ABS,CON)
+SSEG0                               00000000    00000080 =         128. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -57,7 +57,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-DATA1                               00000000    00000052 =          82. bytes (ABS,CON)
+DATA1                               00000000    00000053 =          83. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -80,16 +80,16 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                00008080    00000C2F =        3119. bytes (REL,CON)
+CODE                                00008080    00000B1F =        2847. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      000080E2  set_int_priority                   HW_INIT
      00008143  prng                               HW_INIT
      00008332  oled_init                          HW_INIT
-     00008A1A  uart_getc                          HW_INIT
-     00008AEA  move                               HW_INIT
-     00008B2C  strlen                             HW_INIT
+     00008944  uart_getc                          HW_INIT
+     00008A14  move                               HW_INIT
+     00008A56  strlen                             HW_INIT
 ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
 
 Files Linked                              [ module(s) ]

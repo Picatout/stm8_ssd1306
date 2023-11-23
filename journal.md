@@ -1,5 +1,11 @@
 ### 2023-11-22
 
+* Création de la branche *text_only* pour tester un nouveau modèle suportant en priorité le texte plutôt que les graphiques.
+    * le ssd1306 est configuré en mode PAGE 
+
+
+* -------------------
+
 * Nouveau projet dérivé de stm8_chipcon pour me concentrer sur l'utilisation des OLED basé sur le contrôleur SSD1306 128x64 pixels.
 
 * Suppression des fichiers concernant spécifiquement CHIPCON.

@@ -32,16 +32,14 @@
 
 STACK_SIZE=128
 STACK_EMPTY=RAM_SIZE-1 
-DISPLAY_BUFFER_SIZE=128*8 ; col*page  
+DISPLAY_BUFFER_SIZE=128 ; horz pixels   
 
 ;;-----------------------------------
     .area SSEG (ABS)
 ;; working buffers and stack at end of RAM. 	
 ;;-----------------------------------
-    .org RAM_END - STACK_SIZE - DISPLAY_BUFFER_SIZE - 1
+    .org RAM_END - STACK_SIZE - 1
 free_ram_end: 
-oled_co: .blkb 1  ; OLED Co code sent before data bytes 
-disp_buffer: .ds DISPLAY_BUFFER_SIZE ; data bytes sent to OLED 
 stack_full: .ds STACK_SIZE   ; control stack 
 stack_unf: ; stack underflow ; control_stack bottom 
 
@@ -110,9 +108,9 @@ i2c_idx: .blkw 1 ; index in buffer
 i2c_status: .blkb 1 ; error status 
 i2c_devid: .blkb 1 ; device identifier  
 ;OLED display 
-cur_y: .blkb 1 ; text cursor x coord  
-cur_x: .blkb 1 ;  text cursor y coord  
-
+cur_y: .blkb 1 ; text cursor x coord in char position {0..20} 
+cur_x: .blkb 1 ;  text cursor y coord  in line position {0..7}
+start_page: .blkb 1 ; display start page 
 
 .if WANT_TERMINAL
 ; usart queue 
@@ -125,7 +123,8 @@ count: .blkb 1 ; character count in tib
 .endif 
 
 	.org 0x100
-cmd_buffer: .ds 129 ; oled display page buffer 
+co_code: .blkb 1	
+disp_buffer: .ds DISPLAY_BUFFER_SIZE ; oled display page buffer 
 
 free_ram: ; from here RAM free up to free_ram_end 
 
