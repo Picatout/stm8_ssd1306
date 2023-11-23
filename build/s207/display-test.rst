@@ -4202,26 +4202,24 @@ Hexadecimal [24-Bits]
       008B4F 63 CD 89         [ 4]  234 	call print_word
       008B52 62 0D            [ 1]  235 	ld a,#CR 
       008B53 CD 08 E2         [ 4]  236 	call putchar 	
-      000AEA                        237 test4: ; echo character from usart  
+      000AEA                        237 test4: ; loop qbf message   
       008B53 3F 09 4B         [ 4]  238 	call display_clear 
       000AED                        239 0$:	 
-      008B56 A7 A6 41         [ 4]  240 	call uart_getc
-      008B59 CD 87            [ 1]  241 	cp a,#'a 
-      008B5B E1 0A            [ 1]  242 	jrmi 1$ 
-      008B5D 01 26            [ 1]  243 	and a,#0xDF  
-      008B5F F7 BE 08         [ 4]  244 1$:	call put_char
-      008B62 CD 89            [ 2]  245 	jra 0$ 
-      008B64 1A A6 0D CD 89 62 00   246 hello: .asciz "HELLO "
-      008B6A 54 48 45 20 51 55 49   247 qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG.\n" 
+      008B56 A7 A6 41 CD      [ 2]  240 	ldw y,#qbf 
+      008B5A 87 E1 0A         [ 4]  241 	call put_string
+      008B5D 01 26            [ 1]  242 	ld a,#50 
+      008B5F F7 BE 08         [ 4]  243 	call pause  
+      008B62 CD 89            [ 2]  244 	jra 0$ 
+      008B64 1A A6 0D CD 89 62 49   245 qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG\n" 
              43 4B 20 42 52 4F 57
              4E 20 46 4F 58 20 4A
              55 4D 50 20 4F 56 45
              52 20 54 48 45 20 4C
              41 5A 59 20 44 4F 47
-             2E 0A 00
-      000B2F                        248 end_test: 	 
-                                    249 .endif 
-                                    250 
+             0A 00
+      008B6A                        246 end_test: 	 
+                                    247 .endif 
+                                    248 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 78.
 Hexadecimal [24-Bits]
 
@@ -4617,45 +4615,45 @@ Symbol Table
   5 cur_x      00001E R   |   5 cur_y      00001D R   |   7 cursor_r   000753 R
   7 debug_pr   000A9B R   |   5 delay_ti   00000A R   |   7 delback    000919 R
   6 disp_buf   000101 R   |   7 display_   00070B R   |   7 end_of_t   0001CB R
-  7 end_test   000B2F R   |   7 evt_addr   0001A4 R   |   7 evt_btf    0001BF R
+  7 end_test   000B27 R   |   7 evt_addr   0001A4 R   |   7 evt_btf    0001BF R
   7 evt_rxne   0001D8 R   |   7 evt_sb     00019E R   |   7 evt_stop   0001F3 R
   7 evt_txe    0001AA R   |   7 evt_txe_   0001AF R   |   7 exam_blo   000837 R
   7 fast       00026B R   |   5 flags      000014 GR  |   7 font_hex   000373 R
   7 font_hex   0003C3 R   |   6 free_ram   000181 R   |   2 free_ram   00177E R
-  7 getline    0008EB R   |   7 hello      000AFB R   |   5 i2c_buf    000015 R
-  5 i2c_coun   000017 R   |   5 i2c_devi   00001C R   |   7 i2c_erro   000207 R
-  5 i2c_idx    000019 R   |   7 i2c_init   00027C R   |   7 i2c_scl_   000255 R
-  7 i2c_scl_   000277 R   |   7 i2c_star   00029B R   |   5 i2c_stat   00001B R
-  7 i2c_writ   00023D R   |   7 key        0000FA R   |   4 last       000005 R
-  7 main       000AC0 R   |   4 mode       000000 R   |   7 modify     00081D R
-  7 move       00098D GR  |   7 move_dow   0009AC R   |   7 move_exi   0009CB R
-  7 move_loo   0009B1 R   |   7 move_up    00099E R   |   7 new_row    00083B R
-  7 next_cha   0007D2 R   |   7 nibble_l   00020F R   |   7 noise      000A62 R
-  7 oled_cmd   00034F R   |   7 oled_dat   000369 R   |   7 oled_fon   000463 R
-  7 oled_fon   0006CD R   |   7 oled_ini   0002B2 GR  |   7 oled_sen   00035C R
-  7 page_cle   0006EF R   |   7 parse01    0007E4 R   |   7 parse_he   00085E R
-  7 pause      0009DA R   |   7 print_ad   000889 R   |   7 print_by   0008A3 R
-  7 print_di   0008A9 R   |   7 print_me   000891 R   |   7 print_wo   00089A R
-  7 prng       0000C3 GR  |   5 ptr16      000012 GR  |   5 ptr8       000013 R
-  7 put_byte   0007A2 R   |   7 put_char   000761 R   |   7 put_hex    0007A8 R
-  7 put_hex_   0007B6 R   |   7 put_stri   00078D R   |   7 putchar    0008E2 R
-  7 qbf        000B02 R   |   7 row        00084A R   |   5 rx1_head   000030 R
-  5 rx1_queu   000020 R   |   5 rx1_tail   000031 R   |   7 scale      000A32 R
-  7 scroll_u   0006E2 R   |   5 seedx      00000C R   |   5 seedy      00000E R
+  7 getline    0008EB R   |   5 i2c_buf    000015 R   |   5 i2c_coun   000017 R
+  5 i2c_devi   00001C R   |   7 i2c_erro   000207 R   |   5 i2c_idx    000019 R
+  7 i2c_init   00027C R   |   7 i2c_scl_   000255 R   |   7 i2c_scl_   000277 R
+  7 i2c_star   00029B R   |   5 i2c_stat   00001B R   |   7 i2c_writ   00023D R
+  7 key        0000FA R   |   4 last       000005 R   |   7 main       000AC0 R
+  4 mode       000000 R   |   7 modify     00081D R   |   7 move       00098D GR
+  7 move_dow   0009AC R   |   7 move_exi   0009CB R   |   7 move_loo   0009B1 R
+  7 move_up    00099E R   |   7 new_row    00083B R   |   7 next_cha   0007D2 R
+  7 nibble_l   00020F R   |   7 noise      000A62 R   |   7 oled_cmd   00034F R
+  7 oled_dat   000369 R   |   7 oled_fon   000463 R   |   7 oled_fon   0006CD R
+  7 oled_ini   0002B2 GR  |   7 oled_sen   00035C R   |   7 page_cle   0006EF R
+  7 parse01    0007E4 R   |   7 parse_he   00085E R   |   7 pause      0009DA R
+  7 print_ad   000889 R   |   7 print_by   0008A3 R   |   7 print_di   0008A9 R
+  7 print_me   000891 R   |   7 print_wo   00089A R   |   7 prng       0000C3 GR
+  5 ptr16      000012 GR  |   5 ptr8       000013 R   |   7 put_byte   0007A2 R
+  7 put_char   000761 R   |   7 put_hex    0007A8 R   |   7 put_hex_   0007B6 R
+  7 put_stri   00078D R   |   7 putchar    0008E2 R   |   7 qbf        000AFB R
+  7 row        00084A R   |   5 rx1_head   000030 R   |   5 rx1_queu   000020 R
+  5 rx1_tail   000031 R   |   7 scale      000A32 R   |   7 scroll_u   0006E2 R
+  5 seedx      00000C R   |   5 seedy      00000E R   |   7 set_int_   000062 GR
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 85.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-  7 set_int_   000062 GR  |   7 set_page   0006CD R   |   7 set_seed   0000E5 R
-  7 sll_xy_3   0000B5 R   |   7 sound_pa   0009E7 R   |   5 sound_ti   00000B R
-  7 space      000895 R   |   7 srl_xy_3   0000BC R   |   2 stack_fu   00177E R
-  2 stack_un   0017FE R   |   5 start_pa   00001F R   |   7 std        00025D R
-  4 storadr    000003 R   |   7 strlen     0009CF GR  |   7 test1      000AD3 R
-  7 test4      000AEA R   |   5 tib        000032 R   |   5 ticks      000008 R
-  7 timer2_i   00004D R   |   7 timer4_i   000034 R   |   7 tone       000A00 R
-  7 uart_get   0008BD GR  |   7 uart_ini   00095D R   |   7 uart_qge   0008B7 R
-  7 wait_key   000100 R   |   4 xamadr     000001 R   |   7 xor_seed   000099 R
+  7 set_page   0006CD R   |   7 set_seed   0000E5 R   |   7 sll_xy_3   0000B5 R
+  7 sound_pa   0009E7 R   |   5 sound_ti   00000B R   |   7 space      000895 R
+  7 srl_xy_3   0000BC R   |   2 stack_fu   00177E R   |   2 stack_un   0017FE R
+  5 start_pa   00001F R   |   7 std        00025D R   |   4 storadr    000003 R
+  7 strlen     0009CF GR  |   7 test1      000AD3 R   |   7 test4      000AEA R
+  5 tib        000032 R   |   5 ticks      000008 R   |   7 timer2_i   00004D R
+  7 timer4_i   000034 R   |   7 tone       000A00 R   |   7 uart_get   0008BD GR
+  7 uart_ini   00095D R   |   7 uart_qge   0008B7 R   |   7 wait_key   000100 R
+  4 xamadr     000001 R   |   7 xor_seed   000099 R
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 86.
 Hexadecimal [24-Bits]
@@ -4669,5 +4667,5 @@ Area Table
    4 DATA       size      7   flags    8
    5 DATA1      size     53   flags    8
    6 DATA2      size     81   flags    8
-   7 CODE       size    B2F   flags    0
+   7 CODE       size    B27   flags    0
 

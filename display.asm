@@ -214,7 +214,8 @@ put_hex:
     ret 
 
 ;----------------------------
-; put integer in display 
+; put hexadecimal integer 
+; in display 
 ; buffer 
 ; input:
 ;    X    integer to display 

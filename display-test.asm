@@ -237,10 +237,12 @@ test1:
 test4: ; loop qbf message   
 	call display_clear 
 0$:	 
-	ldw x,#qbf 
-	call put_string 
+	ldw y,#qbf 
+	call put_string
+	ld a,#50 
+	call pause  
 	jra 0$ 
-qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG.\n" 
+qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG\n" 
 end_test: 	 
 .endif 
 
