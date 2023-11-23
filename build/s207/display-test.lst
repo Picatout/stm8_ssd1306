@@ -4202,26 +4202,39 @@ Hexadecimal [24-Bits]
       000AD2 CD 08 E9         [ 4]  223 	call putchar 
       000AD5 A6 63            [ 1]  224 	ld a,#'c 
       000AD7 CD 08 E9         [ 4]  225 	call putchar 
-      000ADA                        226 test4: ; echo character from usart  
-      000ADA CD 07 0B         [ 4]  227 	call display_clear 
-      000ADD                        228 0$:	 
-      000ADD CD 08 C4         [ 4]  229 	call uart_getc
-      000AE0 A1 61            [ 1]  230 	cp a,#'a 
-      000AE2 2B 02            [ 1]  231 	jrmi 1$ 
-      000AE4 A4 DF            [ 1]  232 	and a,#0xDF  
-      000AE6 CD 07 68         [ 4]  233 1$:	call put_char
-      000AE9 20 F2            [ 2]  234 	jra 0$ 
-      000AEB 48 45 4C 4C 4F 20 00   235 hello: .asciz "HELLO "
-      000AF2 54 48 45 20 51 55 49   236 qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG.\n" 
+      000ADA                        226 test1:
+      000ADA                        227 	_clrz ticks+1 
+      000ADA 3F 09                    1     .byte 0x3f, ticks+1 
+      000ADC 4B A7            [ 1]  228 	push #8*21-1
+      000ADE A6 41            [ 1]  229 1$: ld a,#'A 
+      000AE0 CD 07 68         [ 4]  230 	call put_char 
+      000AE3 0A 01            [ 1]  231 	dec (1,sp)
+      000AE5 26 F7            [ 1]  232 	jrne 1$ 
+      000AE7                        233 	_ldxz ticks 
+      000AE7 BE 08                    1     .byte 0xbe,ticks 
+      000AE9 CD 08 A1         [ 4]  234 	call print_word
+      000AEC A6 0D            [ 1]  235 	ld a,#CR 
+      000AEE CD 08 E9         [ 4]  236 	call putchar 	
+      000AF1                        237 test4: ; echo character from usart  
+      000AF1 CD 07 0B         [ 4]  238 	call display_clear 
+      000AF4                        239 0$:	 
+      000AF4 CD 08 C4         [ 4]  240 	call uart_getc
+      000AF7 A1 61            [ 1]  241 	cp a,#'a 
+      000AF9 2B 02            [ 1]  242 	jrmi 1$ 
+      000AFB A4 DF            [ 1]  243 	and a,#0xDF  
+      000AFD CD 07 68         [ 4]  244 1$:	call put_char
+      000B00 20 F2            [ 2]  245 	jra 0$ 
+      000B02 48 45 4C 4C 4F 20 00   246 hello: .asciz "HELLO "
+      000B09 54 48 45 20 51 55 49   247 qbf: .asciz "THE QUICK BROWN FOX JUMP OVER THE LAZY DOG.\n" 
              43 4B 20 42 52 4F 57
              4E 20 46 4F 58 20 4A
              55 4D 50 20 4F 56 45
              52 20 54 48 45 20 4C
              41 5A 59 20 44 4F 47
              2E 0A 00
-      000B1F                        237 end_test: 	 
-                                    238 .endif 
-                                    239 
+      000B36                        248 end_test: 	 
+                                    249 .endif 
+                                    250 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 78.
 Hexadecimal [24-Bits]
 
@@ -4617,12 +4630,12 @@ Symbol Table
   5 cur_x      00001E R   |   5 cur_y      00001D R   |   7 curpos     000753 R
   7 cursor_r   00075A R   |   7 debug_pr   000AA2 R   |   5 delay_ti   00000A R
   7 delback    000920 R   |   6 disp_buf   000101 R   |   7 display_   00070B R
-  7 end_of_t   0001CB R   |   7 end_test   000B1F R   |   7 evt_addr   0001A4 R
+  7 end_of_t   0001CB R   |   7 end_test   000B36 R   |   7 evt_addr   0001A4 R
   7 evt_btf    0001BF R   |   7 evt_rxne   0001D8 R   |   7 evt_sb     00019E R
   7 evt_stop   0001F3 R   |   7 evt_txe    0001AA R   |   7 evt_txe_   0001AF R
   7 exam_blo   00083E R   |   7 fast       00026B R   |   5 flags      000014 GR
   7 font_hex   000373 R   |   7 font_hex   0003C3 R   |   6 free_ram   000181 R
-  2 free_ram   00177E R   |   7 getline    0008F2 R   |   7 hello      000AEB R
+  2 free_ram   00177E R   |   7 getline    0008F2 R   |   7 hello      000B02 R
   5 i2c_buf    000015 R   |   5 i2c_coun   000017 R   |   5 i2c_devi   00001C R
   7 i2c_erro   000207 R   |   5 i2c_idx    000019 R   |   7 i2c_init   00027C R
   7 i2c_scl_   000255 R   |   7 i2c_scl_   000277 R   |   7 i2c_star   00029B R
@@ -4639,7 +4652,7 @@ Symbol Table
   7 print_wo   0008A1 R   |   7 prng       0000C3 GR  |   5 ptr16      000012 GR
   5 ptr8       000013 R   |   7 put_byte   0007A9 R   |   7 put_char   000768 R
   7 put_hex    0007AF R   |   7 put_hex_   0007BD R   |   7 put_stri   000794 R
-  7 putchar    0008E9 R   |   7 qbf        000AF2 R   |   7 row        000851 R
+  7 putchar    0008E9 R   |   7 qbf        000B09 R   |   7 row        000851 R
   5 rx1_head   000030 R   |   5 rx1_queu   000020 R   |   5 rx1_tail   000031 R
   7 scale      000A39 R   |   7 scroll_u   0006E2 R   |   5 seedx      00000C R
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 85.
@@ -4652,10 +4665,11 @@ Symbol Table
   5 sound_ti   00000B R   |   7 space      00089C R   |   7 srl_xy_3   0000BC R
   2 stack_fu   00177E R   |   2 stack_un   0017FE R   |   5 start_pa   00001F R
   7 std        00025D R   |   4 storadr    000003 R   |   7 strlen     0009D6 GR
-  7 test4      000ADA R   |   5 tib        000032 R   |   5 ticks      000008 R
-  7 timer2_i   00004D R   |   7 timer4_i   000034 R   |   7 tone       000A07 R
-  7 uart_get   0008C4 GR  |   7 uart_ini   000964 R   |   7 uart_qge   0008BE R
-  7 wait_key   000100 R   |   4 xamadr     000001 R   |   7 xor_seed   000099 R
+  7 test1      000ADA R   |   7 test4      000AF1 R   |   5 tib        000032 R
+  5 ticks      000008 R   |   7 timer2_i   00004D R   |   7 timer4_i   000034 R
+  7 tone       000A07 R   |   7 uart_get   0008C4 GR  |   7 uart_ini   000964 R
+  7 uart_qge   0008BE R   |   7 wait_key   000100 R   |   4 xamadr     000001 R
+  7 xor_seed   000099 R
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 86.
 Hexadecimal [24-Bits]
@@ -4669,5 +4683,5 @@ Area Table
    4 DATA       size      7   flags    8
    5 DATA1      size     53   flags    8
    6 DATA2      size     81   flags    8
-   7 CODE       size    B1F   flags    0
+   7 CODE       size    B36   flags    0
 

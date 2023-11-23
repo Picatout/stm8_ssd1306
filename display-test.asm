@@ -223,6 +223,17 @@ main:
 	call putchar 
 	ld a,#'c 
 	call putchar 
+test1:
+	_clrz ticks+1 
+	push #8*21-1
+1$: ld a,#'A 
+	call put_char 
+	dec (1,sp)
+	jrne 1$ 
+	_ldxz ticks 
+	call print_word
+	ld a,#CR 
+	call putchar 	
 test4: ; echo character from usart  
 	call display_clear 
 0$:	 
