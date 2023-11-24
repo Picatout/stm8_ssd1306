@@ -108,9 +108,9 @@ i2c_idx: .blkw 1 ; index in buffer
 i2c_status: .blkb 1 ; error status 
 i2c_devid: .blkb 1 ; device identifier  
 ;OLED display 
-cur_y: .blkb 1 ; text cursor x coord in char position {0..20} 
-cur_x: .blkb 1 ;  text cursor y coord  in line position {0..7}
-start_page: .blkb 1 ; display start page 
+line: .blkb 1 ; text line char position {0..7} 
+col: .blkb 1 ;  text cursor column position {0..20}
+scroll_line: .blkb 1 ; display start scrolling when scroll_line==8 
 
 .if DEBUG 
 ; usart queue 

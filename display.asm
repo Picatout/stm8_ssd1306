@@ -24,19 +24,19 @@
 ;-------------------------------
 
 ;--------------------------
-; select display page 
+; set text cursor line
 ; input:
-;    A  page {0..7}
+;    A  line {0..7}
 ;--------------------------
-set_page:
-    _clrz cur_x
-    _straz cur_y
-    _straz start_page
+set_line:
+    _clrz col
+    _straz line
+    _straz scroll_line 
     add a,#0xB0 
     call oled_cmd 
     _send_cmd COL_WND 
     _send_cmd 0 
-    _send_cmd 127
+    _send_cmd (DISP_WIDTH-1)
     ret 
 
 ;---------------------------
@@ -59,7 +59,7 @@ scroll_up:
 ;     A    page #
 ;---------------------------
 page_clear:
-    call set_page 
+    call set_line 
     clr disp_buffer 
     ldw x,#DISPLAY_BUFFER_SIZE 
     jp oled_data
@@ -95,10 +95,10 @@ display_clear:
     jrpl 2$ 
     _drop 1 
     clr a 
-    _straz cur_x
-    _straz cur_y
-    _straz start_page  
-    call set_page
+    _straz col
+    _straz line
+    _straz scroll_line  
+    call set_line
     clr a 
     call scroll_up 
     pop a 
@@ -109,25 +109,25 @@ display_clear:
 ; at next line 
 ;------------------------
 crlf:
-    _clrz cur_x 
-    _ldaz cur_y
+    _clrz col 
+    _ldaz line
     inc a 
     and a,#7 
-    _straz cur_y 
+    _straz line 
     call clear_disp_buffer 
-    _ldaz cur_y 
+    _ldaz line 
     call page_clear
-    _ldaz cur_y 
-    call set_page
-    _ldaz start_page 
+    _ldaz line 
+    call set_line
+    _ldaz scroll_line 
     inc a  
     cp a,#8
     jrmi 6$ 
-    _ldaz cur_y
+    _ldaz line
     inc a   
     call scroll_up 
     ret 
-6$: _straz start_page  
+6$: _straz scroll_line  
     ret 
 
 ;-----------------------
@@ -136,9 +136,9 @@ crlf:
 ; scroll up if needed 
 ;-----------------------
 cursor_right:
-    _ldaz cur_x 
+    _ldaz col 
     add a,#1  
-    _straz cur_x 
+    _straz col 
     cp a,#21 
     jrmi 9$
     call crlf 

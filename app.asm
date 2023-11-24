@@ -61,7 +61,7 @@ app:
     pushw x  
     call itoa
     ld a,#4 
-    call set_page 
+    call set_line 
     call put_string 
     ldw y,#celcius 
     call put_string 
@@ -73,7 +73,7 @@ app:
     addw x,#32
     call itoa 
     ld a,#6 
-    call set_page 
+    call set_line 
     call put_string 
     ldw y,#fahrenheit
     call put_string 

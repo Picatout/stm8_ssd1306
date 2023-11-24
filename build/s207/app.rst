@@ -1851,9 +1851,9 @@ Hexadecimal [24-Bits]
       00001B                        108 i2c_status: .blkb 1 ; error status 
       00001C                        109 i2c_devid: .blkb 1 ; device identifier  
                                     110 ;OLED display 
-      00001D                        111 cur_y: .blkb 1 ; text cursor x coord in char position {0..20} 
-      00001E                        112 cur_x: .blkb 1 ;  text cursor y coord  in line position {0..7}
-      00001F                        113 start_page: .blkb 1 ; display start page 
+      00001D                        111 line: .blkb 1 ; text line char position {0..7} 
+      00001E                        112 col: .blkb 1 ;  text cursor column position {0..20}
+      00001F                        113 scroll_line: .blkb 1 ; display start scrolling when scroll_line==8 
                                     114 
                            000000   115 .if DEBUG 
                                     116 ; usart queue 
@@ -3280,17 +3280,17 @@ Hexadecimal [24-Bits]
                                      24 ;-------------------------------
                                      25 
                                      26 ;--------------------------
-                                     27 ; select display page 
+                                     27 ; set text cursor line
                                      28 ; input:
-                                     29 ;    A  page {0..7}
+                                     29 ;    A  line {0..7}
                                      30 ;--------------------------
-      0086DE                         31 set_page:
-      00065E                         32     _clrz cur_x
-      0086DE 3F 1E                    1     .byte 0x3f, cur_x 
-      000660                         33     _straz cur_y
-      0086E0 B7 1D                    1     .byte 0xb7,cur_y 
-      000662                         34     _straz start_page
-      0086E2 B7 1F                    1     .byte 0xb7,start_page 
+      0086DE                         31 set_line:
+      00065E                         32     _clrz col
+      0086DE 3F 1E                    1     .byte 0x3f, col 
+      000660                         33     _straz line
+      0086E0 B7 1D                    1     .byte 0xb7,line 
+      000662                         34     _straz scroll_line 
+      0086E2 B7 1F                    1     .byte 0xb7,scroll_line 
       0086E4 AB B0            [ 1]   35     add a,#0xB0 
       0086E6 CD 83 4D         [ 4]   36     call oled_cmd 
       000669                         37     _send_cmd COL_WND 
@@ -3299,8 +3299,8 @@ Hexadecimal [24-Bits]
       00066E                         38     _send_cmd 0 
       0086EE A6 00            [ 1]    1     ld a,#0 
       0086F0 CD 83 4D         [ 4]    2     call oled_cmd 
-      000673                         39     _send_cmd 127
-      0086F3 A6 7F            [ 1]    1     ld a,#127 
+      000673                         39     _send_cmd (DISP_WIDTH-1)
+      0086F3 A6 7F            [ 1]    1     ld a,#(DISP_WIDTH-1) 
       0086F5 CD 83 4D         [ 4]    2     call oled_cmd 
       0086F8 81               [ 4]   40     ret 
                                      41 
@@ -3331,7 +3331,7 @@ Hexadecimal [24-Bits]
                                      59 ;     A    page #
                                      60 ;---------------------------
       008706                         61 page_clear:
-      008706 CD 86 DE         [ 4]   62     call set_page 
+      008706 CD 86 DE         [ 4]   62     call set_line 
       008709 72 5F 01 01      [ 1]   63     clr disp_buffer 
       00870D AE 00 80         [ 2]   64     ldw x,#DISPLAY_BUFFER_SIZE 
       008710 CC 83 69         [ 2]   65     jp oled_data
@@ -3368,18 +3368,18 @@ Hexadecimal [24-Bits]
       0006B1                         96     _drop 1 
       008731 5B 01            [ 2]    1     addw sp,#1 
       008733 4F               [ 1]   97     clr a 
-      0006B4                         98     _straz cur_x
+      0006B4                         98     _straz col
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 64.
 Hexadecimal [24-Bits]
 
 
 
-      008734 B7 1E                    1     .byte 0xb7,cur_x 
-      0006B6                         99     _straz cur_y
-      008736 B7 1D                    1     .byte 0xb7,cur_y 
-      0006B8                        100     _straz start_page  
-      008738 B7 1F                    1     .byte 0xb7,start_page 
-      00873A CD 86 DE         [ 4]  101     call set_page
+      008734 B7 1E                    1     .byte 0xb7,col 
+      0006B6                         99     _straz line
+      008736 B7 1D                    1     .byte 0xb7,line 
+      0006B8                        100     _straz scroll_line  
+      008738 B7 1F                    1     .byte 0xb7,scroll_line 
+      00873A CD 86 DE         [ 4]  101     call set_line
       00873D 4F               [ 1]  102     clr a 
       00873E CD 86 F9         [ 4]  103     call scroll_up 
       008741 84               [ 1]  104     pop a 
@@ -3390,33 +3390,33 @@ Hexadecimal [24-Bits]
                                     109 ; at next line 
                                     110 ;------------------------
       008743                        111 crlf:
-      0006C3                        112     _clrz cur_x 
-      008743 3F 1E                    1     .byte 0x3f, cur_x 
-      0006C5                        113     _ldaz cur_y
-      008745 B6 1D                    1     .byte 0xb6,cur_y 
+      0006C3                        112     _clrz col 
+      008743 3F 1E                    1     .byte 0x3f, col 
+      0006C5                        113     _ldaz line
+      008745 B6 1D                    1     .byte 0xb6,line 
       008747 4C               [ 1]  114     inc a 
       008748 A4 07            [ 1]  115     and a,#7 
-      0006CA                        116     _straz cur_y 
-      00874A B7 1D                    1     .byte 0xb7,cur_y 
+      0006CA                        116     _straz line 
+      00874A B7 1D                    1     .byte 0xb7,line 
       00874C CD 87 13         [ 4]  117     call clear_disp_buffer 
-      0006CF                        118     _ldaz cur_y 
-      00874F B6 1D                    1     .byte 0xb6,cur_y 
+      0006CF                        118     _ldaz line 
+      00874F B6 1D                    1     .byte 0xb6,line 
       008751 CD 87 06         [ 4]  119     call page_clear
-      0006D4                        120     _ldaz cur_y 
-      008754 B6 1D                    1     .byte 0xb6,cur_y 
-      008756 CD 86 DE         [ 4]  121     call set_page
-      0006D9                        122     _ldaz start_page 
-      008759 B6 1F                    1     .byte 0xb6,start_page 
+      0006D4                        120     _ldaz line 
+      008754 B6 1D                    1     .byte 0xb6,line 
+      008756 CD 86 DE         [ 4]  121     call set_line
+      0006D9                        122     _ldaz scroll_line 
+      008759 B6 1F                    1     .byte 0xb6,scroll_line 
       00875B 4C               [ 1]  123     inc a  
       00875C A1 08            [ 1]  124     cp a,#8
       00875E 2B 07            [ 1]  125     jrmi 6$ 
-      0006E0                        126     _ldaz cur_y
-      008760 B6 1D                    1     .byte 0xb6,cur_y 
+      0006E0                        126     _ldaz line
+      008760 B6 1D                    1     .byte 0xb6,line 
       008762 4C               [ 1]  127     inc a   
       008763 CD 86 F9         [ 4]  128     call scroll_up 
       008766 81               [ 4]  129     ret 
-      0006E7                        130 6$: _straz start_page  
-      008767 B7 1F                    1     .byte 0xb7,start_page 
+      0006E7                        130 6$: _straz scroll_line  
+      008767 B7 1F                    1     .byte 0xb7,scroll_line 
       008769 81               [ 4]  131     ret 
                                     132 
                                     133 ;-----------------------
@@ -3425,16 +3425,16 @@ Hexadecimal [24-Bits]
                                     136 ; scroll up if needed 
                                     137 ;-----------------------
       00876A                        138 cursor_right:
-      0006EA                        139     _ldaz cur_x 
-      00876A B6 1E                    1     .byte 0xb6,cur_x 
+      0006EA                        139     _ldaz col 
+      00876A B6 1E                    1     .byte 0xb6,col 
       00876C AB 01            [ 1]  140     add a,#1  
-      0006EE                        141     _straz cur_x 
+      0006EE                        141     _straz col 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 65.
 Hexadecimal [24-Bits]
 
 
 
-      00876E B7 1E                    1     .byte 0xb7,cur_x 
+      00876E B7 1E                    1     .byte 0xb7,col 
       008770 A1 15            [ 1]  142     cp a,#21 
       008772 2B 03            [ 1]  143     jrmi 9$
       008774 CD 87 43         [ 4]  144     call crlf 
@@ -4112,7 +4112,7 @@ Hexadecimal [24-Bits]
       008844 89               [ 2]   61     pushw x  
       008845 CD 88 8B         [ 4]   62     call itoa
       008848 A6 04            [ 1]   63     ld a,#4 
-      00884A CD 86 DE         [ 4]   64     call set_page 
+      00884A CD 86 DE         [ 4]   64     call set_line 
       00884D CD 87 A4         [ 4]   65     call put_string 
       008850 90 AE 88 D7      [ 2]   66     ldw y,#celcius 
       008854 CD 87 A4         [ 4]   67     call put_string 
@@ -4124,7 +4124,7 @@ Hexadecimal [24-Bits]
       00885E 1C 00 20         [ 2]   73     addw x,#32
       008861 CD 88 8B         [ 4]   74     call itoa 
       008864 A6 06            [ 1]   75     ld a,#6 
-      008866 CD 86 DE         [ 4]   76     call set_page 
+      008866 CD 86 DE         [ 4]   76     call set_line 
       008869 CD 87 A4         [ 4]   77     call put_string 
       00886C 90 AE 88 DA      [ 2]   78     ldw y,#fahrenheit
       008870 CD 87 A4         [ 4]   79     call put_string 
@@ -4593,27 +4593,27 @@ Symbol Table
   7 app        000756 R   |   7 beep       0000B1 R   |   7 blink      0001A0 R
   7 blink0     000198 R   |   7 blink1     00019D R   |   7 celcius    000857 R
   7 clear_di   000693 R   |   7 clock_in   00002F R   |   6 co_code    000100 R
-  7 cold_sta   0000BA R   |   7 crlf       0006C3 R   |   5 cur_x      00001E R
-  5 cur_y      00001D R   |   7 cursor_r   0006EA R   |   5 delay_ti   00000A R
-  6 disp_buf   000101 R   |   7 display_   0006A2 R   |   7 end_of_t   000149 R
-  7 evt_addr   000122 R   |   7 evt_btf    00013D R   |   7 evt_rxne   000156 R
-  7 evt_sb     00011C R   |   7 evt_stop   000171 R   |   7 evt_txe    000128 R
-  7 evt_txe_   00012D R   |   7 fahrenhe   00085A R   |   7 fast       0001E9 R
-  5 flags      000014 GR  |   7 font_hex   0002FE R   |   7 font_hex   00034E R
-  6 free_ram   000181 R   |   2 free_ram   00177E R   |   5 i2c_buf    000015 R
-  5 i2c_coun   000017 R   |   5 i2c_devi   00001C R   |   7 i2c_erro   000185 R
-  5 i2c_idx    000019 R   |   7 i2c_init   0001FA R   |   7 i2c_scl_   0001D3 R
-  7 i2c_scl_   0001F5 R   |   7 i2c_star   000219 R   |   5 i2c_stat   00001B R
-  7 i2c_writ   0001BB R   |   7 itoa       00080B R   |   7 mul16x8    0007FB R
+  5 col        00001E R   |   7 cold_sta   0000BA R   |   7 crlf       0006C3 R
+  7 cursor_r   0006EA R   |   5 delay_ti   00000A R   |   6 disp_buf   000101 R
+  7 display_   0006A2 R   |   7 end_of_t   000149 R   |   7 evt_addr   000122 R
+  7 evt_btf    00013D R   |   7 evt_rxne   000156 R   |   7 evt_sb     00011C R
+  7 evt_stop   000171 R   |   7 evt_txe    000128 R   |   7 evt_txe_   00012D R
+  7 fahrenhe   00085A R   |   7 fast       0001E9 R   |   5 flags      000014 GR
+  7 font_hex   0002FE R   |   7 font_hex   00034E R   |   6 free_ram   000181 R
+  2 free_ram   00177E R   |   5 i2c_buf    000015 R   |   5 i2c_coun   000017 R
+  5 i2c_devi   00001C R   |   7 i2c_erro   000185 R   |   5 i2c_idx    000019 R
+  7 i2c_init   0001FA R   |   7 i2c_scl_   0001D3 R   |   7 i2c_scl_   0001F5 R
+  7 i2c_star   000219 R   |   5 i2c_stat   00001B R   |   7 i2c_writ   0001BB R
+  7 itoa       00080B R   |   5 line       00001D R   |   7 mul16x8    0007FB R
   7 nibble_l   00018D R   |   7 oled_cmd   0002CD R   |   7 oled_dat   0002E9 R
   7 oled_fon   0003EE R   |   7 oled_fon   00065E R   |   7 oled_ini   000230 GR
   7 page_cle   000686 R   |   7 pause      000062 R   |   7 prompt     000832 R
   5 ptr16      000012 GR  |   5 ptr8       000013 R   |   7 put_byte   000739 R
   7 put_char   0006F8 R   |   7 put_hex    00073F R   |   7 put_hex_   00074D R
-  7 put_stri   000724 R   |   7 scroll_u   000679 R   |   5 seedx      00000C R
-  5 seedy      00000E R   |   7 set_page   00065E R   |   7 sound_pa   00006F R
-  5 sound_ti   00000B R   |   2 stack_fu   00177E R   |   2 stack_un   0017FE R
-  5 start_pa   00001F R   |   7 std        0001DB R   |   5 ticks      000008 R
+  7 put_stri   000724 R   |   5 scroll_l   00001F R   |   7 scroll_u   000679 R
+  5 seedx      00000C R   |   5 seedy      00000E R   |   7 set_line   00065E R
+  7 sound_pa   00006F R   |   5 sound_ti   00000B R   |   2 stack_fu   00177E R
+  2 stack_un   0017FE R   |   7 std        0001DB R   |   5 ticks      000008 R
   7 timer2_i   00004D R   |   7 timer4_i   000034 R   |   7 tone       000088 R
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 86.
