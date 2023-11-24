@@ -1,9 +1,11 @@
 ### 2023-11-24
 
 * renommé certaines variables 
-    * cur_x  renommé   col 
-    * cur_y  renommé   line 
-    * start_page renommé scroll_line 
+    * *cur_x*  renommé   *col* 
+    * *cur_y*  renommé   *line* 
+    * *start_page* renommé *scroll_line* 
+
+-----
 
 * complété démo [app.asm](asm.asm). Démonstration lecture sonde de températeur avec affichage en Celcius et Fahranheit.
 
