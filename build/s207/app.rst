@@ -349,7 +349,7 @@ Hexadecimal [24-Bits]
                            000003   145  AFR3_TIM1    = BIT3
                            000002   146  AFR2_CCO     = BIT2
                            000001   147  AFR1_TIM2    = BIT1
-                           000000   148  AFR0_ADC     = BIT0
+                           000000   148  AFR0_ADC2    = BIT0
                                     149 
                                     150 ; device ID = (read only)
                            0048CD   151  DEVID_XL  = (0x48CD)
@@ -567,7 +567,7 @@ Hexadecimal [24-Bits]
                            000000   343  CLK_PCKENR1_I2C = (0)
                                     344 ; CLK_PCKENR2
                            000007   345  CLK_PCKENR2_CAN = (7)
-                           000003   346  CLK_PCKENR2_ADC = (3)
+                           000003   346  CLK_PCKENR2_ADC2 = (3)
                            000002   347  CLK_PCKENR2_AWU = (2)
                                     348 
                                     349 ; Clock bits
@@ -1250,194 +1250,188 @@ Hexadecimal [24-Bits]
                            000007   971  TIM4_PSCR_128 = 7
                                     972 
                                     973 ; ADC2
-                           005400   974  ADC_CSR  = (0x5400)
-                           005401   975  ADC_CR1  = (0x5401)
-                           005402   976  ADC_CR2  = (0x5402)
-                           005403   977  ADC_CR3  = (0x5403)
-                           005404   978  ADC_DRH  = (0x5404)
-                           005405   979  ADC_DRL  = (0x5405)
-                           005406   980  ADC_TDRH  = (0x5406)
-                           005407   981  ADC_TDRL  = (0x5407)
+                           005400   974  ADC2_CSR  = (0x5400) ; ADC control/status register
+                           005401   975  ADC2_CR1  = (0x5401) ; ADC configuration register 1
+                           005402   976  ADC2_CR2  = (0x5402) ; ADC configuration register 2
+                           005403   977  ADC2_CR3  = (0x5403) ; ADC configuration register 3
+                           005404   978  ADC2_DRH  = (0x5404) ; ADC data register high
+                           005405   979  ADC2_DRL  = (0x5405) ; ADC data register low 
+                           005406   980  ADC2_TDRH  = (0x5406) ; ADC Schmitt trigger disable register high
+                           005407   981  ADC2_TDRL  = (0x5407) ; ADC Schmitt trigger disable register low 
                                     982  
-                                    983 ; ADC bitmasks
+                                    983 ; ADC2 bitmasks
                                     984 
-                           000007   985  ADC_CSR_EOC = (7)
-                           000006   986  ADC_CSR_AWD = (6)
-                           000005   987  ADC_CSR_EOCIE = (5)
-                           000004   988  ADC_CSR_AWDIE = (4)
-                           000003   989  ADC_CSR_CH3 = (3)
+                           000007   985  ADC2_CSR_EOC = (7) ; end of conversion flag 
+                           000006   986  ADC2_CSR_AWD = (6) ; analog watchdog flag 
+                           000005   987  ADC2_CSR_EOCIE = (5) ; Interrupt enable for EOC 
+                           000004   988  ADC2_CSR_AWDIE = (4) ; Interrupt enable for AWD 
+                           000000   989  ADC2_CSR_CH = (0) ; bits 3:0 channel select field 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 23.
 Hexadecimal [24-Bits]
 
 
 
-                           000002   990  ADC_CSR_CH2 = (2)
-                           000001   991  ADC_CSR_CH1 = (1)
-                           000000   992  ADC_CSR_CH0 = (0)
-                                    993 
-                           000006   994  ADC_CR1_SPSEL2 = (6)
-                           000005   995  ADC_CR1_SPSEL1 = (5)
-                           000004   996  ADC_CR1_SPSEL0 = (4)
-                           000001   997  ADC_CR1_CONT = (1)
-                           000000   998  ADC_CR1_ADON = (0)
+                                    990  
+                           000004   991  ADC2_CR1_SPSEL2 = (4) ; bits 6:4 pre-scaler selection 
+                           000001   992  ADC2_CR1_CONT = (1) ; continuous converstion 
+                           000000   993  ADC2_CR1_ADON = (0) ; converter on/off 
+                                    994 
+                           000006   995  ADC2_CR2_EXTTRIG = (6) ; external trigger enable 
+                           000004   996  ADC2_CR2_EXTSEL1 = (4) ; bits 5:4 external event selection  
+                           000003   997  ADC2_CR2_ALIGN = (3) ; data alignment  
+                           000001   998  ADC2_CR2_SCAN = (1) ; scan mode eanble 
                                     999 
-                           000006  1000  ADC_CR2_EXTTRIG = (6)
-                           000005  1001  ADC_CR2_EXTSEL1 = (5)
-                           000004  1002  ADC_CR2_EXTSEL0 = (4)
-                           000003  1003  ADC_CR2_ALIGN = (3)
-                           000001  1004  ADC_CR2_SCAN = (1)
-                                   1005 
-                           000007  1006  ADC_CR3_DBUF = (7)
-                           000006  1007  ADC_CR3_DRH = (6)
-                                   1008 
-                                   1009 ; beCAN
-                           005420  1010  CAN_MCR = (0x5420)
-                           005421  1011  CAN_MSR = (0x5421)
-                           005422  1012  CAN_TSR = (0x5422)
-                           005423  1013  CAN_TPR = (0x5423)
-                           005424  1014  CAN_RFR = (0x5424)
-                           005425  1015  CAN_IER = (0x5425)
-                           005426  1016  CAN_DGR = (0x5426)
-                           005427  1017  CAN_FPSR = (0x5427)
-                           005428  1018  CAN_P0 = (0x5428)
-                           005429  1019  CAN_P1 = (0x5429)
-                           00542A  1020  CAN_P2 = (0x542A)
-                           00542B  1021  CAN_P3 = (0x542B)
-                           00542C  1022  CAN_P4 = (0x542C)
-                           00542D  1023  CAN_P5 = (0x542D)
-                           00542E  1024  CAN_P6 = (0x542E)
-                           00542F  1025  CAN_P7 = (0x542F)
-                           005430  1026  CAN_P8 = (0x5430)
-                           005431  1027  CAN_P9 = (0x5431)
-                           005432  1028  CAN_PA = (0x5432)
-                           005433  1029  CAN_PB = (0x5433)
-                           005434  1030  CAN_PC = (0x5434)
-                           005435  1031  CAN_PD = (0x5435)
-                           005436  1032  CAN_PE = (0x5436)
-                           005437  1033  CAN_PF = (0x5437)
-                                   1034 
-                                   1035 
-                                   1036 ; CPU
-                           007F00  1037  CPU_A  = (0x7F00)
-                           007F01  1038  CPU_PCE  = (0x7F01)
-                           007F02  1039  CPU_PCH  = (0x7F02)
-                           007F03  1040  CPU_PCL  = (0x7F03)
-                           007F04  1041  CPU_XH  = (0x7F04)
-                           007F05  1042  CPU_XL  = (0x7F05)
-                           007F06  1043  CPU_YH  = (0x7F06)
-                           007F07  1044  CPU_YL  = (0x7F07)
+                           000007  1000  ADC2_CR3_DBUF = (7) ; data buffer enable 
+                           000006  1001  ADC2_CR3_DRH = (6)  ; overrun flag 
+                                   1002 
+                                   1003 ; beCAN
+                           005420  1004  CAN_MCR = (0x5420)
+                           005421  1005  CAN_MSR = (0x5421)
+                           005422  1006  CAN_TSR = (0x5422)
+                           005423  1007  CAN_TPR = (0x5423)
+                           005424  1008  CAN_RFR = (0x5424)
+                           005425  1009  CAN_IER = (0x5425)
+                           005426  1010  CAN_DGR = (0x5426)
+                           005427  1011  CAN_FPSR = (0x5427)
+                           005428  1012  CAN_P0 = (0x5428)
+                           005429  1013  CAN_P1 = (0x5429)
+                           00542A  1014  CAN_P2 = (0x542A)
+                           00542B  1015  CAN_P3 = (0x542B)
+                           00542C  1016  CAN_P4 = (0x542C)
+                           00542D  1017  CAN_P5 = (0x542D)
+                           00542E  1018  CAN_P6 = (0x542E)
+                           00542F  1019  CAN_P7 = (0x542F)
+                           005430  1020  CAN_P8 = (0x5430)
+                           005431  1021  CAN_P9 = (0x5431)
+                           005432  1022  CAN_PA = (0x5432)
+                           005433  1023  CAN_PB = (0x5433)
+                           005434  1024  CAN_PC = (0x5434)
+                           005435  1025  CAN_PD = (0x5435)
+                           005436  1026  CAN_PE = (0x5436)
+                           005437  1027  CAN_PF = (0x5437)
+                                   1028 
+                                   1029 
+                                   1030 ; CPU
+                           007F00  1031  CPU_A  = (0x7F00)
+                           007F01  1032  CPU_PCE  = (0x7F01)
+                           007F02  1033  CPU_PCH  = (0x7F02)
+                           007F03  1034  CPU_PCL  = (0x7F03)
+                           007F04  1035  CPU_XH  = (0x7F04)
+                           007F05  1036  CPU_XL  = (0x7F05)
+                           007F06  1037  CPU_YH  = (0x7F06)
+                           007F07  1038  CPU_YL  = (0x7F07)
+                           007F08  1039  CPU_SPH  = (0x7F08)
+                           007F09  1040  CPU_SPL   = (0x7F09)
+                           007F0A  1041  CPU_CCR   = (0x7F0A)
+                                   1042 
+                                   1043 ; global configuration register
+                           007F60  1044  CFG_GCR   = (0x7F60)
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 24.
 Hexadecimal [24-Bits]
 
 
 
-                           007F08  1045  CPU_SPH  = (0x7F08)
-                           007F09  1046  CPU_SPL   = (0x7F09)
-                           007F0A  1047  CPU_CCR   = (0x7F0A)
-                                   1048 
-                                   1049 ; global configuration register
-                           007F60  1050  CFG_GCR   = (0x7F60)
-                           000001  1051  CFG_GCR_AL = 1
-                           000000  1052  CFG_GCR_SWIM = 0
-                                   1053 
-                                   1054 ; interrupt software priority 
-                           007F70  1055  ITC_SPR1   = (0x7F70) ; (0..3) 0->resreved,AWU..EXT0 
-                           007F71  1056  ITC_SPR2   = (0x7F71) ; (4..7) EXT1..EXT4 RX 
-                           007F72  1057  ITC_SPR3   = (0x7F72) ; (8..11) beCAN RX..TIM1 UPDT/OVR  
-                           007F73  1058  ITC_SPR4   = (0x7F73) ; (12..15) TIM1 CAP/CMP .. TIM3 UPDT/OVR 
-                           007F74  1059  ITC_SPR5   = (0x7F74) ; (16..19) TIM3 CAP/CMP..I2C  
-                           007F75  1060  ITC_SPR6   = (0x7F75) ; (20..23) UART3 TX..TIM4 CAP/OVR 
-                           007F76  1061  ITC_SPR7   = (0x7F76) ; (24..29) FLASH WR..
-                           007F77  1062  ITC_SPR8   = (0x7F77) ; (30..32) ..
-                                   1063 
-                           000001  1064 ITC_SPR_LEVEL1=1 
-                           000000  1065 ITC_SPR_LEVEL2=0
-                           000003  1066 ITC_SPR_LEVEL3=3 
-                                   1067 
-                                   1068 ; SWIM, control and status register
-                           007F80  1069  SWIM_CSR   = (0x7F80)
-                                   1070 ; debug registers
-                           007F90  1071  DM_BK1RE   = (0x7F90)
-                           007F91  1072  DM_BK1RH   = (0x7F91)
-                           007F92  1073  DM_BK1RL   = (0x7F92)
-                           007F93  1074  DM_BK2RE   = (0x7F93)
-                           007F94  1075  DM_BK2RH   = (0x7F94)
-                           007F95  1076  DM_BK2RL   = (0x7F95)
-                           007F96  1077  DM_CR1   = (0x7F96)
-                           007F97  1078  DM_CR2   = (0x7F97)
-                           007F98  1079  DM_CSR1   = (0x7F98)
-                           007F99  1080  DM_CSR2   = (0x7F99)
-                           007F9A  1081  DM_ENFCTR   = (0x7F9A)
-                                   1082 
-                                   1083 ; Interrupt Numbers
-                           000000  1084  INT_TLI = 0
-                           000001  1085  INT_AWU = 1
-                           000002  1086  INT_CLK = 2
-                           000003  1087  INT_EXTI0 = 3
-                           000004  1088  INT_EXTI1 = 4
-                           000005  1089  INT_EXTI2 = 5
-                           000006  1090  INT_EXTI3 = 6
-                           000007  1091  INT_EXTI4 = 7
-                           000008  1092  INT_CAN_RX = 8
-                           000009  1093  INT_CAN_TX = 9
-                           00000A  1094  INT_SPI = 10
-                           00000B  1095  INT_TIM1_OVF = 11
-                           00000C  1096  INT_TIM1_CCM = 12
-                           00000D  1097  INT_TIM2_OVF = 13
-                           00000E  1098  INT_TIM2_CCM = 14
-                           00000F  1099  INT_TIM3_OVF = 15
+                           000001  1045  CFG_GCR_AL = 1
+                           000000  1046  CFG_GCR_SWIM = 0
+                                   1047 
+                                   1048 ; interrupt software priority 
+                           007F70  1049  ITC_SPR1   = (0x7F70) ; (0..3) 0->resreved,AWU..EXT0 
+                           007F71  1050  ITC_SPR2   = (0x7F71) ; (4..7) EXT1..EXT4 RX 
+                           007F72  1051  ITC_SPR3   = (0x7F72) ; (8..11) beCAN RX..TIM1 UPDT/OVR  
+                           007F73  1052  ITC_SPR4   = (0x7F73) ; (12..15) TIM1 CAP/CMP .. TIM3 UPDT/OVR 
+                           007F74  1053  ITC_SPR5   = (0x7F74) ; (16..19) TIM3 CAP/CMP..I2C  
+                           007F75  1054  ITC_SPR6   = (0x7F75) ; (20..23) UART3 TX..TIM4 CAP/OVR 
+                           007F76  1055  ITC_SPR7   = (0x7F76) ; (24..29) FLASH WR..
+                           007F77  1056  ITC_SPR8   = (0x7F77) ; (30..32) ..
+                                   1057 
+                           000001  1058 ITC_SPR_LEVEL1=1 
+                           000000  1059 ITC_SPR_LEVEL2=0
+                           000003  1060 ITC_SPR_LEVEL3=3 
+                                   1061 
+                                   1062 ; SWIM, control and status register
+                           007F80  1063  SWIM_CSR   = (0x7F80)
+                                   1064 ; debug registers
+                           007F90  1065  DM_BK1RE   = (0x7F90)
+                           007F91  1066  DM_BK1RH   = (0x7F91)
+                           007F92  1067  DM_BK1RL   = (0x7F92)
+                           007F93  1068  DM_BK2RE   = (0x7F93)
+                           007F94  1069  DM_BK2RH   = (0x7F94)
+                           007F95  1070  DM_BK2RL   = (0x7F95)
+                           007F96  1071  DM_CR1   = (0x7F96)
+                           007F97  1072  DM_CR2   = (0x7F97)
+                           007F98  1073  DM_CSR1   = (0x7F98)
+                           007F99  1074  DM_CSR2   = (0x7F99)
+                           007F9A  1075  DM_ENFCTR   = (0x7F9A)
+                                   1076 
+                                   1077 ; Interrupt Numbers
+                           000000  1078  INT_TLI = 0
+                           000001  1079  INT_AWU = 1
+                           000002  1080  INT_CLK = 2
+                           000003  1081  INT_EXTI0 = 3
+                           000004  1082  INT_EXTI1 = 4
+                           000005  1083  INT_EXTI2 = 5
+                           000006  1084  INT_EXTI3 = 6
+                           000007  1085  INT_EXTI4 = 7
+                           000008  1086  INT_CAN_RX = 8
+                           000009  1087  INT_CAN_TX = 9
+                           00000A  1088  INT_SPI = 10
+                           00000B  1089  INT_TIM1_OVF = 11
+                           00000C  1090  INT_TIM1_CCM = 12
+                           00000D  1091  INT_TIM2_OVF = 13
+                           00000E  1092  INT_TIM2_CCM = 14
+                           00000F  1093  INT_TIM3_OVF = 15
+                           000010  1094  INT_TIM3_CCM = 16
+                           000011  1095  INT_UART1_TX_COMPLETED = 17
+                           000012  1096  INT_AUART1_RX_FULL = 18
+                           000013  1097  INT_I2C = 19
+                           000014  1098  INT_UART3_TX_COMPLETED = 20
+                           000015  1099  INT_UART3_RX_FULL = 21
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 25.
 Hexadecimal [24-Bits]
 
 
 
-                           000010  1100  INT_TIM3_CCM = 16
-                           000011  1101  INT_UART1_TX_COMPLETED = 17
-                           000012  1102  INT_AUART1_RX_FULL = 18
-                           000013  1103  INT_I2C = 19
-                           000014  1104  INT_UART3_TX_COMPLETED = 20
-                           000015  1105  INT_UART3_RX_FULL = 21
-                           000016  1106  INT_ADC2 = 22
-                           000017  1107  INT_TIM4_OVF = 23
-                           000018  1108  INT_FLASH = 24
-                                   1109 
-                                   1110 ; Interrupt Vectors
-                           008000  1111  INT_VECTOR_RESET = 0x8000
-                           008004  1112  INT_VECTOR_TRAP = 0x8004
-                           008008  1113  INT_VECTOR_TLI = 0x8008
-                           00800C  1114  INT_VECTOR_AWU = 0x800C
-                           008010  1115  INT_VECTOR_CLK = 0x8010
-                           008014  1116  INT_VECTOR_EXTI0 = 0x8014
-                           008018  1117  INT_VECTOR_EXTI1 = 0x8018
-                           00801C  1118  INT_VECTOR_EXTI2 = 0x801C
-                           008020  1119  INT_VECTOR_EXTI3 = 0x8020
-                           008024  1120  INT_VECTOR_EXTI4 = 0x8024
-                           008028  1121  INT_VECTOR_CAN_RX = 0x8028
-                           00802C  1122  INT_VECTOR_CAN_TX = 0x802c
-                           008030  1123  INT_VECTOR_SPI = 0x8030
-                           008034  1124  INT_VECTOR_TIM1_OVF = 0x8034
-                           008038  1125  INT_VECTOR_TIM1_CCM = 0x8038
-                           00803C  1126  INT_VECTOR_TIM2_OVF = 0x803C
-                           008040  1127  INT_VECTOR_TIM2_CCM = 0x8040
-                           008044  1128  INT_VECTOR_TIM3_OVF = 0x8044
-                           008048  1129  INT_VECTOR_TIM3_CCM = 0x8048
-                           00804C  1130  INT_VECTOR_UART1_TX_COMPLETED = 0x804c
-                           008050  1131  INT_VECTOR_UART1_RX_FULL = 0x8050
-                           008054  1132  INT_VECTOR_I2C = 0x8054
-                           008058  1133  INT_VECTOR_UART3_TX_COMPLETED = 0x8058
-                           00805C  1134  INT_VECTOR_UART3_RX_FULL = 0x805C
-                           008060  1135  INT_VECTOR_ADC2 = 0x8060
-                           008064  1136  INT_VECTOR_TIM4_OVF = 0x8064
-                           008068  1137  INT_VECTOR_FLASH = 0x8068
-                                   1138 
-                                   1139 ; Condition code register bits
-                           000007  1140 CC_V = 7  ; overflow flag 
-                           000005  1141 CC_I1= 5  ; interrupt bit 1
-                           000004  1142 CC_H = 4  ; half carry 
-                           000003  1143 CC_I0 = 3 ; interrupt bit 0
-                           000002  1144 CC_N = 2 ;  negative flag 
-                           000001  1145 CC_Z = 1 ;  zero flag  
-                           000000  1146 CC_C = 0 ; carry bit 
+                           000016  1100  INT_ADC2 = 22
+                           000017  1101  INT_TIM4_OVF = 23
+                           000018  1102  INT_FLASH = 24
+                                   1103 
+                                   1104 ; Interrupt Vectors
+                           008000  1105  INT_VECTOR_RESET = 0x8000
+                           008004  1106  INT_VECTOR_TRAP = 0x8004
+                           008008  1107  INT_VECTOR_TLI = 0x8008
+                           00800C  1108  INT_VECTOR_AWU = 0x800C
+                           008010  1109  INT_VECTOR_CLK = 0x8010
+                           008014  1110  INT_VECTOR_EXTI0 = 0x8014
+                           008018  1111  INT_VECTOR_EXTI1 = 0x8018
+                           00801C  1112  INT_VECTOR_EXTI2 = 0x801C
+                           008020  1113  INT_VECTOR_EXTI3 = 0x8020
+                           008024  1114  INT_VECTOR_EXTI4 = 0x8024
+                           008028  1115  INT_VECTOR_CAN_RX = 0x8028
+                           00802C  1116  INT_VECTOR_CAN_TX = 0x802c
+                           008030  1117  INT_VECTOR_SPI = 0x8030
+                           008034  1118  INT_VECTOR_TIM1_OVF = 0x8034
+                           008038  1119  INT_VECTOR_TIM1_CCM = 0x8038
+                           00803C  1120  INT_VECTOR_TIM2_OVF = 0x803C
+                           008040  1121  INT_VECTOR_TIM2_CCM = 0x8040
+                           008044  1122  INT_VECTOR_TIM3_OVF = 0x8044
+                           008048  1123  INT_VECTOR_TIM3_CCM = 0x8048
+                           00804C  1124  INT_VECTOR_UART1_TX_COMPLETED = 0x804c
+                           008050  1125  INT_VECTOR_UART1_RX_FULL = 0x8050
+                           008054  1126  INT_VECTOR_I2C = 0x8054
+                           008058  1127  INT_VECTOR_UART3_TX_COMPLETED = 0x8058
+                           00805C  1128  INT_VECTOR_UART3_RX_FULL = 0x805C
+                           008060  1129  INT_VECTOR_ADC2 = 0x8060
+                           008064  1130  INT_VECTOR_TIM4_OVF = 0x8064
+                           008068  1131  INT_VECTOR_FLASH = 0x8068
+                                   1132 
+                                   1133 ; Condition code register bits
+                           000007  1134 CC_V = 7  ; overflow flag 
+                           000005  1135 CC_I1= 5  ; interrupt bit 1
+                           000004  1136 CC_H = 4  ; half carry 
+                           000003  1137 CC_I0 = 3 ; interrupt bit 0
+                           000002  1138 CC_N = 2 ;  negative flag 
+                           000001  1139 CC_Z = 1 ;  zero flag  
+                           000000  1140 CC_C = 0 ; carry bit 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 26.
 Hexadecimal [24-Bits]
 
@@ -1724,73 +1718,41 @@ Hexadecimal [24-Bits]
                                      57     .endm 
                                      58 
                                      59 
-                                     60 ;--------------------------------
-                                     61 ; oled commands macros 
-                                     62 ;----------------------------------
-                                     63 
-                                     64     ; initialize cmd_buffer 
-                                     65     .macro _cmd_init 
-                                     66         BUF_OFS=0
-                                     67     .endm 
-                                     68 
-                                     69     ; set oled command buffer values 
-                                     70     ; initialize BUF_OFS=0 
-                                     71     ; before using it 
-                                     72     .macro _set_cmd n
-                                     73     BUF_OFS=BUF_OFS+1 
-                                     74     mov cmd_buffer_BUF_OFS,#0x80
-                                     75     BUF_OFS=BUF_OFS+1 
-                                     76     mov cmd_buffer+BUF_OFS,#n 
-                                     77     .endm 
-                                     78 
-                                     79     
-                                     80     ; send command 
-                                     81     .macro _send_cmd code 
-                                     82     ld a,#code 
-                                     83     call oled_cmd 
-                                     84     .endm 
-                                     85 
+                                     60     ; read buttons 
+                                     61     .macro _read_buttons
+                                     62     ld a,#BTN_PORT+GPIO_IDR 
+                                     63     and a,#ALL_KEY_UP
+                                     64     .endm 
+                                     65 
+                                     66 
+                                     67 ;-----------------------------
+                                     68 ;   keypad macros 
+                                     69 ;-----------------------------
+                                     70 
+                                     71     .macro _btn_down btn 
+                                     72     ld a,BTN_IDR 
+                                     73     and a,#(1<<btn)
+                                     74     or a,#(1<<btn)
+                                     75     .endm 
+                                     76 
+                                     77     .macro _btn_up 
+                                     78     ld a,#BTN_IDR 
+                                     79     and a,#(1<<btn)
+                                     80     .endm 
+                                     81 
+                                     82     .macro _btn_state 
+                                     83     ld a,#BTN_IDR 
+                                     84     and a,#ALL_KEY_UP
+                                     85     .endm 
                                      86 
-                                     87     ; read buttons 
-                                     88     .macro _read_buttons
-                                     89     ld a,#BTN_PORT+GPIO_IDR 
-                                     90     and a,#ALL_KEY_UP
-                                     91     .endm 
-                                     92 
-                                     93 
-                                     94 ;-----------------------------
-                                     95 ;   keypad macros 
-                                     96 ;-----------------------------
-                                     97 
-                                     98     .macro _btn_down btn 
-                                     99     ld a,BTN_IDR 
-                                    100     and a,#(1<<btn)
-                                    101     or a,#(1<<btn)
-                                    102     .endm 
-                                    103 
-                                    104     .macro _btn_up 
-                                    105     ld a,#BTN_IDR 
-                                    106     and a,#(1<<btn)
-                                    107     .endm 
-                                    108 
-                                    109     .macro _btn_state 
+                                     87     .macro _wait_key_release  ?loop 
+                                     88     loop:
+                                     89     ld a,BTN_IDR 
+                                     90     and a,#ALL_KEY_UP 
+                                     91     cp a,#ALL_KEY_UP 
+                                     92     jrne loop 
+                                     93     .endm 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 33.
-Hexadecimal [24-Bits]
-
-
-
-                                    110     ld a,#BTN_IDR 
-                                    111     and a,#ALL_KEY_UP
-                                    112     .endm 
-                                    113 
-                                    114     .macro _wait_key_release  ?loop 
-                                    115     loop:
-                                    116     ld a,BTN_IDR 
-                                    117     and a,#ALL_KEY_UP 
-                                    118     cp a,#ALL_KEY_UP 
-                                    119     jrne loop 
-                                    120     .endm 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 34.
 Hexadecimal [24-Bits]
 
 
@@ -1799,7 +1761,7 @@ Hexadecimal [24-Bits]
                                      55 
                                      56 
                                      57 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 35.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 34.
 Hexadecimal [24-Bits]
 
 
@@ -1859,7 +1821,7 @@ Hexadecimal [24-Bits]
       008070 82 00 80 80             83 	int NonHandledInterrupt	; irq26
       008074 82 00 80 80             84 	int NonHandledInterrupt	; irq27
       008078 82 00 80 80             85 	int NonHandledInterrupt	; irq28
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 36.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 35.
 Hexadecimal [24-Bits]
 
 
@@ -1919,7 +1881,7 @@ Hexadecimal [24-Bits]
       008080                        138 NonHandledInterrupt:
       008080 80               [11]  139 	iret 
                                     140 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 37.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 36.
 Hexadecimal [24-Bits]
 
 
@@ -1979,7 +1941,7 @@ Hexadecimal [24-Bits]
       0080C0 35 83 53 46      [ 1]  191 	mov TIM4_ARR,#(256-125) ; 125000/125=1 msec 
       0080C4 35 05 53 40      [ 1]  192 	mov TIM4_CR1,#((1<<TIM4_CR1_CEN)|(1<<TIM4_CR1_URS))
       0080C8 72 10 53 41      [ 1]  193 	bset TIM4_IER,#TIM4_IER_UIE
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 38.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 37.
 Hexadecimal [24-Bits]
 
 
@@ -2039,7 +2001,7 @@ Hexadecimal [24-Bits]
                                     246 	dec a 
                                     247 	jrne 1$
                                     248 2$:	ld a,xl 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 39.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 38.
 Hexadecimal [24-Bits]
 
 
@@ -2099,7 +2061,7 @@ Hexadecimal [24-Bits]
                                     299 ; Ft2clk=62500 hertz 
                                     300 ; input:
                                     301 ;   A   duration n*10 msec    
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 40.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 39.
 Hexadecimal [24-Bits]
 
 
@@ -2159,7 +2121,7 @@ Hexadecimal [24-Bits]
                                     354     ld a,yh 
                                     355     _xorz seedy
                                     356     _straz seedy 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 41.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 40.
 Hexadecimal [24-Bits]
 
 
@@ -2219,7 +2181,7 @@ Hexadecimal [24-Bits]
                                     409     call xor_seed32
                                     410     ld a,#17 
                                     411     call srl_xy_32
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 42.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 41.
 Hexadecimal [24-Bits]
 
 
@@ -2279,7 +2241,7 @@ Hexadecimal [24-Bits]
                                     464 ; debounce
                                     465 	mov delay_timer,#2
                                     466 	bset flags,#F_GAME_TMR
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 43.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 42.
 Hexadecimal [24-Bits]
 
 
@@ -2332,12 +2294,12 @@ Hexadecimal [24-Bits]
                                     512 	ldw seedx,x  
                                     513     jp test_code  	
                            000001   514 .else 
-      008159 CC 87 BD         [ 2]  515 	jp app 
+      008159 CC 87 D6         [ 2]  515 	jp app 
                                     516 .endif ; DEBUG 
                                     517 
                                     518 
                                     519 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 44.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 43.
 Hexadecimal [24-Bits]
 
 
@@ -2397,7 +2359,7 @@ Hexadecimal [24-Bits]
                                      52 ; handle events 
       0000FB                         53 2$: _ldxz i2c_idx  
       00817B BE 19                    1     .byte 0xbe,i2c_idx 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 45.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 44.
 Hexadecimal [24-Bits]
 
 
@@ -2457,7 +2419,7 @@ Hexadecimal [24-Bits]
       000156                        101     _ldyz i2c_count 
       0081D6 90 BE 17                 1     .byte 0x90,0xbe,i2c_count 
       0081D9 27 16            [ 1]  102     jreq evt_stopf  
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 46.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 45.
 Hexadecimal [24-Bits]
 
 
@@ -2517,7 +2479,7 @@ Hexadecimal [24-Bits]
       00821D AE 02 58         [ 2]  152     ldw x,#600 
       008220                        153 blink:
       008220 CD 80 E2         [ 4]  154     call pause 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 47.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 46.
 Hexadecimal [24-Bits]
 
 
@@ -2577,7 +2539,7 @@ Hexadecimal [24-Bits]
                                     207 ;---------------------------------
       00823B                        208 i2c_write:
       00823B 72 00 52 19 FB   [ 2]  209     btjt I2C_SR3,#I2C_SR3_MSL,.
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 48.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 47.
 Hexadecimal [24-Bits]
 
 
@@ -2637,7 +2599,7 @@ Hexadecimal [24-Bits]
                                     261 ; send start bit and device id 
                                     262 ; paramenter:
                                     263 ;     A      device_id, 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 49.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 48.
 Hexadecimal [24-Bits]
 
 
@@ -2654,7 +2616,7 @@ Hexadecimal [24-Bits]
       0082AF 81               [ 4]  273 	ret 
                                     274 
                                     275 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 50.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 49.
 Hexadecimal [24-Bits]
 
 
@@ -2681,7 +2643,7 @@ Hexadecimal [24-Bits]
                                      20 ; SSD1306 OLED display 128x64
                                      21 ;------------------------------
                                      22 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 51.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 50.
 Hexadecimal [24-Bits]
 
 
@@ -2741,7 +2703,7 @@ Hexadecimal [24-Bits]
                                      52             ; when reach end rollback to 0 and page pointer is increased by 1.
                            000001    53 VERT_MODE=1 ; At each byte write page pointer is increased by 1 and 
                                      54             ; when last page is reached rollback to page 0 and column pointer
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 52.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 51.
 Hexadecimal [24-Bits]
 
 
@@ -2791,225 +2753,266 @@ Hexadecimal [24-Bits]
                            000000    97 VCOMH_DSEL_65=0
                            000020    98 VCOMH_DSEL_77=0X20 
                            000030    99 VCOMH_DSEL_83=0X30
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 53.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 52.
 Hexadecimal [24-Bits]
 
 
 
                                      24 
-                                     25 ;----------------------------
-                                     26 ; initialize OLED display
-                                     27 ;----------------------------
-      0082B0                         28 oled_init:: 
-                                     29 ; multiplex ratio to default 64 
-      000230                         30     _send_cmd MUX_RATIO 
+                                     25 ;--------------------------------
+                                     26 ; oled commands macros 
+                                     27 ;----------------------------------
+                                     28 
+                                     29     ; initialize cmd_buffer 
+                                     30     .macro _cmd_init 
+                                     31         BUF_OFS=0
+                                     32     .endm 
+                                     33 
+                                     34     ; set oled command buffer values 
+                                     35     ; initialize BUF_OFS=0 
+                                     36     ; before using it 
+                                     37     .macro _set_cmd n
+                                     38     BUF_OFS=BUF_OFS+1 
+                                     39     mov cmd_buffer_BUF_OFS,#0x80
+                                     40     BUF_OFS=BUF_OFS+1 
+                                     41     mov cmd_buffer+BUF_OFS,#n 
+                                     42     .endm 
+                                     43 
+                                     44     
+                                     45     ; send command 
+                                     46     .macro _send_cmd code 
+                                     47     ld a,#code 
+                                     48     call oled_cmd 
+                                     49     .endm 
+                                     50 
+                                     51 ;----------------------------
+                                     52 ; initialize OLED display
+                                     53 ;----------------------------
+      0082B0                         54 oled_init:: 
+                                     55 ; multiplex ratio to default 64 
+      000230                         56     _send_cmd MUX_RATIO 
       0082B0 A6 A8            [ 1]    1     ld a,#MUX_RATIO 
       0082B2 CD 83 4D         [ 4]    2     call oled_cmd 
-      000235                         31     _send_cmd 63
+      000235                         57     _send_cmd 63
       0082B5 A6 3F            [ 1]    1     ld a,#63 
       0082B7 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     32 ; no display offset 
-      00023A                         33     _send_cmd DISP_OFFSET 
+                                     58 ; no display offset 
+      00023A                         59     _send_cmd DISP_OFFSET 
       0082BA A6 D3            [ 1]    1     ld a,#DISP_OFFSET 
       0082BC CD 83 4D         [ 4]    2     call oled_cmd 
-      00023F                         34     _send_cmd 0 
+      00023F                         60     _send_cmd 0 
       0082BF A6 00            [ 1]    1     ld a,#0 
       0082C1 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     35 ; no segment remap SEG0 -> COM0 
-      000244                         36     _send_cmd MAP_SEG0_COL0   
+                                     61 ; no segment remap SEG0 -> COM0 
+      000244                         62     _send_cmd MAP_SEG0_COL0   
       0082C4 A6 A0            [ 1]    1     ld a,#MAP_SEG0_COL0 
       0082C6 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     37 ; COMMON scan direction top to bottom 
-      000249                         38     _send_cmd SCAN_TOP_DOWN
+                                     63 ; COMMON scan direction top to bottom 
+      000249                         64     _send_cmd SCAN_TOP_DOWN
       0082C9 A6 C0            [ 1]    1     ld a,#SCAN_TOP_DOWN 
       0082CB CD 83 4D         [ 4]    2     call oled_cmd 
-                                     39 ; common pins config, bit 5=0, 4=1 
-      00024E                         40     _send_cmd COM_CFG 
+                                     65 ; common pins config, bit 5=0, 4=1 
+      00024E                         66     _send_cmd COM_CFG 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 53.
+Hexadecimal [24-Bits]
+
+
+
       0082CE A6 DA            [ 1]    1     ld a,#COM_CFG 
       0082D0 CD 83 4D         [ 4]    2     call oled_cmd 
-      000253                         41     _send_cmd COM_DISABLE_REMAP+COM_ALTERNATE
+      000253                         67     _send_cmd COM_DISABLE_REMAP+COM_ALTERNATE
       0082D3 A6 10            [ 1]    1     ld a,#COM_DISABLE_REMAP+COM_ALTERNATE 
       0082D5 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     42 ; constrast level 1, lowest 
-      000258                         43     _send_cmd DISP_CONTRAST
+                                     68 ; constrast level 1, lowest 
+      000258                         69     _send_cmd DISP_CONTRAST
       0082D8 A6 81            [ 1]    1     ld a,#DISP_CONTRAST 
       0082DA CD 83 4D         [ 4]    2     call oled_cmd 
-      00025D                         44     _send_cmd 1
+      00025D                         70     _send_cmd 1
       0082DD A6 01            [ 1]    1     ld a,#1 
       0082DF CD 83 4D         [ 4]    2     call oled_cmd 
-                                     45 ; display RAM 
-      000262                         46     _send_cmd DISP_RAM
+                                     71 ; display RAM 
+      000262                         72     _send_cmd DISP_RAM
       0082E2 A6 A4            [ 1]    1     ld a,#DISP_RAM 
       0082E4 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     47 ; display normal 
-      000267                         48     _send_cmd DISP_NORMAL
+                                     73 ; display normal 
+      000267                         74     _send_cmd DISP_NORMAL
       0082E7 A6 A6            [ 1]    1     ld a,#DISP_NORMAL 
       0082E9 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     49 ; clock frequency=maximum and display divisor=1 
-      00026C                         50     _send_cmd CLK_FREQ_DIV
+                                     75 ; clock frequency=maximum and display divisor=1 
+      00026C                         76     _send_cmd CLK_FREQ_DIV
       0082EC A6 D5            [ 1]    1     ld a,#CLK_FREQ_DIV 
       0082EE CD 83 4D         [ 4]    2     call oled_cmd 
-      000271                         51     _send_cmd ((15<<CLK_FREQ)+(0<<DISP_DIV)) 
+      000271                         77     _send_cmd ((15<<CLK_FREQ)+(0<<DISP_DIV)) 
       0082F1 A6 F0            [ 1]    1     ld a,#((15<<CLK_FREQ)+(0<<DISP_DIV)) 
+      0082F3 CD 83 4D         [ 4]    2     call oled_cmd 
+                                     78 ; pre-charge phase1=1 and phase2=15
+                                     79 ; reducing phase2 value dim display  
+      000276                         80     _send_cmd PRE_CHARGE
+      0082F6 A6 D9            [ 1]    1     ld a,#PRE_CHARGE 
+      0082F8 CD 83 4D         [ 4]    2     call oled_cmd 
+      00027B                         81     _send_cmd ((1<<PHASE1_PERIOD)+(15<<PHASE2_PERIOD))
+      0082FB A6 F1            [ 1]    1     ld a,#((1<<PHASE1_PERIOD)+(15<<PHASE2_PERIOD)) 
+      0082FD CD 83 4D         [ 4]    2     call oled_cmd 
+                                     82 ; RAM addressing mode       
+      000280                         83     _send_cmd ADR_MODE 
+      008300 A6 20            [ 1]    1     ld a,#ADR_MODE 
+      008302 CD 83 4D         [ 4]    2     call oled_cmd 
+      000285                         84     _send_cmd PAGE_MODE
+      008305 A6 02            [ 1]    1     ld a,#PAGE_MODE 
+      008307 CD 83 4D         [ 4]    2     call oled_cmd 
+                                     85 ; Vcomh deselect level 0.83volt 
+      00028A                         86     _send_cmd VCOMH_DSEL 
+      00830A A6 DB            [ 1]    1     ld a,#VCOMH_DSEL 
+      00830C CD 83 4D         [ 4]    2     call oled_cmd 
+      00028F                         87     _send_cmd VCOMH_DSEL_83
+      00830F A6 30            [ 1]    1     ld a,#VCOMH_DSEL_83 
+      008311 CD 83 4D         [ 4]    2     call oled_cmd 
+                                     88 ; enable charge pump 
+      000294                         89     _send_cmd DISP_CHARGE_PUMP
+      008314 A6 8D            [ 1]    1     ld a,#DISP_CHARGE_PUMP 
+      008316 CD 83 4D         [ 4]    2     call oled_cmd 
+      000299                         90     _send_cmd CP_ON 
+      008319 A6 14            [ 1]    1     ld a,#CP_ON 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 54.
 Hexadecimal [24-Bits]
 
 
 
-      0082F3 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     52 ; pre-charge phase1=1 and phase2=15
-                                     53 ; reducing phase2 value dim display  
-      000276                         54     _send_cmd PRE_CHARGE
-      0082F6 A6 D9            [ 1]    1     ld a,#PRE_CHARGE 
-      0082F8 CD 83 4D         [ 4]    2     call oled_cmd 
-      00027B                         55     _send_cmd ((1<<PHASE1_PERIOD)+(15<<PHASE2_PERIOD))
-      0082FB A6 F1            [ 1]    1     ld a,#((1<<PHASE1_PERIOD)+(15<<PHASE2_PERIOD)) 
-      0082FD CD 83 4D         [ 4]    2     call oled_cmd 
-                                     56 ; RAM addressing mode       
-      000280                         57     _send_cmd ADR_MODE 
-      008300 A6 20            [ 1]    1     ld a,#ADR_MODE 
-      008302 CD 83 4D         [ 4]    2     call oled_cmd 
-      000285                         58     _send_cmd PAGE_MODE
-      008305 A6 02            [ 1]    1     ld a,#PAGE_MODE 
-      008307 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     59 ; Vcomh deselect level 0.83volt 
-      00028A                         60     _send_cmd VCOMH_DSEL 
-      00830A A6 DB            [ 1]    1     ld a,#VCOMH_DSEL 
-      00830C CD 83 4D         [ 4]    2     call oled_cmd 
-      00028F                         61     _send_cmd VCOMH_DSEL_83
-      00830F A6 30            [ 1]    1     ld a,#VCOMH_DSEL_83 
-      008311 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     62 ; enable charge pump 
-      000294                         63     _send_cmd DISP_CHARGE_PUMP
-      008314 A6 8D            [ 1]    1     ld a,#DISP_CHARGE_PUMP 
-      008316 CD 83 4D         [ 4]    2     call oled_cmd 
-      000299                         64     _send_cmd CP_ON 
-      008319 A6 14            [ 1]    1     ld a,#CP_ON 
       00831B CD 83 4D         [ 4]    2     call oled_cmd 
-                                     65 ; disable scrolling 
-      00029E                         66     _send_cmd SCROLL_STOP
+                                     91 ; disable scrolling 
+      00029E                         92     _send_cmd SCROLL_STOP
       00831E A6 2E            [ 1]    1     ld a,#SCROLL_STOP 
       008320 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     67 ; diplay row from 0 
-      0002A3                         68     _send_cmd START_LINE 
+                                     93 ; diplay row from 0 
+      0002A3                         94     _send_cmd START_LINE 
       008323 A6 40            [ 1]    1     ld a,#START_LINE 
       008325 CD 83 4D         [ 4]    2     call oled_cmd 
-                                     69 ; activate display 
-      0002A8                         70     _send_cmd DISP_ON 
+                                     95 ; activate display 
+      0002A8                         96     _send_cmd DISP_ON 
       008328 A6 AF            [ 1]    1     ld a,#DISP_ON 
       00832A CD 83 4D         [ 4]    2     call oled_cmd 
-      00832D 81               [ 4]   71     ret 
-                                     72 
-                                     73 ;--------------------------------
-                                     74 ; set column address to 0:127 
-                                     75 ; set page address to 0:7 
-                                     76 ;--------------------------------
-      00832E                         77 all_display:
-                                     78 ; page window 0..7
-      0002AE                         79     _send_cmd PAG_WND 
+      00832D 81               [ 4]   97     ret 
+                                     98 
+                                     99 ;--------------------------------
+                                    100 ; set column address to 0:127 
+                                    101 ; set page address to 0:7 
+                                    102 ;--------------------------------
+      00832E                        103 all_display:
+                                    104 ; page window 0..7
+      0002AE                        105     _send_cmd PAG_WND 
       00832E A6 22            [ 1]    1     ld a,#PAG_WND 
       008330 CD 83 4D         [ 4]    2     call oled_cmd 
-      0002B3                         80     _send_cmd 0  
+      0002B3                        106     _send_cmd 0  
       008333 A6 00            [ 1]    1     ld a,#0 
+      008335 CD 83 4D         [ 4]    2     call oled_cmd 
+      0002B8                        107     _send_cmd 7 
+      008338 A6 07            [ 1]    1     ld a,#7 
+      00833A CD 83 4D         [ 4]    2     call oled_cmd 
+                                    108 ; columns windows 0..127
+      0002BD                        109     _send_cmd COL_WND 
+      00833D A6 21            [ 1]    1     ld a,#COL_WND 
+      00833F CD 83 4D         [ 4]    2     call oled_cmd 
+      0002C2                        110     _send_cmd 0 
+      008342 A6 00            [ 1]    1     ld a,#0 
+      008344 CD 83 4D         [ 4]    2     call oled_cmd 
+      0002C7                        111     _send_cmd 127
+      008347 A6 7F            [ 1]    1     ld a,#127 
+      008349 CD 83 4D         [ 4]    2     call oled_cmd 
+      00834C 81               [ 4]  112     ret 
+                                    113 
+                                    114 
+                           000000   115 .if 0
+                                    116 ;------------------------
+                                    117 ; scroll display left|right  
+                                    118 ; input:
+                                    119 ;     A   SCROLL_LEFT|SCROLL_RIGHT 
+                                    120 ;     XL  speed 
+                                    121 ;------------------------
+                                    122 scroll:
+                                    123     pushw x 
+                                    124     call oled_cmd 
+                                    125     _send_cmd 0 ; dummy byte  
+                                    126     _send_cmd 0 ; start page 0 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 55.
 Hexadecimal [24-Bits]
 
 
 
-      008335 CD 83 4D         [ 4]    2     call oled_cmd 
-      0002B8                         81     _send_cmd 7 
-      008338 A6 07            [ 1]    1     ld a,#7 
-      00833A CD 83 4D         [ 4]    2     call oled_cmd 
-                                     82 ; columns windows 0..127
-      0002BD                         83     _send_cmd COL_WND 
-      00833D A6 21            [ 1]    1     ld a,#COL_WND 
-      00833F CD 83 4D         [ 4]    2     call oled_cmd 
-      0002C2                         84     _send_cmd 0 
-      008342 A6 00            [ 1]    1     ld a,#0 
-      008344 CD 83 4D         [ 4]    2     call oled_cmd 
-      0002C7                         85     _send_cmd 127
-      008347 A6 7F            [ 1]    1     ld a,#127 
-      008349 CD 83 4D         [ 4]    2     call oled_cmd 
-      00834C 81               [ 4]   86     ret 
-                                     87 
-                                     88 
-                           000000    89 .if 0
-                                     90 ;------------------------
-                                     91 ; scroll display left|right  
-                                     92 ; input:
-                                     93 ;     A   SCROLL_LEFT|SCROLL_RIGHT 
-                                     94 ;     XL  speed 
-                                     95 ;------------------------
-                                     96 scroll:
-                                     97     pushw x 
-                                     98     call oled_cmd 
-                                     99     _send_cmd 0 ; dummy byte  
-                                    100     _send_cmd 0 ; start page 0 
-                                    101     pop a ; 
-                                    102     pop a ; 
-                                    103     call oled_cmd ;speed  
-                                    104     _send_cmd 7 ; end page 
-                                    105     _send_cmd 0 ; dummy 
-                                    106     _send_cmd 255 ; dummy
-                                    107     _send_cmd SCROLL_START 
-                                    108     ret 
-                                    109 
-                                    110 ;---------------------------------
-                                    111 ; enable/disable charge pump 
-                                    112 ; parameters:
-                                    113 ;    A    CP_OFF|CP_ON 
-                                    114 ;---------------------------------
-                                    115 charge_pump_switch:
-                                    116     push a 
-                                    117     _send_cmd DISP_CHARGE_PUMP
-                                    118     pop a 
-                                    119     jra oled_cmd 
-                                    120 
-                                    121 .endif 
-                                    122 
-                                    123 ;---------------------------------
-                                    124 ; send command to OLED 
-                                    125 ; parameters:
-                                    126 ;     A     command code  
+                                    127     pop a ; 
+                                    128     pop a ; 
+                                    129     call oled_cmd ;speed  
+                                    130     _send_cmd 7 ; end page 
+                                    131     _send_cmd 0 ; dummy 
+                                    132     _send_cmd 255 ; dummy
+                                    133     _send_cmd SCROLL_START 
+                                    134     ret 
+                                    135 
+                                    136 ;---------------------------------
+                                    137 ; enable/disable charge pump 
+                                    138 ; parameters:
+                                    139 ;    A    CP_OFF|CP_ON 
+                                    140 ;---------------------------------
+                                    141 charge_pump_switch:
+                                    142     push a 
+                                    143     _send_cmd DISP_CHARGE_PUMP
+                                    144     pop a 
+                                    145     jra oled_cmd 
+                                    146 
+                                    147 .endif 
+                                    148 
+                                    149 ;---------------------------------
+                                    150 ; send command to OLED 
+                                    151 ; parameters:
+                                    152 ;     A     command code  
+                                    153 ;---------------------------------
+      00834D                        154 oled_cmd:
+      00834D 89               [ 2]  155     pushw x 
+      0002CE                        156     _clrz i2c_count 
+      00834E 3F 17                    1     .byte 0x3f, i2c_count 
+      008350 35 02 00 18      [ 1]  157     mov i2c_count+1,#2
+      008354 AE 01 00         [ 2]  158     ldw x,#co_code 
+      008357 E7 01            [ 1]  159     ld (1,x),a 
+      008359 A6 80            [ 1]  160     ld a,#OLED_CMD 
+      00835B F7               [ 1]  161     ld (x),a   
+      0002DC                        162     _strxz i2c_buf 
+      00835C BF 15                    1     .byte 0xbf,i2c_buf 
+      00835E 35 78 00 1C      [ 1]  163     mov i2c_devid,#OLED_DEVID 
+      0002E2                        164     _clrz i2c_status
+      008362 3F 1B                    1     .byte 0x3f, i2c_status 
+      008364 CD 82 3B         [ 4]  165     call i2c_write
+      008367 85               [ 2]  166     popw x 
+      008368 81               [ 4]  167     ret 
+                                    168 
+                                    169 ;---------------------------------
+                                    170 ; send data to OLED GDDRAM
+                                    171 ; parameters:
+                                    172 ;     X     byte count  
+                                    173 ;---------------------------------
+      008369                        174 oled_data:
+      008369 5C               [ 1]  175     incw x   
+      0002EA                        176     _strxz i2c_count     
+      00836A BF 17                    1     .byte 0xbf,i2c_count 
+      00836C AE 01 00         [ 2]  177     ldw x,#co_code 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 56.
 Hexadecimal [24-Bits]
 
 
 
-                                    127 ;---------------------------------
-      00834D                        128 oled_cmd:
-                                    129 ;    ldw x,#2 
-                                    130 ;    _strxz i2c_count 
-      0002CD                        131     _clrz i2c_count 
-      00834D 3F 17                    1     .byte 0x3f, i2c_count 
-      00834F 35 02 00 18      [ 1]  132     mov i2c_count+1,#2
-      008353 AE 01 00         [ 2]  133     ldw x,#co_code 
-      008356 E7 01            [ 1]  134     ld (1,x),a 
-      008358 A6 80            [ 1]  135     ld a,#OLED_CMD 
-      00835A                        136 oled_send:
-      00835A F7               [ 1]  137     ld (x),a   
-      0002DB                        138     _strxz i2c_buf 
-      00835B BF 15                    1     .byte 0xbf,i2c_buf 
-      00835D 35 78 00 1C      [ 1]  139     mov i2c_devid,#OLED_DEVID 
-      0002E1                        140     _clrz i2c_status
-      008361 3F 1B                    1     .byte 0x3f, i2c_status 
-      008363 CD 82 3B         [ 4]  141     call i2c_write
-      008366 81               [ 4]  142     ret 
-                                    143 
-                                    144 ;---------------------------------
-                                    145 ; send data to OLED GDDRAM
-                                    146 ; parameters:
-                                    147 ;     X     byte count  
-                                    148 ;---------------------------------
-      008367                        149 oled_data:
-      008367 5C               [ 1]  150     incw x   
-      0002E8                        151     _strxz i2c_count 
-      008368 BF 17                    1     .byte 0xbf,i2c_count 
-      00836A AE 01 00         [ 2]  152     ldw x,#co_code 
-      00836D A6 40            [ 1]  153     ld a,#OLED_DATA 
-      00836F 20 E9            [ 2]  154     jra oled_send  
-                                    155 
-                                    156 
+      00836F A6 40            [ 1]  178     ld a,#OLED_DATA 
+      008371 F7               [ 1]  179     ld (x),a 
+      0002F2                        180     _strxz i2c_buf
+      008372 BF 15                    1     .byte 0xbf,i2c_buf 
+      008374 35 78 00 1C      [ 1]  181     mov i2c_devid,#OLED_DEVID 
+      0002F8                        182     _clrz i2c_status
+      008378 3F 1B                    1     .byte 0x3f, i2c_status 
+      00837A CD 82 3B         [ 4]  183     call i2c_write
+      00837D 81               [ 4]  184     ret 
+                                    185 
+                                    186 
+                                    187 
+                                    188 
+                                    189 
+                                    190 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 57.
 Hexadecimal [24-Bits]
 
@@ -3039,65 +3042,65 @@ Hexadecimal [24-Bits]
                                      22 ;; small hexadecimal font, 4x5 pixels 
                            000004    23 SF_WIDTH=4
                            000005    24 SF_HEIGHT=5
-      008371                         25 font_hex_4x5:
-      008371 E0 A0 A0 A0 E0          26     .byte 0xe0,0xa0,0xa0,0xa0,0xe0 ;0
-      008376 C0 40 40 40 E0          27     .byte 0xc0,0x40,0x40,0x40,0xe0 ;1
-      00837B E0 20 E0 80 E0          28     .byte 0xe0,0x20,0xe0,0x80,0xe0 ;2
-      008380 E0 20 E0 20 E0          29     .byte 0xe0,0x20,0xe0,0x20,0xe0 ;3
-      008385 A0 A0 E0 20 20          30     .byte 0xa0,0xa0,0xe0,0x20,0x20 ;4
-      00838A E0 80 E0 20 E0          31     .byte 0xe0,0x80,0xe0,0x20,0xe0 ;5
-      00838F 80 80 E0 A0 E0          32     .byte 0x80,0x80,0xe0,0xa0,0xe0 ;6
-      008394 E0 20 20 20 20          33     .byte 0xe0,0x20,0x20,0x20,0x20 ;7
-      008399 E0 A0 E0 A0 E0          34     .byte 0xe0,0xa0,0xe0,0xa0,0xe0 ;8
-      00839E E0 A0 E0 20 20          35     .byte 0xe0,0xa0,0xe0,0x20,0x20 ;9
-      0083A3 E0 A0 E0 A0 A0          36     .byte 0xe0,0xa0,0xe0,0xa0,0xa0 ;A
-      0083A8 C0 A0 C0 A0 C0          37     .byte 0xc0,0xa0,0xc0,0xa0,0xc0 ;B
-      0083AD E0 80 80 80 E0          38     .byte 0xe0,0x80,0x80,0x80,0xe0 ;C
-      0083B2 C0 A0 A0 A0 C0          39     .byte 0xc0,0xa0,0xa0,0xa0,0xc0 ;D
-      0083B7 E0 80 E0 80 E0          40     .byte 0xe0,0x80,0xe0,0x80,0xe0 ;E
-      0083BC E0 80 E0 80 80          41     .byte 0xe0,0x80,0xe0,0x80,0x80 ;F
+      00837E                         25 font_hex_4x5:
+      00837E E0 A0 A0 A0 E0          26     .byte 0xe0,0xa0,0xa0,0xa0,0xe0 ;0
+      008383 C0 40 40 40 E0          27     .byte 0xc0,0x40,0x40,0x40,0xe0 ;1
+      008388 E0 20 E0 80 E0          28     .byte 0xe0,0x20,0xe0,0x80,0xe0 ;2
+      00838D E0 20 E0 20 E0          29     .byte 0xe0,0x20,0xe0,0x20,0xe0 ;3
+      008392 A0 A0 E0 20 20          30     .byte 0xa0,0xa0,0xe0,0x20,0x20 ;4
+      008397 E0 80 E0 20 E0          31     .byte 0xe0,0x80,0xe0,0x20,0xe0 ;5
+      00839C 80 80 E0 A0 E0          32     .byte 0x80,0x80,0xe0,0xa0,0xe0 ;6
+      0083A1 E0 20 20 20 20          33     .byte 0xe0,0x20,0x20,0x20,0x20 ;7
+      0083A6 E0 A0 E0 A0 E0          34     .byte 0xe0,0xa0,0xe0,0xa0,0xe0 ;8
+      0083AB E0 A0 E0 20 20          35     .byte 0xe0,0xa0,0xe0,0x20,0x20 ;9
+      0083B0 E0 A0 E0 A0 A0          36     .byte 0xe0,0xa0,0xe0,0xa0,0xa0 ;A
+      0083B5 C0 A0 C0 A0 C0          37     .byte 0xc0,0xa0,0xc0,0xa0,0xc0 ;B
+      0083BA E0 80 80 80 E0          38     .byte 0xe0,0x80,0x80,0x80,0xe0 ;C
+      0083BF C0 A0 A0 A0 C0          39     .byte 0xc0,0xa0,0xa0,0xa0,0xc0 ;D
+      0083C4 E0 80 E0 80 E0          40     .byte 0xe0,0x80,0xe0,0x80,0xe0 ;E
+      0083C9 E0 80 E0 80 80          41     .byte 0xe0,0x80,0xe0,0x80,0x80 ;F
                                      42 
                                      43 
                                      44 ;; large hexadecimal font, 8x10 pixels
                            000008    45 LF_WIDTH=8 
                            00000A    46 LF_HEIGHT=10 
-      0083C1                         47 font_hex_8x10:
-      0083C1 7C 82 86 8A 92 A2 C2    48     .byte 0x7c,0x82,0x86,0x8a,0x92,0xa2,0xc2,0x82,0x7c,0x00 ; 0
+      0083CE                         47 font_hex_8x10:
+      0083CE 7C 82 86 8A 92 A2 C2    48     .byte 0x7c,0x82,0x86,0x8a,0x92,0xa2,0xc2,0x82,0x7c,0x00 ; 0
              82 7C 00
-      0083CB 08 18 28 08 08 08 08    49     .byte 0x08,0x18,0x28,0x08,0x08,0x08,0x08,0x08,0x3e,0x00 ; 1
+      0083D8 08 18 28 08 08 08 08    49     .byte 0x08,0x18,0x28,0x08,0x08,0x08,0x08,0x08,0x3e,0x00 ; 1
              08 3E 00
-      0083D5 38 44 82 04 08 10 20    50     .byte 0x38,0x44,0x82,0x04,0x08,0x10,0x20,0x40,0xfe,0x00 ; 2
+      0083E2 38 44 82 04 08 10 20    50     .byte 0x38,0x44,0x82,0x04,0x08,0x10,0x20,0x40,0xfe,0x00 ; 2
              40 FE 00
-      0083DF 38 44 82 02 3C 02 82    51     .byte 0x38,0x44,0x82,0x02,0x3c,0x02,0x82,0x44,0x38,0x00 ; 3
+      0083EC 38 44 82 02 3C 02 82    51     .byte 0x38,0x44,0x82,0x02,0x3c,0x02,0x82,0x44,0x38,0x00 ; 3
              44 38 00
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 58.
 Hexadecimal [24-Bits]
 
 
 
-      0083E9 84 84 84 84 7E 04 04    52     .byte 0x84,0x84,0x84,0x84,0x7e,0x04,0x04,0x04,0x04,0x00 ; 4
+      0083F6 84 84 84 84 7E 04 04    52     .byte 0x84,0x84,0x84,0x84,0x7e,0x04,0x04,0x04,0x04,0x00 ; 4
              04 04 00
-      0083F3 7E 80 80 80 7C 02 02    53     .byte 0x7e,0x80,0x80,0x80,0x7c,0x02,0x02,0x02,0xfe,0x00 ; 5
+      008400 7E 80 80 80 7C 02 02    53     .byte 0x7e,0x80,0x80,0x80,0x7c,0x02,0x02,0x02,0xfe,0x00 ; 5
              02 FE 00
-      0083FD 78 84 80 80 FC 82 82    54     .byte 0x78,0x84,0x80,0x80,0xfc,0x82,0x82,0x82,0x7c,0x00 ; 6
+      00840A 78 84 80 80 FC 82 82    54     .byte 0x78,0x84,0x80,0x80,0xfc,0x82,0x82,0x82,0x7c,0x00 ; 6
              82 7C 00
-      008407 7E 82 04 08 08 08 08    55     .byte 0x7e,0x82,0x04,0x08,0x08,0x08,0x08,0x08,0x08,0x00 ; 7
+      008414 7E 82 04 08 08 08 08    55     .byte 0x7e,0x82,0x04,0x08,0x08,0x08,0x08,0x08,0x08,0x00 ; 7
              08 08 00
-      008411 38 44 82 82 7C 82 82    56     .byte 0x38,0x44,0x82,0x82,0x7c,0x82,0x82,0x44,0x38,0x00 ; 8
+      00841E 38 44 82 82 7C 82 82    56     .byte 0x38,0x44,0x82,0x82,0x7c,0x82,0x82,0x44,0x38,0x00 ; 8
              44 38 00
-      00841B 38 44 82 82 46 3A 02    57     .byte 0x38,0x44,0x82,0x82,0x46,0x3a,0x02,0x04,0x38,0x00 ; 9
+      008428 38 44 82 82 46 3A 02    57     .byte 0x38,0x44,0x82,0x82,0x46,0x3a,0x02,0x04,0x38,0x00 ; 9
              04 38 00
-      008425 38 44 82 82 FE 82 82    58     .byte 0x38,0x44,0x82,0x82,0xfe,0x82,0x82,0x82,0x82,0x00 ; A
+      008432 38 44 82 82 FE 82 82    58     .byte 0x38,0x44,0x82,0x82,0xfe,0x82,0x82,0x82,0x82,0x00 ; A
              82 82 00
-      00842F FC 82 82 82 FC 82 82    59     .byte 0xfc,0x82,0x82,0x82,0xfc,0x82,0x82,0x82,0xfc,0x00 ; B
+      00843C FC 82 82 82 FC 82 82    59     .byte 0xfc,0x82,0x82,0x82,0xfc,0x82,0x82,0x82,0xfc,0x00 ; B
              82 FC 00
-      008439 3E 40 80 80 80 80 80    60     .byte 0x3e,0x40,0x80,0x80,0x80,0x80,0x80,0x40,0x3e,0x00 ; C
+      008446 3E 40 80 80 80 80 80    60     .byte 0x3e,0x40,0x80,0x80,0x80,0x80,0x80,0x40,0x3e,0x00 ; C
              40 3E 00
-      008443 F8 84 82 82 82 82 82    61     .byte 0xf8,0x84,0x82,0x82,0x82,0x82,0x82,0x84,0xf8,0x00 ; D
+      008450 F8 84 82 82 82 82 82    61     .byte 0xf8,0x84,0x82,0x82,0x82,0x82,0x82,0x84,0xf8,0x00 ; D
              84 F8 00
-      00844D FE 80 80 80 FE 80 80    62     .byte 0xfe,0x80,0x80,0x80,0xfe,0x80,0x80,0x80,0xfe,0x00 ; E
+      00845A FE 80 80 80 FE 80 80    62     .byte 0xfe,0x80,0x80,0x80,0xfe,0x80,0x80,0x80,0xfe,0x00 ; E
              80 FE 00
-      008457 FE 80 80 80 FE 80 80    63     .byte 0xfe,0x80,0x80,0x80,0xfe,0x80,0x80,0x80,0x80,0x00 ; F
+      008464 FE 80 80 80 FE 80 80    63     .byte 0xfe,0x80,0x80,0x80,0xfe,0x80,0x80,0x80,0x80,0x00 ; F
              80 80 00
                                      64 
                                      65 
@@ -3129,123 +3132,123 @@ Hexadecimal [24-Bits]
                                      21 ; ASCII font 6x8 
                            000008    22 OLED_FONT_HEIGHT=8 
                            000006    23 OLED_FONT_WIDTH=6 
-      008461                         24 oled_font_6x8: 
-      008461 00 00 00 00 00 00       25 .byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; space ASCII 32
-      008467 00 00 5F 00 00 00       26 .byte 0x00, 0x00, 0x5F, 0x00, 0x00, 0x00 ; !
-      00846D 00 07 00 07 00 00       27 .byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x00 ; "
-      008473 14 7F 14 7F 14 00       28 .byte 0x14, 0x7F, 0x14, 0x7F, 0x14, 0x00 ; #
-      008479 24 2A 7F 2A 12 00       29 .byte 0x24, 0x2A, 0x7F, 0x2A, 0x12, 0x00 ; $
-      00847F 23 13 08 64 62 00       30 .byte 0x23, 0x13, 0x08, 0x64, 0x62, 0x00 ; %
-      008485 36 49 55 22 50 00       31 .byte 0x36, 0x49, 0x55, 0x22, 0x50, 0x00 ; &
-      00848B 00 05 03 00 00 00       32 .byte 0x00, 0x05, 0x03, 0x00, 0x00, 0x00 ; '
-      008491 00 1C 22 41 00 00       33 .byte 0x00, 0x1C, 0x22, 0x41, 0x00, 0x00 ; (
-      008497 00 41 22 1C 00 00       34 .byte 0x00, 0x41, 0x22, 0x1C, 0x00, 0x00 ; )
-      00849D 14 08 3E 08 14 00       35 .byte 0x14, 0x08, 0x3E, 0x08, 0x14, 0x00 ; *
-      0084A3 08 08 3E 08 08 00       36 .byte 0x08, 0x08, 0x3E, 0x08, 0x08, 0x00 ; +
-      0084A9 00 D8 78 38 00 00       37 .byte 0x00, 0xD8, 0x78, 0x38, 0x00, 0x00 ; ,
-      0084AF 08 08 08 08 00 00       38 .byte 0x08, 0x08, 0x08, 0x08, 0x00, 0x00 ; -
-      0084B5 00 60 60 60 00 00       39 .byte 0x00, 0x60, 0x60, 0x60, 0x00, 0x00 ; .
-      0084BB 00 20 34 18 0C 06       40 .byte 0x00, 0x20, 0x34, 0x18, 0x0C, 0x06 ; /
-      0084C1 3E 51 49 45 3E 00       41 .byte 0x3E, 0x51, 0x49, 0x45, 0x3E, 0x00 ; 0
-      0084C7 40 42 7F 40 40 00       42 .byte 0x40, 0x42, 0x7F, 0x40, 0x40, 0x00 ; 1
-      0084CD 62 51 49 45 42 00       43 .byte 0x62, 0x51, 0x49, 0x45, 0x42, 0x00 ; 2
-      0084D3 49 49 49 49 36 00       44 .byte 0x49, 0x49, 0x49, 0x49, 0x36, 0x00 ; 3
-      0084D9 18 14 12 7F 10 00       45 .byte 0x18, 0x14, 0x12, 0x7F, 0x10, 0x00 ; 4
-      0084DF 4F 49 49 49 31 00       46 .byte 0x4F, 0x49, 0x49, 0x49, 0x31, 0x00 ; 5
-      0084E5 3C 4A 49 49 30 00       47 .byte 0x3C, 0x4A, 0x49, 0x49, 0x30, 0x00 ; 6
-      0084EB 01 71 09 05 03 00       48 .byte 0x01, 0x71, 0x09, 0x05, 0x03, 0x00 ; 7
-      0084F1 36 49 49 49 36 00       49 .byte 0x36, 0x49, 0x49, 0x49, 0x36, 0x00 ; 8
-      0084F7 06 49 49 49 36 00       50 .byte 0x06, 0x49, 0x49, 0x49, 0x36, 0x00 ; 9
-      0084FD 00 36 36 36 00 00       51 .byte 0x00, 0x36, 0x36, 0x36, 0x00, 0x00 ; :
-      008503 00 F6 76 36 00 00       52 .byte 0x00, 0xF6, 0x76, 0x36, 0x00, 0x00 ; ;
-      008509 08 14 22 41 00 00       53 .byte 0x08, 0x14, 0x22, 0x41, 0x00, 0x00 ; <
-      00850F 14 14 14 14 14 00       54 .byte 0x14, 0x14, 0x14, 0x14, 0x14, 0x00 ; =
-      008515 00 41 22 14 08 00       55 .byte 0x00, 0x41, 0x22, 0x14, 0x08, 0x00 ; >
+      00846E                         24 oled_font_6x8: 
+      00846E 00 00 00 00 00 00       25 .byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 ; space ASCII 32
+      008474 00 00 5F 00 00 00       26 .byte 0x00, 0x00, 0x5F, 0x00, 0x00, 0x00 ; !
+      00847A 00 07 00 07 00 00       27 .byte 0x00, 0x07, 0x00, 0x07, 0x00, 0x00 ; "
+      008480 14 7F 14 7F 14 00       28 .byte 0x14, 0x7F, 0x14, 0x7F, 0x14, 0x00 ; #
+      008486 24 2A 7F 2A 12 00       29 .byte 0x24, 0x2A, 0x7F, 0x2A, 0x12, 0x00 ; $
+      00848C 23 13 08 64 62 00       30 .byte 0x23, 0x13, 0x08, 0x64, 0x62, 0x00 ; %
+      008492 36 49 55 22 50 00       31 .byte 0x36, 0x49, 0x55, 0x22, 0x50, 0x00 ; &
+      008498 00 05 03 00 00 00       32 .byte 0x00, 0x05, 0x03, 0x00, 0x00, 0x00 ; '
+      00849E 00 1C 22 41 00 00       33 .byte 0x00, 0x1C, 0x22, 0x41, 0x00, 0x00 ; (
+      0084A4 00 41 22 1C 00 00       34 .byte 0x00, 0x41, 0x22, 0x1C, 0x00, 0x00 ; )
+      0084AA 14 08 3E 08 14 00       35 .byte 0x14, 0x08, 0x3E, 0x08, 0x14, 0x00 ; *
+      0084B0 08 08 3E 08 08 00       36 .byte 0x08, 0x08, 0x3E, 0x08, 0x08, 0x00 ; +
+      0084B6 00 D8 78 38 00 00       37 .byte 0x00, 0xD8, 0x78, 0x38, 0x00, 0x00 ; ,
+      0084BC 08 08 08 08 00 00       38 .byte 0x08, 0x08, 0x08, 0x08, 0x00, 0x00 ; -
+      0084C2 00 60 60 60 00 00       39 .byte 0x00, 0x60, 0x60, 0x60, 0x00, 0x00 ; .
+      0084C8 00 20 34 18 0C 06       40 .byte 0x00, 0x20, 0x34, 0x18, 0x0C, 0x06 ; /
+      0084CE 3E 51 49 45 3E 00       41 .byte 0x3E, 0x51, 0x49, 0x45, 0x3E, 0x00 ; 0
+      0084D4 40 42 7F 40 40 00       42 .byte 0x40, 0x42, 0x7F, 0x40, 0x40, 0x00 ; 1
+      0084DA 62 51 49 45 42 00       43 .byte 0x62, 0x51, 0x49, 0x45, 0x42, 0x00 ; 2
+      0084E0 49 49 49 49 36 00       44 .byte 0x49, 0x49, 0x49, 0x49, 0x36, 0x00 ; 3
+      0084E6 18 14 12 7F 10 00       45 .byte 0x18, 0x14, 0x12, 0x7F, 0x10, 0x00 ; 4
+      0084EC 4F 49 49 49 31 00       46 .byte 0x4F, 0x49, 0x49, 0x49, 0x31, 0x00 ; 5
+      0084F2 3C 4A 49 49 30 00       47 .byte 0x3C, 0x4A, 0x49, 0x49, 0x30, 0x00 ; 6
+      0084F8 01 71 09 05 03 00       48 .byte 0x01, 0x71, 0x09, 0x05, 0x03, 0x00 ; 7
+      0084FE 36 49 49 49 36 00       49 .byte 0x36, 0x49, 0x49, 0x49, 0x36, 0x00 ; 8
+      008504 06 49 49 49 36 00       50 .byte 0x06, 0x49, 0x49, 0x49, 0x36, 0x00 ; 9
+      00850A 00 36 36 36 00 00       51 .byte 0x00, 0x36, 0x36, 0x36, 0x00, 0x00 ; :
+      008510 00 F6 76 36 00 00       52 .byte 0x00, 0xF6, 0x76, 0x36, 0x00, 0x00 ; ;
+      008516 08 14 22 41 00 00       53 .byte 0x08, 0x14, 0x22, 0x41, 0x00, 0x00 ; <
+      00851C 14 14 14 14 14 00       54 .byte 0x14, 0x14, 0x14, 0x14, 0x14, 0x00 ; =
+      008522 00 41 22 14 08 00       55 .byte 0x00, 0x41, 0x22, 0x14, 0x08, 0x00 ; >
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 60.
 Hexadecimal [24-Bits]
 
 
 
-      00851B 02 01 51 09 06 00       56 .byte 0x02, 0x01, 0x51, 0x09, 0x06, 0x00 ; ?
-      008521 32 49 79 41 3E 00       57 .byte 0x32, 0x49, 0x79, 0x41, 0x3E, 0x00 ; @
-      008527 7E 09 09 09 7E 00       58 .byte 0x7E, 0x09, 0x09, 0x09, 0x7E, 0x00 ; A
-      00852D 7F 49 49 49 36 00       59 .byte 0x7F, 0x49, 0x49, 0x49, 0x36, 0x00 ; B
-      008533 3E 41 41 41 41 00       60 .byte 0x3E, 0x41, 0x41, 0x41, 0x41, 0x00 ; C
-      008539 7F 41 41 41 3E 00       61 .byte 0x7F, 0x41, 0x41, 0x41, 0x3E, 0x00 ; D
-      00853F 7F 49 49 49 49 00       62 .byte 0x7F, 0x49, 0x49, 0x49, 0x49, 0x00 ; E
-      008545 7F 09 09 09 09 00       63 .byte 0x7F, 0x09, 0x09, 0x09, 0x09, 0x00 ; F
-      00854B 3E 41 49 49 31 00       64 .byte 0x3E, 0x41, 0x49, 0x49, 0x31, 0x00 ; G
-      008551 7F 08 08 08 7F 00       65 .byte 0x7F, 0x08, 0x08, 0x08, 0x7F, 0x00 ; H
-      008557 00 41 7F 41 00 00       66 .byte 0x00, 0x41, 0x7F, 0x41, 0x00, 0x00 ; I
-      00855D 20 41 41 21 1F 00       67 .byte 0x20, 0x41, 0x41, 0x21, 0x1F, 0x00 ; J
-      008563 7F 08 14 22 41 00       68 .byte 0x7F, 0x08, 0x14, 0x22, 0x41, 0x00 ; K
-      008569 7F 40 40 40 40 00       69 .byte 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00 ; L
-      00856F 7F 02 04 02 7F 00       70 .byte 0x7F, 0x02, 0x04, 0x02, 0x7F, 0x00 ; M
-      008575 7F 04 08 10 7F 00       71 .byte 0x7F, 0x04, 0x08, 0x10, 0x7F, 0x00 ; N
-      00857B 3E 41 41 41 3E 00       72 .byte 0x3E, 0x41, 0x41, 0x41, 0x3E, 0x00 ; O
-      008581 7F 09 09 09 06 00       73 .byte 0x7F, 0x09, 0x09, 0x09, 0x06, 0x00 ; P
-      008587 3E 41 51 61 7E 00       74 .byte 0x3E, 0x41, 0x51, 0x61, 0x7E, 0x00 ; Q
-      00858D 7F 09 19 29 46 00       75 .byte 0x7F, 0x09, 0x19, 0x29, 0x46, 0x00 ; R
-      008593 46 49 49 49 31 00       76 .byte 0x46, 0x49, 0x49, 0x49, 0x31, 0x00 ; S
-      008599 01 01 01 7F 01 01       77 .byte 0x01, 0x01, 0x01, 0x7F, 0x01, 0x01 ; T
-      00859F 3F 40 40 40 3F 00       78 .byte 0x3F, 0x40, 0x40, 0x40, 0x3F, 0x00 ; U
-      0085A5 1F 20 40 20 1F 00       79 .byte 0x1F, 0x20, 0x40, 0x20, 0x1F, 0x00 ; V
-      0085AB 7F 20 18 20 7F 00       80 .byte 0x7F, 0x20, 0x18, 0x20, 0x7F, 0x00 ; W
-      0085B1 63 14 08 14 63 00       81 .byte 0x63, 0x14, 0x08, 0x14, 0x63, 0x00 ; X
-      0085B7 07 08 70 08 07 00       82 .byte 0x07, 0x08, 0x70, 0x08, 0x07, 0x00 ; Y
-      0085BD 71 49 45 43 41 00       83 .byte 0x71, 0x49, 0x45, 0x43, 0x41, 0x00 ; Z
-      0085C3 00 7F 41 00 00 00       84 .byte 0x00, 0x7F, 0x41, 0x00, 0x00, 0x00 ; [
-      0085C9 02 04 08 10 20 00       85 .byte 0x02, 0x04, 0x08, 0x10, 0x20, 0x00 ; '\'
-      0085CF 00 00 00 41 7F 00       86 .byte 0x00, 0x00, 0x00, 0x41, 0x7F, 0x00 ; ]
-      0085D5 04 02 01 02 04 00       87 .byte 0x04, 0x02, 0x01, 0x02, 0x04, 0x00 ; ^
-      0085DB 80 80 80 80 80 80       88 .byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 ; _
-      0085E1 00 01 02 04 00 00       89 .byte 0x00, 0x01, 0x02, 0x04, 0x00, 0x00 ; `
-      0085E7 20 54 54 54 78 00       90 .byte 0x20, 0x54, 0x54, 0x54, 0x78, 0x00 ; a
-      0085ED 7F 50 48 48 30 00       91 .byte 0x7F, 0x50, 0x48, 0x48, 0x30, 0x00 ; b
-      0085F3 38 44 44 44 20 00       92 .byte 0x38, 0x44, 0x44, 0x44, 0x20, 0x00 ; c
-      0085F9 30 48 48 50 7F 00       93 .byte 0x30, 0x48, 0x48, 0x50, 0x7F, 0x00 ; d
-      0085FF 38 54 54 54 18 00       94 .byte 0x38, 0x54, 0x54, 0x54, 0x18, 0x00 ; e
-      008605 08 7E 09 01 02 00       95 .byte 0x08, 0x7E, 0x09, 0x01, 0x02, 0x00 ; f
-      00860B 18 A4 A4 A4 7C 00       96 .byte 0x18, 0xA4, 0xA4, 0xA4, 0x7C, 0x00 ; g
-      008611 7F 08 04 04 78 00       97 .byte 0x7F, 0x08, 0x04, 0x04, 0x78, 0x00 ; h
-      008617 00 00 7A 00 00 00       98 .byte 0x00, 0x00, 0x7A, 0x00, 0x00, 0x00 ; i
-      00861D 20 40 44 3D 00 00       99 .byte 0x20, 0x40, 0x44, 0x3D, 0x00, 0x00 ; j
-      008623 7F 10 28 44 00 00      100 .byte 0x7F, 0x10, 0x28, 0x44, 0x00, 0x00 ; k
-      008629 00 41 7F 40 00 00      101 .byte 0x00, 0x41, 0x7F, 0x40, 0x00, 0x00 ; l
-      00862F 7C 04 18 04 78 00      102 .byte 0x7C, 0x04, 0x18, 0x04, 0x78, 0x00 ; m
-      008635 7C 08 04 04 78 00      103 .byte 0x7C, 0x08, 0x04, 0x04, 0x78, 0x00 ; n
-      00863B 38 44 44 44 38 00      104 .byte 0x38, 0x44, 0x44, 0x44, 0x38, 0x00 ; o
-      008641 FC 24 24 24 18 00      105 .byte 0xFC, 0x24, 0x24, 0x24, 0x18, 0x00 ; p
-      008647 38 44 24 F8 84 00      106 .byte 0x38, 0x44, 0x24, 0xF8, 0x84, 0x00 ; q
-      00864D 7C 08 04 04 08 00      107 .byte 0x7C, 0x08, 0x04, 0x04, 0x08, 0x00 ; r
-      008653 48 54 54 54 20 00      108 .byte 0x48, 0x54, 0x54, 0x54, 0x20, 0x00 ; s
-      008659 04 3F 44 40 20 00      109 .byte 0x04, 0x3F, 0x44, 0x40, 0x20, 0x00 ; t
-      00865F 3C 40 40 20 7C 00      110 .byte 0x3C, 0x40, 0x40, 0x20, 0x7C, 0x00 ; u
+      008528 02 01 51 09 06 00       56 .byte 0x02, 0x01, 0x51, 0x09, 0x06, 0x00 ; ?
+      00852E 32 49 79 41 3E 00       57 .byte 0x32, 0x49, 0x79, 0x41, 0x3E, 0x00 ; @
+      008534 7E 09 09 09 7E 00       58 .byte 0x7E, 0x09, 0x09, 0x09, 0x7E, 0x00 ; A
+      00853A 7F 49 49 49 36 00       59 .byte 0x7F, 0x49, 0x49, 0x49, 0x36, 0x00 ; B
+      008540 3E 41 41 41 41 00       60 .byte 0x3E, 0x41, 0x41, 0x41, 0x41, 0x00 ; C
+      008546 7F 41 41 41 3E 00       61 .byte 0x7F, 0x41, 0x41, 0x41, 0x3E, 0x00 ; D
+      00854C 7F 49 49 49 49 00       62 .byte 0x7F, 0x49, 0x49, 0x49, 0x49, 0x00 ; E
+      008552 7F 09 09 09 09 00       63 .byte 0x7F, 0x09, 0x09, 0x09, 0x09, 0x00 ; F
+      008558 3E 41 49 49 31 00       64 .byte 0x3E, 0x41, 0x49, 0x49, 0x31, 0x00 ; G
+      00855E 7F 08 08 08 7F 00       65 .byte 0x7F, 0x08, 0x08, 0x08, 0x7F, 0x00 ; H
+      008564 00 41 7F 41 00 00       66 .byte 0x00, 0x41, 0x7F, 0x41, 0x00, 0x00 ; I
+      00856A 20 41 41 21 1F 00       67 .byte 0x20, 0x41, 0x41, 0x21, 0x1F, 0x00 ; J
+      008570 7F 08 14 22 41 00       68 .byte 0x7F, 0x08, 0x14, 0x22, 0x41, 0x00 ; K
+      008576 7F 40 40 40 40 00       69 .byte 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00 ; L
+      00857C 7F 02 04 02 7F 00       70 .byte 0x7F, 0x02, 0x04, 0x02, 0x7F, 0x00 ; M
+      008582 7F 04 08 10 7F 00       71 .byte 0x7F, 0x04, 0x08, 0x10, 0x7F, 0x00 ; N
+      008588 3E 41 41 41 3E 00       72 .byte 0x3E, 0x41, 0x41, 0x41, 0x3E, 0x00 ; O
+      00858E 7F 09 09 09 06 00       73 .byte 0x7F, 0x09, 0x09, 0x09, 0x06, 0x00 ; P
+      008594 3E 41 51 61 7E 00       74 .byte 0x3E, 0x41, 0x51, 0x61, 0x7E, 0x00 ; Q
+      00859A 7F 09 19 29 46 00       75 .byte 0x7F, 0x09, 0x19, 0x29, 0x46, 0x00 ; R
+      0085A0 46 49 49 49 31 00       76 .byte 0x46, 0x49, 0x49, 0x49, 0x31, 0x00 ; S
+      0085A6 01 01 01 7F 01 01       77 .byte 0x01, 0x01, 0x01, 0x7F, 0x01, 0x01 ; T
+      0085AC 3F 40 40 40 3F 00       78 .byte 0x3F, 0x40, 0x40, 0x40, 0x3F, 0x00 ; U
+      0085B2 1F 20 40 20 1F 00       79 .byte 0x1F, 0x20, 0x40, 0x20, 0x1F, 0x00 ; V
+      0085B8 7F 20 18 20 7F 00       80 .byte 0x7F, 0x20, 0x18, 0x20, 0x7F, 0x00 ; W
+      0085BE 63 14 08 14 63 00       81 .byte 0x63, 0x14, 0x08, 0x14, 0x63, 0x00 ; X
+      0085C4 07 08 70 08 07 00       82 .byte 0x07, 0x08, 0x70, 0x08, 0x07, 0x00 ; Y
+      0085CA 71 49 45 43 41 00       83 .byte 0x71, 0x49, 0x45, 0x43, 0x41, 0x00 ; Z
+      0085D0 00 7F 41 00 00 00       84 .byte 0x00, 0x7F, 0x41, 0x00, 0x00, 0x00 ; [
+      0085D6 02 04 08 10 20 00       85 .byte 0x02, 0x04, 0x08, 0x10, 0x20, 0x00 ; '\'
+      0085DC 00 00 00 41 7F 00       86 .byte 0x00, 0x00, 0x00, 0x41, 0x7F, 0x00 ; ]
+      0085E2 04 02 01 02 04 00       87 .byte 0x04, 0x02, 0x01, 0x02, 0x04, 0x00 ; ^
+      0085E8 80 80 80 80 80 80       88 .byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80 ; _
+      0085EE 00 01 02 04 00 00       89 .byte 0x00, 0x01, 0x02, 0x04, 0x00, 0x00 ; `
+      0085F4 20 54 54 54 78 00       90 .byte 0x20, 0x54, 0x54, 0x54, 0x78, 0x00 ; a
+      0085FA 7F 50 48 48 30 00       91 .byte 0x7F, 0x50, 0x48, 0x48, 0x30, 0x00 ; b
+      008600 38 44 44 44 20 00       92 .byte 0x38, 0x44, 0x44, 0x44, 0x20, 0x00 ; c
+      008606 30 48 48 50 7F 00       93 .byte 0x30, 0x48, 0x48, 0x50, 0x7F, 0x00 ; d
+      00860C 38 54 54 54 18 00       94 .byte 0x38, 0x54, 0x54, 0x54, 0x18, 0x00 ; e
+      008612 08 7E 09 01 02 00       95 .byte 0x08, 0x7E, 0x09, 0x01, 0x02, 0x00 ; f
+      008618 18 A4 A4 A4 7C 00       96 .byte 0x18, 0xA4, 0xA4, 0xA4, 0x7C, 0x00 ; g
+      00861E 7F 08 04 04 78 00       97 .byte 0x7F, 0x08, 0x04, 0x04, 0x78, 0x00 ; h
+      008624 00 00 7A 00 00 00       98 .byte 0x00, 0x00, 0x7A, 0x00, 0x00, 0x00 ; i
+      00862A 20 40 44 3D 00 00       99 .byte 0x20, 0x40, 0x44, 0x3D, 0x00, 0x00 ; j
+      008630 7F 10 28 44 00 00      100 .byte 0x7F, 0x10, 0x28, 0x44, 0x00, 0x00 ; k
+      008636 00 41 7F 40 00 00      101 .byte 0x00, 0x41, 0x7F, 0x40, 0x00, 0x00 ; l
+      00863C 7C 04 18 04 78 00      102 .byte 0x7C, 0x04, 0x18, 0x04, 0x78, 0x00 ; m
+      008642 7C 08 04 04 78 00      103 .byte 0x7C, 0x08, 0x04, 0x04, 0x78, 0x00 ; n
+      008648 38 44 44 44 38 00      104 .byte 0x38, 0x44, 0x44, 0x44, 0x38, 0x00 ; o
+      00864E FC 24 24 24 18 00      105 .byte 0xFC, 0x24, 0x24, 0x24, 0x18, 0x00 ; p
+      008654 38 44 24 F8 84 00      106 .byte 0x38, 0x44, 0x24, 0xF8, 0x84, 0x00 ; q
+      00865A 7C 08 04 04 08 00      107 .byte 0x7C, 0x08, 0x04, 0x04, 0x08, 0x00 ; r
+      008660 48 54 54 54 20 00      108 .byte 0x48, 0x54, 0x54, 0x54, 0x20, 0x00 ; s
+      008666 04 3F 44 40 20 00      109 .byte 0x04, 0x3F, 0x44, 0x40, 0x20, 0x00 ; t
+      00866C 3C 40 40 20 7C 00      110 .byte 0x3C, 0x40, 0x40, 0x20, 0x7C, 0x00 ; u
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 61.
 Hexadecimal [24-Bits]
 
 
 
-      008665 1C 20 40 20 1C 00      111 .byte 0x1C, 0x20, 0x40, 0x20, 0x1C, 0x00 ; v
-      00866B 3C 40 30 40 3C 00      112 .byte 0x3C, 0x40, 0x30, 0x40, 0x3C, 0x00 ; w
-      008671 44 28 10 28 44 00      113 .byte 0x44, 0x28, 0x10, 0x28, 0x44, 0x00 ; x
-      008677 1C A0 A0 A0 7C 00      114 .byte 0x1C, 0xA0, 0xA0, 0xA0, 0x7C, 0x00 ; y
-      00867D 44 64 54 4C 44 00      115 .byte 0x44, 0x64, 0x54, 0x4C, 0x44, 0x00 ; z
-      008683 08 36 41 00 00 00      116 .byte 0x08, 0x36, 0x41, 0x00, 0x00, 0x00 ; {
-      008689 00 00 7F 00 00 00      117 .byte 0x00, 0x00, 0x7F, 0x00, 0x00, 0x00 ; |
-      00868F 00 41 36 08 00 00      118 .byte 0x00, 0x41, 0x36, 0x08, 0x00, 0x00 ; }
-      008695 08 04 08 10 08 00      119 .byte 0x08, 0x04, 0x08, 0x10, 0x08, 0x00 ; ~  ASCII 127 
-      00869B FF FF FF FF FF FF      120 .byte 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ; 95 block cursor  128 
-      0086A1 08 49 2A 1C 08 00      121 .byte 0x08, 0x49, 0x2A, 0x1C, 0x08, 0x00 ; 96 flèche droite 129 
-      0086A7 08 1C 2A 49 08 00      122 .byte 0x08, 0x1C, 0x2A, 0x49, 0x08, 0x00 ; 97 flèche gauche 130
-      0086AD 04 02 3F 02 04 00      123 .byte 0x04, 0x02, 0x3F, 0x02, 0x04, 0x00 ; 98 flèche haut   131
-      0086B3 10 20 7E 20 10 00      124 .byte 0x10, 0x20, 0x7E, 0x20, 0x10, 0x00 ; 99 flèche bas    132
-      0086B9 1C 3E 3E 3E 1C 00      125 .byte 0x1C, 0x3E, 0x3E, 0x3E, 0x1C, 0x00 ; 100 rond         133 
-      0086BF 00 00 00 80 80 80      126 .byte 0x00, 0x00, 0x00, 0x80, 0x80, 0x80 ; 101 underline cursor 134
-      0086C5 FF 00 00 00 00 00      127 .byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00 ; 102 insert cursor 135 
-      0086CB                        128 oled_font_end:
-                                    129 
-                                    130 
+      008672 1C 20 40 20 1C 00      111 .byte 0x1C, 0x20, 0x40, 0x20, 0x1C, 0x00 ; v
+      008678 3C 40 30 40 3C 00      112 .byte 0x3C, 0x40, 0x30, 0x40, 0x3C, 0x00 ; w
+      00867E 44 28 10 28 44 00      113 .byte 0x44, 0x28, 0x10, 0x28, 0x44, 0x00 ; x
+      008684 1C A0 A0 A0 7C 00      114 .byte 0x1C, 0xA0, 0xA0, 0xA0, 0x7C, 0x00 ; y
+      00868A 44 64 54 4C 44 00      115 .byte 0x44, 0x64, 0x54, 0x4C, 0x44, 0x00 ; z
+      008690 08 36 41 00 00 00      116 .byte 0x08, 0x36, 0x41, 0x00, 0x00, 0x00 ; {
+      008696 00 00 7F 00 00 00      117 .byte 0x00, 0x00, 0x7F, 0x00, 0x00, 0x00 ; |
+      00869C 00 41 36 08 00 00      118 .byte 0x00, 0x41, 0x36, 0x08, 0x00, 0x00 ; }
+      0086A2 08 04 08 10 08 00      119 .byte 0x08, 0x04, 0x08, 0x10, 0x08, 0x00 ; ~  ASCII 127 
+      0086A8 FF FF FF FF FF FF      120 .byte 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF ; 95 block cursor  127 
+      0086AE 08 49 2A 1C 08 00      121 .byte 0x08, 0x49, 0x2A, 0x1C, 0x08, 0x00 ; 96 flèche droite 128 
+      0086B4 08 1C 2A 49 08 00      122 .byte 0x08, 0x1C, 0x2A, 0x49, 0x08, 0x00 ; 97 flèche gauche 129
+      0086BA 04 02 3F 02 04 00      123 .byte 0x04, 0x02, 0x3F, 0x02, 0x04, 0x00 ; 98 flèche haut   130
+      0086C0 10 20 7E 20 10 00      124 .byte 0x10, 0x20, 0x7E, 0x20, 0x10, 0x00 ; 99 flèche bas    131
+      0086C6 1C 3E 3E 3E 1C 00      125 .byte 0x1C, 0x3E, 0x3E, 0x3E, 0x1C, 0x00 ; 100 rond         132
+      0086CC 00 00 00 80 80 80      126 .byte 0x00, 0x00, 0x00, 0x80, 0x80, 0x80 ; 101 underline cursor 133
+      0086D2 FF 00 00 00 00 00      127 .byte 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00 ; 102 insert cursor 134 
+      0086D8 00 06 09 09 06 00      128 .byte 0x00, 0x06, 0x09, 0x09, 0x06, 0x00 ; 103 degree symbol 135 
+      0086DE                        129 oled_font_end:
+                           000087   130 DEGREE=135
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 62.
 Hexadecimal [24-Bits]
 
@@ -3281,248 +3284,254 @@ Hexadecimal [24-Bits]
                                      28 ; input:
                                      29 ;    A  page {0..7}
                                      30 ;--------------------------
-      0086CB                         31 set_page:
-      0086CB AB B0            [ 1]   32     add a,#0xB0 
-      0086CD CD 83 4D         [ 4]   33     call oled_cmd 
-      000650                         34     _send_cmd COL_WND 
-      0086D0 A6 21            [ 1]    1     ld a,#COL_WND 
-      0086D2 CD 83 4D         [ 4]    2     call oled_cmd 
-      000655                         35     _send_cmd 0 
-      0086D5 A6 00            [ 1]    1     ld a,#0 
-      0086D7 CD 83 4D         [ 4]    2     call oled_cmd 
-      00065A                         36     _send_cmd 127 
-      0086DA A6 7F            [ 1]    1     ld a,#127 
-      0086DC CD 83 4D         [ 4]    2     call oled_cmd 
-      0086DF 81               [ 4]   37     ret 
-                                     38 
-                                     39 ;---------------------------
-                                     40 ; set display start line 
-                                     41 ;----------------------------
-      0086E0                         42 scroll_up:
-      0086E0 48               [ 1]   43     sll a 
-      0086E1 48               [ 1]   44     sll a 
-      0086E2 48               [ 1]   45     sll a 
-      0086E3 88               [ 1]   46     push a 
-      000664                         47     _send_cmd DISP_OFFSET
-      0086E4 A6 D3            [ 1]    1     ld a,#DISP_OFFSET 
-      0086E6 CD 83 4D         [ 4]    2     call oled_cmd 
+      0086DE                         31 set_page:
+      00065E                         32     _clrz cur_x
+      0086DE 3F 1E                    1     .byte 0x3f, cur_x 
+      000660                         33     _straz cur_y
+      0086E0 B7 1D                    1     .byte 0xb7,cur_y 
+      000662                         34     _straz start_page
+      0086E2 B7 1F                    1     .byte 0xb7,start_page 
+      0086E4 AB B0            [ 1]   35     add a,#0xB0 
+      0086E6 CD 83 4D         [ 4]   36     call oled_cmd 
+      000669                         37     _send_cmd COL_WND 
+      0086E9 A6 21            [ 1]    1     ld a,#COL_WND 
+      0086EB CD 83 4D         [ 4]    2     call oled_cmd 
+      00066E                         38     _send_cmd 0 
+      0086EE A6 00            [ 1]    1     ld a,#0 
+      0086F0 CD 83 4D         [ 4]    2     call oled_cmd 
+      000673                         39     _send_cmd 127
+      0086F3 A6 7F            [ 1]    1     ld a,#127 
+      0086F5 CD 83 4D         [ 4]    2     call oled_cmd 
+      0086F8 81               [ 4]   40     ret 
+                                     41 
+                                     42 ;---------------------------
+                                     43 ; set display start line 
+                                     44 ;----------------------------
+      0086F9                         45 scroll_up:
+      0086F9 48               [ 1]   46     sll a 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 63.
 Hexadecimal [24-Bits]
 
 
 
-      0086E9 84               [ 1]   48     pop a  
-      0086EA CC 83 4D         [ 2]   49     jp oled_cmd
-                                     50 ;    ret 
-                                     51 
-                                     52 ;---------------------------
-                                     53 ;  clear page 
-                                     54 ;  expect disp_buffer cleared 
-                                     55 ;  input:
-                                     56 ;     A    page #
-                                     57 ;---------------------------
-      0086ED                         58 page_clear:
-      0086ED CD 86 CB         [ 4]   59     call set_page 
-      0086F0 72 5F 01 01      [ 1]   60     clr disp_buffer 
-      0086F4 AE 00 80         [ 2]   61     ldw x,#DISPLAY_BUFFER_SIZE 
-      0086F7 CC 83 67         [ 2]   62     jp oled_data
-                                     63 
-                                     64 ;----------------------
-                                     65 ; zero's display buffer 
-                                     66 ; input: 
-                                     67 ;   none 
-                                     68 ;----------------------
-      0086FA                         69 clear_disp_buffer:
-      0086FA 89               [ 2]   70     pushw x 
-      0086FB 88               [ 1]   71     push a 
-      0086FC AE 01 01         [ 2]   72     ldw x,#disp_buffer 
-      0086FF A6 80            [ 1]   73     ld a,#DISPLAY_BUFFER_SIZE
-      008701 7F               [ 1]   74 1$: clr(x)
-      008702 5C               [ 1]   75     incw x 
-      008703 4A               [ 1]   76     dec a 
-      008704 26 FB            [ 1]   77     jrne 1$
-      008706 84               [ 1]   78     pop a 
-      008707 85               [ 2]   79     popw x 
-      008708 81               [ 4]   80     ret 
-                                     81 
-                                     82 ;--------------------------
-                                     83 ;  zero's SSD1306 RAM 
-                                     84 ;--------------------------
-      008709                         85 display_clear:
-      008709 88               [ 1]   86     push a 
-      00870A CD 86 FA         [ 4]   87     call clear_disp_buffer
-      00870D 4B 07            [ 1]   88     push #7
-      00870F 7B 01            [ 1]   89 2$: ld a,(1,sp)
-      008711 CD 86 ED         [ 4]   90     call page_clear 
-      008714 0A 01            [ 1]   91     dec (1,sp)
-      008716 2A F7            [ 1]   92     jrpl 2$ 
-      000698                         93     _drop 1 
-      008718 5B 01            [ 2]    1     addw sp,#1 
-      00871A 4F               [ 1]   94     clr a 
-      00069B                         95     _straz cur_x
-      00871B B7 1E                    1     .byte 0xb7,cur_x 
-      00069D                         96     _straz cur_y
-      00871D B7 1D                    1     .byte 0xb7,cur_y 
-      00069F                         97     _straz start_page  
-      00871F B7 1F                    1     .byte 0xb7,start_page 
-      008721 CD 86 CB         [ 4]   98     call set_page
+      0086FA 48               [ 1]   47     sll a 
+      0086FB 48               [ 1]   48     sll a 
+      0086FC 88               [ 1]   49     push a 
+      00067D                         50     _send_cmd DISP_OFFSET
+      0086FD A6 D3            [ 1]    1     ld a,#DISP_OFFSET 
+      0086FF CD 83 4D         [ 4]    2     call oled_cmd 
+      008702 84               [ 1]   51     pop a  
+      008703 CC 83 4D         [ 2]   52     jp oled_cmd
+                                     53 ;    ret 
+                                     54 
+                                     55 ;---------------------------
+                                     56 ;  clear page 
+                                     57 ;  expect disp_buffer cleared 
+                                     58 ;  input:
+                                     59 ;     A    page #
+                                     60 ;---------------------------
+      008706                         61 page_clear:
+      008706 CD 86 DE         [ 4]   62     call set_page 
+      008709 72 5F 01 01      [ 1]   63     clr disp_buffer 
+      00870D AE 00 80         [ 2]   64     ldw x,#DISPLAY_BUFFER_SIZE 
+      008710 CC 83 69         [ 2]   65     jp oled_data
+                                     66 
+                                     67 ;----------------------
+                                     68 ; zero's display buffer 
+                                     69 ; input: 
+                                     70 ;   none 
+                                     71 ;----------------------
+      008713                         72 clear_disp_buffer:
+      008713 89               [ 2]   73     pushw x 
+      008714 88               [ 1]   74     push a 
+      008715 AE 01 01         [ 2]   75     ldw x,#disp_buffer 
+      008718 A6 80            [ 1]   76     ld a,#DISPLAY_BUFFER_SIZE
+      00871A 7F               [ 1]   77 1$: clr(x)
+      00871B 5C               [ 1]   78     incw x 
+      00871C 4A               [ 1]   79     dec a 
+      00871D 26 FB            [ 1]   80     jrne 1$
+      00871F 84               [ 1]   81     pop a 
+      008720 85               [ 2]   82     popw x 
+      008721 81               [ 4]   83     ret 
+                                     84 
+                                     85 ;--------------------------
+                                     86 ;  zero's SSD1306 RAM 
+                                     87 ;--------------------------
+      008722                         88 display_clear:
+      008722 88               [ 1]   89     push a 
+      008723 CD 87 13         [ 4]   90     call clear_disp_buffer
+      008726 4B 07            [ 1]   91     push #7
+      008728 7B 01            [ 1]   92 2$: ld a,(1,sp)
+      00872A CD 87 06         [ 4]   93     call page_clear 
+      00872D 0A 01            [ 1]   94     dec (1,sp)
+      00872F 2A F7            [ 1]   95     jrpl 2$ 
+      0006B1                         96     _drop 1 
+      008731 5B 01            [ 2]    1     addw sp,#1 
+      008733 4F               [ 1]   97     clr a 
+      0006B4                         98     _straz cur_x
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 64.
 Hexadecimal [24-Bits]
 
 
 
-      008724 4F               [ 1]   99     clr a 
-      008725 CD 86 E0         [ 4]  100     call scroll_up 
-      008728 84               [ 1]  101     pop a 
-      008729 81               [ 4]  102     ret 
-                                    103 
-                                    104 ;-----------------------
-                                    105 ; send text cursor 
-                                    106 ; at next line 
-                                    107 ;------------------------
-      00872A                        108 crlf:
-      0006AA                        109     _clrz cur_x 
-      00872A 3F 1E                    1     .byte 0x3f, cur_x 
-      0006AC                        110     _ldaz cur_y
-      00872C B6 1D                    1     .byte 0xb6,cur_y 
-      00872E 4C               [ 1]  111     inc a 
-      00872F A4 07            [ 1]  112     and a,#7 
-      0006B1                        113     _straz cur_y 
-      008731 B7 1D                    1     .byte 0xb7,cur_y 
-      008733 CD 86 FA         [ 4]  114     call clear_disp_buffer 
-      0006B6                        115     _ldaz cur_y 
-      008736 B6 1D                    1     .byte 0xb6,cur_y 
-      008738 CD 86 ED         [ 4]  116     call page_clear
-      0006BB                        117     _ldaz cur_y 
-      00873B B6 1D                    1     .byte 0xb6,cur_y 
-      00873D CD 86 CB         [ 4]  118     call set_page
-      0006C0                        119     _ldaz start_page 
-      008740 B6 1F                    1     .byte 0xb6,start_page 
-      008742 4C               [ 1]  120     inc a  
-      008743 A1 08            [ 1]  121     cp a,#8
-      008745 2B 07            [ 1]  122     jrmi 6$ 
-      0006C7                        123     _ldaz cur_y
-      008747 B6 1D                    1     .byte 0xb6,cur_y 
-      008749 4C               [ 1]  124     inc a   
-      00874A CD 86 E0         [ 4]  125     call scroll_up 
-      00874D 81               [ 4]  126     ret 
-      0006CE                        127 6$: _straz start_page  
-      00874E B7 1F                    1     .byte 0xb7,start_page 
-      008750 81               [ 4]  128     ret 
-                                    129 
-                                    130 ;-----------------------
-                                    131 ; move cursor right 
-                                    132 ; 1 character position
-                                    133 ; scroll up if needed 
-                                    134 ;-----------------------
-      008751                        135 cursor_right:
-      0006D1                        136     _ldaz cur_x 
-      008751 B6 1E                    1     .byte 0xb6,cur_x 
-      008753 AB 01            [ 1]  137     add a,#1  
-      0006D5                        138     _straz cur_x 
-      008755 B7 1E                    1     .byte 0xb7,cur_x 
-      008757 A1 15            [ 1]  139     cp a,#21 
-      008759 2B 03            [ 1]  140     jrmi 9$
-      00875B CD 87 2A         [ 4]  141     call crlf 
-      00875E 81               [ 4]  142 9$: ret 
-                                    143 
+      008734 B7 1E                    1     .byte 0xb7,cur_x 
+      0006B6                         99     _straz cur_y
+      008736 B7 1D                    1     .byte 0xb7,cur_y 
+      0006B8                        100     _straz start_page  
+      008738 B7 1F                    1     .byte 0xb7,start_page 
+      00873A CD 86 DE         [ 4]  101     call set_page
+      00873D 4F               [ 1]  102     clr a 
+      00873E CD 86 F9         [ 4]  103     call scroll_up 
+      008741 84               [ 1]  104     pop a 
+      008742 81               [ 4]  105     ret 
+                                    106 
+                                    107 ;-----------------------
+                                    108 ; send text cursor 
+                                    109 ; at next line 
+                                    110 ;------------------------
+      008743                        111 crlf:
+      0006C3                        112     _clrz cur_x 
+      008743 3F 1E                    1     .byte 0x3f, cur_x 
+      0006C5                        113     _ldaz cur_y
+      008745 B6 1D                    1     .byte 0xb6,cur_y 
+      008747 4C               [ 1]  114     inc a 
+      008748 A4 07            [ 1]  115     and a,#7 
+      0006CA                        116     _straz cur_y 
+      00874A B7 1D                    1     .byte 0xb7,cur_y 
+      00874C CD 87 13         [ 4]  117     call clear_disp_buffer 
+      0006CF                        118     _ldaz cur_y 
+      00874F B6 1D                    1     .byte 0xb6,cur_y 
+      008751 CD 87 06         [ 4]  119     call page_clear
+      0006D4                        120     _ldaz cur_y 
+      008754 B6 1D                    1     .byte 0xb6,cur_y 
+      008756 CD 86 DE         [ 4]  121     call set_page
+      0006D9                        122     _ldaz start_page 
+      008759 B6 1F                    1     .byte 0xb6,start_page 
+      00875B 4C               [ 1]  123     inc a  
+      00875C A1 08            [ 1]  124     cp a,#8
+      00875E 2B 07            [ 1]  125     jrmi 6$ 
+      0006E0                        126     _ldaz cur_y
+      008760 B6 1D                    1     .byte 0xb6,cur_y 
+      008762 4C               [ 1]  127     inc a   
+      008763 CD 86 F9         [ 4]  128     call scroll_up 
+      008766 81               [ 4]  129     ret 
+      0006E7                        130 6$: _straz start_page  
+      008767 B7 1F                    1     .byte 0xb7,start_page 
+      008769 81               [ 4]  131     ret 
+                                    132 
+                                    133 ;-----------------------
+                                    134 ; move cursor right 
+                                    135 ; 1 character position
+                                    136 ; scroll up if needed 
+                                    137 ;-----------------------
+      00876A                        138 cursor_right:
+      0006EA                        139     _ldaz cur_x 
+      00876A B6 1E                    1     .byte 0xb6,cur_x 
+      00876C AB 01            [ 1]  140     add a,#1  
+      0006EE                        141     _straz cur_x 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 65.
 Hexadecimal [24-Bits]
 
 
 
-                                    144 ;----------------------------
-                                    145 ; put char using rotated font 
-                                    146 ; input:
-                                    147 ;    A    character 
-                                    148 ;-----------------------------
-      00875F                        149 put_char:
-      00875F 89               [ 2]  150     pushw x
-      008760 90 89            [ 2]  151     pushw y 
-      008762 A0 20            [ 1]  152 	sub a,#32
-      008764 AE 00 06         [ 2]  153 	ldw x,#OLED_FONT_WIDTH
-      008767 42               [ 4]  154 	mul x,a 
-      008768 1C 84 61         [ 2]  155 	addw x,#oled_font_6x8
-      00876B 90 93            [ 1]  156     ldw y,x 
-      00876D AE 01 01         [ 2]  157     ldw x,#disp_buffer
-      008770 4B 06            [ 1]  158     push #OLED_FONT_WIDTH
-      008772                        159 1$:
-      008772 90 F6            [ 1]  160     ld a,(y)
-      008774 F7               [ 1]  161     ld (x),a 
-      008775 5C               [ 1]  162     incw x 
-      008776 90 5C            [ 1]  163     incw y 
-      008778 0A 01            [ 1]  164     dec (1,sp)
-      00877A 26 F6            [ 1]  165     jrne 1$ 
-      0006FC                        166     _drop 1
-      00877C 5B 01            [ 2]    1     addw sp,#1 
-      00877E AE 00 06         [ 2]  167     ldw x,#OLED_FONT_WIDTH
-      008781 CD 83 67         [ 4]  168     call oled_data 
-      008784 CD 87 51         [ 4]  169     call cursor_right 
-      008787 90 85            [ 2]  170     popw y
-      008789 85               [ 2]  171     popw x 
-      00878A 81               [ 4]  172     ret 
-                                    173 
-                                    174 
-                                    175 ;----------------------
-                                    176 ; put string in display 
-                                    177 ; buffer 
-                                    178 ; input:
-                                    179 ;    y  .asciz  
-                                    180 ;----------------------
-      00878B                        181 put_string:
-      00878B 90 F6            [ 1]  182 1$: ld a,(y)
-      00878D 27 10            [ 1]  183     jreq 9$
-      00878F A1 0A            [ 1]  184     cp a,#'\n'
-      008791 26 05            [ 1]  185     jrne 2$
-      008793 CD 87 2A         [ 4]  186     call crlf 
-      008796 20 03            [ 2]  187     jra 4$
-      008798                        188 2$:
-      008798 CD 87 5F         [ 4]  189     call put_char 
-      00879B                        190 4$:
-      00879B 90 5C            [ 1]  191     incw y 
-      00879D 20 EC            [ 2]  192     jra 1$
-                                    193 
-      00879F                        194 9$:  
-      00879F 81               [ 4]  195     ret 
-                                    196 
-                                    197 ;-------------------
+      00876E B7 1E                    1     .byte 0xb7,cur_x 
+      008770 A1 15            [ 1]  142     cp a,#21 
+      008772 2B 03            [ 1]  143     jrmi 9$
+      008774 CD 87 43         [ 4]  144     call crlf 
+      008777 81               [ 4]  145 9$: ret 
+                                    146 
+                                    147 ;----------------------------
+                                    148 ; put char using rotated font 
+                                    149 ; input:
+                                    150 ;    A    character 
+                                    151 ;-----------------------------
+      008778                        152 put_char:
+      008778 89               [ 2]  153     pushw x
+      008779 90 89            [ 2]  154     pushw y 
+      00877B A0 20            [ 1]  155 	sub a,#32
+      00877D AE 00 06         [ 2]  156 	ldw x,#OLED_FONT_WIDTH
+      008780 42               [ 4]  157 	mul x,a 
+      008781 1C 84 6E         [ 2]  158 	addw x,#oled_font_6x8
+      008784 90 93            [ 1]  159     ldw y,x 
+      008786 AE 01 01         [ 2]  160     ldw x,#disp_buffer
+      008789 4B 06            [ 1]  161     push #OLED_FONT_WIDTH
+      00878B                        162 1$:
+      00878B 90 F6            [ 1]  163     ld a,(y)
+      00878D F7               [ 1]  164     ld (x),a 
+      00878E 5C               [ 1]  165     incw x 
+      00878F 90 5C            [ 1]  166     incw y 
+      008791 0A 01            [ 1]  167     dec (1,sp)
+      008793 26 F6            [ 1]  168     jrne 1$ 
+      000715                        169     _drop 1
+      008795 5B 01            [ 2]    1     addw sp,#1 
+      008797 AE 00 06         [ 2]  170     ldw x,#OLED_FONT_WIDTH
+      00879A CD 83 69         [ 4]  171     call oled_data 
+      00879D CD 87 6A         [ 4]  172     call cursor_right 
+      0087A0 90 85            [ 2]  173     popw y
+      0087A2 85               [ 2]  174     popw x 
+      0087A3 81               [ 4]  175     ret 
+                                    176 
+                                    177 
+                                    178 ;----------------------
+                                    179 ; put string in display 
+                                    180 ; buffer 
+                                    181 ; input:
+                                    182 ;    y  .asciz  
+                                    183 ;----------------------
+      0087A4                        184 put_string:
+      0087A4 90 F6            [ 1]  185 1$: ld a,(y)
+      0087A6 27 10            [ 1]  186     jreq 9$
+      0087A8 A1 0A            [ 1]  187     cp a,#'\n'
+      0087AA 26 05            [ 1]  188     jrne 2$
+      0087AC CD 87 43         [ 4]  189     call crlf 
+      0087AF 20 03            [ 2]  190     jra 4$
+      0087B1                        191 2$:
+      0087B1 CD 87 78         [ 4]  192     call put_char 
+      0087B4                        193 4$:
+      0087B4 90 5C            [ 1]  194     incw y 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 66.
 Hexadecimal [24-Bits]
 
 
 
-                                    198 ; put byte in hex 
-                                    199 ; input:
-                                    200 ;   A 
-                                    201 ;------------------
-      0087A0                        202 put_byte:
-      0087A0 88               [ 1]  203     push a 
-      0087A1 4E               [ 1]  204     swap a 
-      0087A2 CD 87 A6         [ 4]  205     call put_hex 
-      0087A5 84               [ 1]  206     pop a 
-      0087A6                        207 put_hex:    
-      0087A6 A4 0F            [ 1]  208     and a,#0xf 
-      0087A8 AB 30            [ 1]  209     add a,#'0 
-      0087AA A1 3A            [ 1]  210     cp a,#'9+1 
-      0087AC 2B 02            [ 1]  211     jrmi 2$ 
-      0087AE AB 07            [ 1]  212     add a,#7 
-      0087B0 CD 87 5F         [ 4]  213 2$: call put_char 
-      0087B3 81               [ 4]  214     ret 
-                                    215 
-                                    216 ;----------------------------
-                                    217 ; put hexadecimal integer 
-                                    218 ; in display 
-                                    219 ; buffer 
-                                    220 ; input:
-                                    221 ;    X    integer to display 
-                                    222 ;---------------------------
-      0087B4                        223 put_hex_int:
-      0087B4 9E               [ 1]  224     ld a,xh 
-      0087B5 CD 87 A0         [ 4]  225     call put_byte 
-      0087B8 9F               [ 1]  226     ld a,xl 
-      0087B9 CD 87 A0         [ 4]  227     call put_byte 
-      0087BC 81               [ 4]  228     ret 
-                                    229 
+      0087B6 20 EC            [ 2]  195     jra 1$
+                                    196 
+      0087B8                        197 9$:  
+      0087B8 81               [ 4]  198     ret 
+                                    199 
+                                    200 ;-------------------
+                                    201 ; put byte in hex 
+                                    202 ; input:
+                                    203 ;   A 
+                                    204 ;------------------
+      0087B9                        205 put_byte:
+      0087B9 88               [ 1]  206     push a 
+      0087BA 4E               [ 1]  207     swap a 
+      0087BB CD 87 BF         [ 4]  208     call put_hex 
+      0087BE 84               [ 1]  209     pop a 
+      0087BF                        210 put_hex:    
+      0087BF A4 0F            [ 1]  211     and a,#0xf 
+      0087C1 AB 30            [ 1]  212     add a,#'0 
+      0087C3 A1 3A            [ 1]  213     cp a,#'9+1 
+      0087C5 2B 02            [ 1]  214     jrmi 2$ 
+      0087C7 AB 07            [ 1]  215     add a,#7 
+      0087C9 CD 87 78         [ 4]  216 2$: call put_char 
+      0087CC 81               [ 4]  217     ret 
+                                    218 
+                                    219 ;----------------------------
+                                    220 ; put hexadecimal integer 
+                                    221 ; in display 
+                                    222 ; buffer 
+                                    223 ; input:
+                                    224 ;    X    integer to display 
+                                    225 ;---------------------------
+      0087CD                        226 put_hex_int:
+      0087CD 9E               [ 1]  227     ld a,xh 
+      0087CE CD 87 B9         [ 4]  228     call put_byte 
+      0087D1 9F               [ 1]  229     ld a,xl 
+      0087D2 CD 87 B9         [ 4]  230     call put_byte 
+      0087D5 81               [ 4]  231     ret 
+                                    232 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 67.
 Hexadecimal [24-Bits]
 
@@ -4035,35 +4044,177 @@ Hexadecimal [24-Bits]
 
 
                                       1 
-                                      2 ; fake application 
-                                      3 
-      0087BD                          4 app:
-      0087BD CD 81 31         [ 4]    5     call beep 
-      0087C0 CD 82 B0         [ 4]    6     call oled_init 
-      0087C3 CD 87 09         [ 4]    7     call display_clear 
-      0087C6 90 AE 87 CF      [ 2]    8     ldw y,#hello 
-      0087CA CD 87 8B         [ 4]    9     call put_string 
-      0087CD 20 FE            [ 2]   10     jra .
-                                     11 
-      0087CF 48 45 4C 4C 4F 20 57    12 hello: .asciz "HELLO WORLD!"
-             4F 52 4C 44 21 00
-                                     13 
+                                      2 ;-------------------------
+                                      3 ; temperature sensor demo 
+                                      4 ; using MCP9701-E/TO 
+                                      5 ;-------------------------
+                           000190     6 ZERO_OFS=400 ; Vout offset at 0 degr.  400mV 
+                           0000C3     7 SLOPE10=195 ; 10x19.5mv/degr. C sensor slope   
+                           000021     8 VREF10=33 ; ADC Vref*10 
+                                      9 
+                           000001    10     XSAVE=1
+                           000003    11     REPCNT=3
+                           000003    12     VAR_SIZE=3
+      0087D6                         13 app:
+      000756                         14     _vars VAR_SIZE 
+      0087D6 52 03            [ 2]    1     sub sp,#VAR_SIZE 
+      0087D8 CD 81 31         [ 4]   15     call beep 
+      0087DB CD 82 B0         [ 4]   16     call oled_init 
+      0087DE CD 87 22         [ 4]   17     call display_clear 
+      0087E1 90 AE 88 B2      [ 2]   18     ldw y,#prompt 
+      0087E5 CD 87 A4         [ 4]   19     call put_string 
+      0087E8 72 16 54 02      [ 1]   20     bset ADC2_CR2,#ADC2_CR2_ALIGN 
+      0087EC 72 10 54 01      [ 1]   21     bset ADC2_CR1,#ADC2_CR1_ADON 
+      0087F0 A6 0A            [ 1]   22     ld a,#10 ; ADC wake up delay  
+      0087F2 CD 80 E2         [ 4]   23     call pause 
+      0087F5                         24 1$: ; start conversion 
+      0087F5 72 10 54 01      [ 1]   25     bset ADC2_CR1,#ADC2_CR1_ADON 
+      0087F9 72 0F 54 00 FB   [ 2]   26     btjf ADC2_CSR,#ADC2_CSR_EOC,. 
+      0087FE 72 1F 54 00      [ 1]   27     bres ADC2_CSR,#ADC2_CSR_EOC
+      008802 A6 03            [ 1]   28     ld a,#3
+      008804 6B 03            [ 1]   29     ld (REPCNT,sp),a 
+      008806 C6 54 05         [ 1]   30     ld a,ADC2_DRL
+      008809 97               [ 1]   31     ld xl,a 
+      00880A C6 54 04         [ 1]   32     ld a,ADC2_DRH 
+      00880D 95               [ 1]   33     ld xh,a 
+      00880E A6 21            [ 1]   34     ld a,#VREF10 ; 3.3*10 ref. voltage 
+      008810 CD 88 7B         [ 4]   35     call mul16x8
+      008813 90 AE 04 00      [ 2]   36     ldw y,#1024 
+      008817 65               [ 2]   37     divw x,y
+      008818                         38 2$:
+      008818 A6 0A            [ 1]   39     ld a,#10
+      00881A CD 88 7B         [ 4]   40     call mul16x8  
+      00881D 1F 01            [ 2]   41     ldw (XSAVE,sp),x
+      00881F 0A 03            [ 1]   42     dec (REPCNT,sp)
+      008821 27 10            [ 1]   43     jreq 4$    
+      008823 93               [ 1]   44     ldw x,y
+      008824 A6 0A            [ 1]   45     ld a,#10 
+      008826 CD 88 7B         [ 4]   46     call mul16x8  
+      008829 90 AE 04 00      [ 2]   47     ldw y,#1024 
+      00882D 65               [ 2]   48     divw x,y
+      00882E 72 FB 01         [ 2]   49     addw x,(XSAVE,sp)
+      008831 20 E5            [ 2]   50     jra 2$ 
+      008833                         51 4$:  
+      008833 1E 01            [ 2]   52     ldw x,(XSAVE,sp)
+      008835 1D 0F A0         [ 2]   53     subw x,#ZERO_OFS*10      
+      008838 A6 C3            [ 1]   54     ld a,#SLOPE10 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 77.
+Hexadecimal [24-Bits]
+
+
+
+      00883A 62               [ 2]   55     div x,a
+      00883B 90 58            [ 2]   56     sllw y 
+      00883D 90 A3 00 C3      [ 2]   57     cpw y,#SLOPE10 
+      008841 2B 01            [ 1]   58     jrmi 5$
+      008843 5C               [ 1]   59     incw x
+      008844                         60 5$:
+      008844 89               [ 2]   61     pushw x  
+      008845 CD 88 8B         [ 4]   62     call itoa
+      008848 A6 04            [ 1]   63     ld a,#4 
+      00884A CD 86 DE         [ 4]   64     call set_page 
+      00884D CD 87 A4         [ 4]   65     call put_string 
+      008850 90 AE 88 D7      [ 2]   66     ldw y,#celcius 
+      008854 CD 87 A4         [ 4]   67     call put_string 
+      008857 85               [ 2]   68     popw x 
+      008858 A6 09            [ 1]   69     ld a,#9
+      00885A 42               [ 4]   70     mul x,a 
+      00885B A6 05            [ 1]   71     ld a,#5 
+      00885D 62               [ 2]   72     div x,a 
+      00885E 1C 00 20         [ 2]   73     addw x,#32
+      008861 CD 88 8B         [ 4]   74     call itoa 
+      008864 A6 06            [ 1]   75     ld a,#6 
+      008866 CD 86 DE         [ 4]   76     call set_page 
+      008869 CD 87 A4         [ 4]   77     call put_string 
+      00886C 90 AE 88 DA      [ 2]   78     ldw y,#fahrenheit
+      008870 CD 87 A4         [ 4]   79     call put_string 
+      008873 A6 32            [ 1]   80     ld a,#50 
+      008875 CD 80 E2         [ 4]   81     call pause 
+      008878 CC 87 F5         [ 2]   82     jp 1$  
+                                     83 
+                                     84 
+                                     85 ;------------------------
+                                     86 ; input:
+                                     87 ;    x   
+                                     88 ;    a 
+                                     89 ; output:
+                                     90 ;    X   X*A 
+                                     91 ;------------------------
+      00887B                         92 mul16x8:
+      0007FB                         93     _strxz acc16 
+      00887B BF 10                    1     .byte 0xbf,acc16 
+      00887D 42               [ 4]   94     mul x,a 
+      00887E 89               [ 2]   95     pushw x 
+      0007FF                         96     _ldxz acc16 
+      00887F BE 10                    1     .byte 0xbe,acc16 
+      008881 5E               [ 1]   97     swapw x 
+      008882 42               [ 4]   98     mul x,a 
+      008883 4F               [ 1]   99     clr a 
+      008884 02               [ 1]  100     rlwa x 
+      008885 72 FB 01         [ 2]  101     addw x,(1,sp)
+      000808                        102     _drop 2 
+      008888 5B 02            [ 2]    1     addw sp,#2 
+      00888A 81               [ 4]  103     ret 
+                                    104 
+                                    105 ;-----------------------
+                                    106 ; convert integer to 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 78.
+Hexadecimal [24-Bits]
+
+
+
+                                    107 ; ASCII string 
+                                    108 ; input:
+                                    109 ;   X    integer 
+                                    110 ;------------------------
+                           000001   111     SIGN=1
+      00888B                        112 itoa:
+      00888B 4B 00            [ 1]  113     push #0 
+      00888D 5D               [ 2]  114     tnzw x 
+      00888E 2A 03            [ 1]  115     jrpl 1$ 
+      008890 03 01            [ 1]  116     cpl (SIGN,SP)
+      008892 50               [ 2]  117     negw x 
+      008893 90 AE 01 89      [ 2]  118 1$: ldw y,#free_ram+8
+      008897 90 7F            [ 1]  119     clr(y)
+      008899                        120 2$:
+      008899 90 5A            [ 2]  121     decw y 
+      00889B A6 0A            [ 1]  122     ld a,#10 
+      00889D 62               [ 2]  123     div x,a 
+      00889E AB 30            [ 1]  124     add a,#'0 
+      0088A0 90 F7            [ 1]  125     ld (y),a 
+      0088A2 5D               [ 2]  126     tnzw x 
+      0088A3 26 F4            [ 1]  127     jrne 2$
+      0088A5 0D 01            [ 1]  128     tnz (SIGN,sp)
+      0088A7 2A 06            [ 1]  129     jrpl 4$
+      0088A9 90 5A            [ 2]  130     decw y 
+      0088AB A6 2D            [ 1]  131     ld a,#'-
+      0088AD 90 F7            [ 1]  132     ld (y),a 
+      00082F                        133 4$: _drop 1 
+      0088AF 5B 01            [ 2]    1     addw sp,#1 
+      0088B1 81               [ 4]  134     ret 
+                                    135 
+      0088B2 64 65 6D 6F 20 4D 43   136 prompt: .asciz "demo MCP9701 sensor\nroom temperature"
+             50 39 37 30 31 20 73
+             65 6E 73 6F 72 0A 72
+             6F 6F 6D 20 74 65 6D
+             70 65 72 61 74 75 72
+             65 00
+      0088D7 87 43 00               137 celcius: .byte DEGREE,'C',0  
+      0088DA 87 46 00               138 fahrenheit: .byte DEGREE,'F',0 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 79.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
     .__.$$$.=  002710 L   |     .__.ABS.=  000000 G   |     .__.CPU.=  000000 L
-    .__.H$L.=  000001 L   |     ACK     =  000006     |     ADC_CR1 =  005401 
-    ADC_CR1_=  000000     |     ADC_CR1_=  000001     |     ADC_CR1_=  000004 
-    ADC_CR1_=  000005     |     ADC_CR1_=  000006     |     ADC_CR2 =  005402 
-    ADC_CR2_=  000003     |     ADC_CR2_=  000004     |     ADC_CR2_=  000005 
-    ADC_CR2_=  000006     |     ADC_CR2_=  000001     |     ADC_CR3 =  005403 
-    ADC_CR3_=  000007     |     ADC_CR3_=  000006     |     ADC_CSR =  005400 
-    ADC_CSR_=  000006     |     ADC_CSR_=  000004     |     ADC_CSR_=  000000 
-    ADC_CSR_=  000001     |     ADC_CSR_=  000002     |     ADC_CSR_=  000003 
-    ADC_CSR_=  000007     |     ADC_CSR_=  000005     |     ADC_DRH =  005404 
-    ADC_DRL =  005405     |     ADC_TDRH=  005406     |     ADC_TDRL=  005407 
+    .__.H$L.=  000001 L   |     ACK     =  000006     |     ADC2_CR1=  005401 
+    ADC2_CR1=  000000     |     ADC2_CR1=  000001     |     ADC2_CR1=  000004 
+    ADC2_CR2=  005402     |     ADC2_CR2=  000003     |     ADC2_CR2=  000004 
+    ADC2_CR2=  000006     |     ADC2_CR2=  000001     |     ADC2_CR3=  005403 
+    ADC2_CR3=  000007     |     ADC2_CR3=  000006     |     ADC2_CSR=  005400 
+    ADC2_CSR=  000006     |     ADC2_CSR=  000004     |     ADC2_CSR=  000000 
+    ADC2_CSR=  000007     |     ADC2_CSR=  000005     |     ADC2_DRH=  005404 
+    ADC2_DRL=  005405     |     ADC2_TDR=  005406     |     ADC2_TDR=  005407 
     ADR_MODE=  000020     |     AFR     =  004803     |     AFR0_ADC=  000000 
     AFR1_TIM=  000001     |     AFR2_CCO=  000002     |     AFR3_TIM=  000003 
     AFR4_TIM=  000004     |     AFR5_TIM=  000005     |     AFR6_I2C=  000006 
@@ -4108,13 +4259,13 @@ Symbol Table
     CLK_PCKE=  000007     |     CLK_PCKE=  000005     |     CLK_PCKE=  000006 
     CLK_PCKE=  000004     |     CLK_PCKE=  000002     |     CLK_PCKE=  000003 
     CLK_PCKE=  0050CA     |     CLK_PCKE=  000003     |     CLK_PCKE=  000002 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 78.
+    CLK_PCKE=  000007     |     CLK_SWCR=  0050C5     |     CLK_SWCR=  000000 
+    CLK_SWCR=  000001     |     CLK_SWCR=  000002     |     CLK_SWCR=  000003 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 80.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-    CLK_PCKE=  000007     |     CLK_SWCR=  0050C5     |     CLK_SWCR=  000000 
-    CLK_SWCR=  000001     |     CLK_SWCR=  000002     |     CLK_SWCR=  000003 
     CLK_SWIM=  0050CD     |     CLK_SWR =  0050C4     |     CLK_SWR_=  0000B4 
     CLK_SWR_=  0000E1     |     CLK_SWR_=  0000D2     |     COLON   =  00003A 
     COL_WND =  000021     |     COMMA   =  00002C     |     COM_ALTE=  000010 
@@ -4135,334 +4286,337 @@ Symbol Table
     CTRL_Y  =  000019     |     CTRL_Z  =  00001A     |     DC1     =  000011 
     DC2     =  000012     |     DC3     =  000013     |     DC4     =  000014 
     DEBUG   =  000000     |     DEBUG_BA=  007F00     |     DEBUG_EN=  007FFF 
-    DEVID_BA=  0048CD     |     DEVID_EN=  0048D8     |     DEVID_LO=  0048D2 
-    DEVID_LO=  0048D3     |     DEVID_LO=  0048D4     |     DEVID_LO=  0048D5 
-    DEVID_LO=  0048D6     |     DEVID_LO=  0048D7     |     DEVID_LO=  0048D8 
-    DEVID_WA=  0048D1     |     DEVID_XH=  0048CE     |     DEVID_XL=  0048CD 
-    DEVID_YH=  0048D0     |     DEVID_YL=  0048CF     |     DISPLAY_=  000080 
-    DISP_ALL=  0000A5     |     DISP_CHA=  00008D     |     DISP_CON=  000081 
-    DISP_DIV=  000000     |     DISP_HEI=  000040     |     DISP_INV=  0000A7 
-    DISP_NOR=  0000A6     |     DISP_OFF=  0000AE     |     DISP_OFF=  0000D3 
-    DISP_ON =  0000AF     |     DISP_RAM=  0000A4     |     DISP_WID=  000080 
-    DLE     =  000010     |     DM_BK1RE=  007F90     |     DM_BK1RH=  007F91 
-    DM_BK1RL=  007F92     |     DM_BK2RE=  007F93     |     DM_BK2RH=  007F94 
-    DM_BK2RL=  007F95     |     DM_CR1  =  007F96     |     DM_CR2  =  007F97 
-    DM_CSR1 =  007F98     |     DM_CSR2 =  007F99     |     DM_ENFCT=  007F9A 
-    EEPROM_B=  004000     |     EEPROM_E=  0043FF     |     EEPROM_S=  000400 
-    EM      =  000019     |     ENQ     =  000005     |     EOF     =  00001A 
-    EOT     =  000004     |     ESC     =  00001B     |     ETB     =  000017 
-    ETX     =  000003     |     EXTI_CR1=  0050A0     |     EXTI_CR2=  0050A1 
-    FF      =  00000C     |     FHSE    =  7A1200     |     FHSI    =  F42400 
-    FLASH_BA=  008000     |     FLASH_CR=  00505A     |     FLASH_CR=  000002 
-    FLASH_CR=  000000     |     FLASH_CR=  000003     |     FLASH_CR=  000001 
-    FLASH_CR=  00505B     |     FLASH_CR=  000005     |     FLASH_CR=  000004 
-    FLASH_CR=  000007     |     FLASH_CR=  000000     |     FLASH_CR=  000006 
-    FLASH_DU=  005064     |     FLASH_DU=  0000AE     |     FLASH_DU=  000056 
-    FLASH_EN=  017FFF     |     FLASH_FP=  00505D     |     FLASH_FP=  000000 
-    FLASH_FP=  000001     |     FLASH_FP=  000002     |     FLASH_FP=  000003 
-    FLASH_FP=  000004     |     FLASH_FP=  000005     |     FLASH_IA=  00505F 
-    FLASH_IA=  000003     |     FLASH_IA=  000002     |     FLASH_IA=  000006 
-    FLASH_IA=  000001     |     FLASH_IA=  000000     |     FLASH_NC=  00505C 
-    FLASH_NF=  00505E     |     FLASH_NF=  000000     |     FLASH_NF=  000001 
-    FLASH_NF=  000002     |     FLASH_NF=  000003     |     FLASH_NF=  000004 
-    FLASH_NF=  000005     |     FLASH_PU=  005062     |     FLASH_PU=  000056 
-    FLASH_PU=  0000AE     |     FLASH_SI=  010000     |     FLASH_WS=  00480D 
-    FLSI    =  01F400     |     FMSTR   =  000010     |     FR_T2_CL=  00F424 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 79.
-Hexadecimal [24-Bits]
-
-Symbol Table
-
-    FS      =  00001C     |     F_DISP_M=  000005     |     F_GAME_T=  000007 
-    F_SOUND_=  000006     |     GPIO_BAS=  005000     |     GPIO_CR1=  000003 
-    GPIO_CR2=  000004     |     GPIO_DDR=  000002     |     GPIO_IDR=  000001 
-    GPIO_ODR=  000000     |     GPIO_SIZ=  000005     |     GS      =  00001D 
-    HORZ_MOD=  000000     |     HSECNT  =  004809     |     I2C_BASE=  005210 
-    I2C_CCRH=  00521C     |     I2C_CCRH=  000080     |     I2C_CCRH=  0000C0 
-    I2C_CCRH=  000080     |     I2C_CCRH=  000000     |     I2C_CCRH=  000001 
-    I2C_CCRH=  000000     |     I2C_CCRH=  000006     |     I2C_CCRH=  000007 
-    I2C_CCRL=  00521B     |     I2C_CCRL=  00001A     |     I2C_CCRL=  000002 
-    I2C_CCRL=  00000D     |     I2C_CCRL=  000050     |     I2C_CCRL=  000090 
-    I2C_CCRL=  0000A0     |     I2C_CR1 =  005210     |     I2C_CR1_=  000006 
-    I2C_CR1_=  000007     |     I2C_CR1_=  000000     |     I2C_CR2 =  005211 
-    I2C_CR2_=  000002     |     I2C_CR2_=  000003     |     I2C_CR2_=  000000 
-    I2C_CR2_=  000001     |     I2C_CR2_=  000007     |     I2C_DR  =  005216 
-    I2C_ERR_=  000003     |     I2C_ERR_=  000004     |     I2C_ERR_=  000000 
-    I2C_ERR_=  000001     |     I2C_ERR_=  000002     |     I2C_ERR_=  000005 
-    I2C_FAST=  000001     |     I2C_FREQ=  005212     |     I2C_ITR =  00521A 
-    I2C_ITR_=  000002     |     I2C_ITR_=  000000     |     I2C_ITR_=  000001 
-    I2C_OARH=  005214     |     I2C_OARH=  000001     |     I2C_OARH=  000002 
-    I2C_OARH=  000006     |     I2C_OARH=  000007     |     I2C_OARL=  005213 
-    I2C_OARL=  000000     |     I2C_OAR_=  000813     |     I2C_OAR_=  000009 
-    I2C_PECR=  00521E     |     I2C_PORT=  000005     |     I2C_READ=  000001 
-    I2C_SR1 =  005217     |     I2C_SR1_=  000003     |     I2C_SR1_=  000001 
-    I2C_SR1_=  000002     |     I2C_SR1_=  000006     |     I2C_SR1_=  000000 
-    I2C_SR1_=  000004     |     I2C_SR1_=  000007     |     I2C_SR2 =  005218 
-    I2C_SR2_=  000002     |     I2C_SR2_=  000001     |     I2C_SR2_=  000000 
-    I2C_SR2_=  000003     |     I2C_SR2_=  000005     |     I2C_SR3 =  005219 
-    I2C_SR3_=  000001     |     I2C_SR3_=  000007     |     I2C_SR3_=  000004 
-    I2C_SR3_=  000000     |     I2C_SR3_=  000002     |     I2C_STAT=  000007 
-    I2C_STAT=  000006     |     I2C_STD =  000000     |     I2C_TRIS=  00521D 
-    I2C_TRIS=  000005     |     I2C_TRIS=  000005     |     I2C_TRIS=  000005 
-    I2C_TRIS=  000011     |     I2C_TRIS=  000011     |     I2C_TRIS=  000011 
-    I2C_WRIT=  000000     |   7 I2cIntHa   0000DC R   |     INPUT_DI=  000000 
-    INPUT_EI=  000001     |     INPUT_FL=  000000     |     INPUT_PU=  000001 
-    INT_ADC2=  000016     |     INT_AUAR=  000012     |     INT_AWU =  000001 
-    INT_CAN_=  000008     |     INT_CAN_=  000009     |     INT_CLK =  000002 
-    INT_EXTI=  000003     |     INT_EXTI=  000004     |     INT_EXTI=  000005 
-    INT_EXTI=  000006     |     INT_EXTI=  000007     |     INT_FLAS=  000018 
-    INT_I2C =  000013     |     INT_SPI =  00000A     |     INT_TIM1=  00000C 
-    INT_TIM1=  00000B     |     INT_TIM2=  00000E     |     INT_TIM2=  00000D 
-    INT_TIM3=  000010     |     INT_TIM3=  00000F     |     INT_TIM4=  000017 
-    INT_TLI =  000000     |     INT_UART=  000011     |     INT_UART=  000015 
-    INT_UART=  000014     |     INT_VECT=  008060     |     INT_VECT=  00800C 
-    INT_VECT=  008028     |     INT_VECT=  00802C     |     INT_VECT=  008010 
-    INT_VECT=  008014     |     INT_VECT=  008018     |     INT_VECT=  00801C 
-    INT_VECT=  008020     |     INT_VECT=  008024     |     INT_VECT=  008068 
-    INT_VECT=  008054     |     INT_VECT=  008000     |     INT_VECT=  008030 
-    INT_VECT=  008038     |     INT_VECT=  008034     |     INT_VECT=  008040 
-    INT_VECT=  00803C     |     INT_VECT=  008048     |     INT_VECT=  008044 
-    INT_VECT=  008064     |     INT_VECT=  008008     |     INT_VECT=  008004 
-    INT_VECT=  008050     |     INT_VECT=  00804C     |     INT_VECT=  00805C 
-    INT_VECT=  008058     |     ITC_SPR1=  007F70     |     ITC_SPR2=  007F71 
-    ITC_SPR3=  007F72     |     ITC_SPR4=  007F73     |     ITC_SPR5=  007F74 
-    ITC_SPR6=  007F75     |     ITC_SPR7=  007F76     |     ITC_SPR8=  007F77 
-    ITC_SPR_=  000001     |     ITC_SPR_=  000000     |     ITC_SPR_=  000003 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 80.
-Hexadecimal [24-Bits]
-
-Symbol Table
-
-    IWDG_KEY=  000055     |     IWDG_KEY=  0000CC     |     IWDG_KEY=  0000AA 
-    IWDG_KR =  0050E0     |     IWDG_PR =  0050E1     |     IWDG_RLR=  0050E2 
-    LED_BIT =  000005     |     LED_MASK=  000020     |     LED_PORT=  00500A 
-    LF      =  00000A     |     LF_HEIGH=  00000A     |     LF_WIDTH=  000008 
-    MAJOR   =  000001     |     MAP_SEG0=  0000A0     |     MAP_SEG0=  0000A1 
-    MINOR   =  000000     |     MUX_RATI=  0000A8     |     NAFR    =  004804 
-    NAK     =  000015     |     NCLKOPT =  004808     |     NFLASH_W=  00480E 
-    NHSECNT =  00480A     |     NOPT1   =  004802     |     NOPT2   =  004804 
-    NOPT3   =  004806     |     NOPT4   =  004808     |     NOPT5   =  00480A 
-    NOPT6   =  00480C     |     NOPT7   =  00480E     |     NOPTBL  =  00487F 
-    NUBC    =  004802     |     NWDGOPT =  004806     |     NWDGOPT_=  FFFFFFFD 
-    NWDGOPT_=  FFFFFFFC     |     NWDGOPT_=  FFFFFFFF     |     NWDGOPT_=  FFFFFFFE 
-  7 NonHandl   000000 R   |     OFS_UART=  000002     |     OFS_UART=  000003 
-    OFS_UART=  000004     |     OFS_UART=  000005     |     OFS_UART=  000006 
-    OFS_UART=  000007     |     OFS_UART=  000008     |     OFS_UART=  000009 
-    OFS_UART=  000001     |     OFS_UART=  000009     |     OFS_UART=  00000A 
-    OFS_UART=  000000     |     OLED_CMD=  000080     |     OLED_DAT=  000040 
-    OLED_DEV=  000078     |     OLED_FON=  000008     |     OLED_FON=  000006 
-    OLED_NOP=  0000E3     |     OPT0    =  004800     |     OPT1    =  004801 
-    OPT2    =  004803     |     OPT3    =  004805     |     OPT4    =  004807 
-    OPT5    =  004809     |     OPT6    =  00480B     |     OPT7    =  00480D 
-    OPTBL   =  00487E     |     OPTION_B=  004800     |     OPTION_E=  00487F 
-    OPTION_S=  000080     |     OUTPUT_F=  000001     |     OUTPUT_O=  000000 
-    OUTPUT_P=  000001     |     OUTPUT_S=  000000     |     PA      =  000000 
-    PAGE_MOD=  000002     |     PAG_WND =  000022     |     PA_BASE =  005000 
-    PA_CR1  =  005003     |     PA_CR2  =  005004     |     PA_DDR  =  005002 
-    PA_IDR  =  005001     |     PA_ODR  =  005000     |     PB      =  000005 
-    PB_BASE =  005005     |     PB_CR1  =  005008     |     PB_CR2  =  005009 
-    PB_DDR  =  005007     |     PB_IDR  =  005006     |     PB_ODR  =  005005 
-    PC      =  00000A     |     PC_BASE =  00500A     |     PC_CR1  =  00500D 
-    PC_CR2  =  00500E     |     PC_DDR  =  00500C     |     PC_IDR  =  00500B 
-    PC_ODR  =  00500A     |     PD      =  00000F     |     PD_BASE =  00500F 
-    PD_CR1  =  005012     |     PD_CR2  =  005013     |     PD_DDR  =  005011 
-    PD_IDR  =  005010     |     PD_ODR  =  00500F     |     PE      =  000014 
-    PE_BASE =  005014     |     PE_CR1  =  005017     |     PE_CR2  =  005018 
-    PE_DDR  =  005016     |     PE_IDR  =  005015     |     PE_ODR  =  005014 
-    PF      =  000019     |     PF_BASE =  005019     |     PF_CR1  =  00501C 
-    PF_CR2  =  00501D     |     PF_DDR  =  00501B     |     PF_IDR  =  00501A 
-    PF_ODR  =  005019     |     PG      =  00001E     |     PG_BASE =  00501E 
-    PG_CR1  =  005021     |     PG_CR2  =  005022     |     PG_DDR  =  005020 
-    PG_IDR  =  00501F     |     PG_ODR  =  00501E     |     PH      =  000023 
-    PHASE1_P=  000000     |     PHASE2_P=  000004     |     PH_BASE =  005023 
-    PH_CR1  =  005026     |     PH_CR2  =  005027     |     PH_DDR  =  005025 
-    PH_IDR  =  005024     |     PH_ODR  =  005023     |     PI      =  000028 
-    PI_BASE =  005028     |     PI_CR1  =  00502B     |     PI_CR2  =  00502C 
-    PI_DDR  =  00502A     |     PI_IDR  =  005029     |     PI_ODR  =  005028 
-    PRE_CHAR=  0000D9     |     RAM_BASE=  000000     |     RAM_END =  0017FF 
-    RAM_SIZE=  001800     |     REV     =  000000     |     ROP     =  004800 
-    RS      =  00001E     |     RST_SR  =  0050B3     |     RX_QUEUE=  000010 
-    SCAN_REV=  0000C8     |     SCAN_TOP=  0000C0     |     SCL_BIT =  000004 
-    SCROLL_L=  000027     |     SCROLL_R=  000026     |     SCROLL_S=  00002F 
-    SCROLL_S=  00002E     |     SCROLL_V=  00002A     |     SCROLL_V=  000029 
-    SDA_BIT =  000005     |     SEMIC   =  00003B     |     SFR_BASE=  005000 
-    SFR_END =  0057FF     |     SF_HEIGH=  000005     |     SF_WIDTH=  000004 
-    SHARP   =  000023     |     SI      =  00000F     |     SO      =  00000E 
+    DEGREE  =  000087     |     DEVID_BA=  0048CD     |     DEVID_EN=  0048D8 
+    DEVID_LO=  0048D2     |     DEVID_LO=  0048D3     |     DEVID_LO=  0048D4 
+    DEVID_LO=  0048D5     |     DEVID_LO=  0048D6     |     DEVID_LO=  0048D7 
+    DEVID_LO=  0048D8     |     DEVID_WA=  0048D1     |     DEVID_XH=  0048CE 
+    DEVID_XL=  0048CD     |     DEVID_YH=  0048D0     |     DEVID_YL=  0048CF 
+    DISPLAY_=  000080     |     DISP_ALL=  0000A5     |     DISP_CHA=  00008D 
+    DISP_CON=  000081     |     DISP_DIV=  000000     |     DISP_HEI=  000040 
+    DISP_INV=  0000A7     |     DISP_NOR=  0000A6     |     DISP_OFF=  0000AE 
+    DISP_OFF=  0000D3     |     DISP_ON =  0000AF     |     DISP_RAM=  0000A4 
+    DISP_WID=  000080     |     DLE     =  000010     |     DM_BK1RE=  007F90 
+    DM_BK1RH=  007F91     |     DM_BK1RL=  007F92     |     DM_BK2RE=  007F93 
+    DM_BK2RH=  007F94     |     DM_BK2RL=  007F95     |     DM_CR1  =  007F96 
+    DM_CR2  =  007F97     |     DM_CSR1 =  007F98     |     DM_CSR2 =  007F99 
+    DM_ENFCT=  007F9A     |     EEPROM_B=  004000     |     EEPROM_E=  0043FF 
+    EEPROM_S=  000400     |     EM      =  000019     |     ENQ     =  000005 
+    EOF     =  00001A     |     EOT     =  000004     |     ESC     =  00001B 
+    ETB     =  000017     |     ETX     =  000003     |     EXTI_CR1=  0050A0 
+    EXTI_CR2=  0050A1     |     FF      =  00000C     |     FHSE    =  7A1200 
+    FHSI    =  F42400     |     FLASH_BA=  008000     |     FLASH_CR=  00505A 
+    FLASH_CR=  000002     |     FLASH_CR=  000000     |     FLASH_CR=  000003 
+    FLASH_CR=  000001     |     FLASH_CR=  00505B     |     FLASH_CR=  000005 
+    FLASH_CR=  000004     |     FLASH_CR=  000007     |     FLASH_CR=  000000 
+    FLASH_CR=  000006     |     FLASH_DU=  005064     |     FLASH_DU=  0000AE 
+    FLASH_DU=  000056     |     FLASH_EN=  017FFF     |     FLASH_FP=  00505D 
+    FLASH_FP=  000000     |     FLASH_FP=  000001     |     FLASH_FP=  000002 
+    FLASH_FP=  000003     |     FLASH_FP=  000004     |     FLASH_FP=  000005 
+    FLASH_IA=  00505F     |     FLASH_IA=  000003     |     FLASH_IA=  000002 
+    FLASH_IA=  000006     |     FLASH_IA=  000001     |     FLASH_IA=  000000 
+    FLASH_NC=  00505C     |     FLASH_NF=  00505E     |     FLASH_NF=  000000 
+    FLASH_NF=  000001     |     FLASH_NF=  000002     |     FLASH_NF=  000003 
+    FLASH_NF=  000004     |     FLASH_NF=  000005     |     FLASH_PU=  005062 
+    FLASH_PU=  000056     |     FLASH_PU=  0000AE     |     FLASH_SI=  010000 
+    FLASH_WS=  00480D     |     FLSI    =  01F400     |     FMSTR   =  000010 
+    FR_T2_CL=  00F424     |     FS      =  00001C     |     F_DISP_M=  000005 
+    F_GAME_T=  000007     |     F_SOUND_=  000006     |     GPIO_BAS=  005000 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 81.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-    SOH     =  000001     |     SOUND_BI=  000004     |     SOUND_PO=  00500F 
-    SPACE   =  000020     |     SPI_CR1 =  005200     |     SPI_CR1_=  000003 
-    SPI_CR1_=  000000     |     SPI_CR1_=  000001     |     SPI_CR1_=  000007 
-    SPI_CR1_=  000002     |     SPI_CR1_=  000006     |     SPI_CR2 =  005201 
-    SPI_CR2_=  000007     |     SPI_CR2_=  000006     |     SPI_CR2_=  000005 
-    SPI_CR2_=  000004     |     SPI_CR2_=  000002     |     SPI_CR2_=  000000 
-    SPI_CR2_=  000001     |     SPI_CRCP=  005205     |     SPI_DR  =  005204 
-    SPI_ICR =  005202     |     SPI_RXCR=  005206     |     SPI_SR  =  005203 
-    SPI_SR_B=  000007     |     SPI_SR_C=  000004     |     SPI_SR_M=  000005 
-    SPI_SR_O=  000006     |     SPI_SR_R=  000000     |     SPI_SR_T=  000001 
-    SPI_SR_W=  000003     |     SPI_TXCR=  005207     |     STACK_EM=  0017FF 
-    STACK_SI=  000080     |     START_LI=  000040     |     STX     =  000002 
-    SUB     =  00001A     |     SWIM_CSR=  007F80     |     SYN     =  000016 
-    TAB     =  000009     |     TIB_SIZE=  000028     |     TICK    =  000027 
-    TIM1_ARR=  005262     |     TIM1_ARR=  005263     |     TIM1_BKR=  00526D 
-    TIM1_CCE=  00525C     |     TIM1_CCE=  00525D     |     TIM1_CCM=  005258 
-    TIM1_CCM=  000000     |     TIM1_CCM=  000001     |     TIM1_CCM=  000004 
-    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000003     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000004     |     TIM1_CCM=  000005 
-    TIM1_CCM=  000006     |     TIM1_CCM=  000003     |     TIM1_CCM=  005259 
-    TIM1_CCM=  000000     |     TIM1_CCM=  000001     |     TIM1_CCM=  000004 
-    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000003     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000004     |     TIM1_CCM=  000005 
-    TIM1_CCM=  000006     |     TIM1_CCM=  000003     |     TIM1_CCM=  00525A 
-    TIM1_CCM=  000000     |     TIM1_CCM=  000001     |     TIM1_CCM=  000004 
-    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000003     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000004     |     TIM1_CCM=  000005 
-    TIM1_CCM=  000006     |     TIM1_CCM=  000003     |     TIM1_CCM=  00525B 
-    TIM1_CCM=  000000     |     TIM1_CCM=  000001     |     TIM1_CCM=  000004 
-    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000003     |     TIM1_CCM=  000007 
-    TIM1_CCM=  000002     |     TIM1_CCM=  000004     |     TIM1_CCM=  000005 
-    TIM1_CCM=  000006     |     TIM1_CCM=  000003     |     TIM1_CCR=  005265 
-    TIM1_CCR=  005266     |     TIM1_CCR=  005267     |     TIM1_CCR=  005268 
-    TIM1_CCR=  005269     |     TIM1_CCR=  00526A     |     TIM1_CCR=  00526B 
-    TIM1_CCR=  00526C     |     TIM1_CNT=  00525E     |     TIM1_CNT=  00525F 
-    TIM1_CR1=  005250     |     TIM1_CR2=  005251     |     TIM1_CR2=  000000 
-    TIM1_CR2=  000002     |     TIM1_CR2=  000004     |     TIM1_CR2=  000005 
-    TIM1_CR2=  000006     |     TIM1_DTR=  00526E     |     TIM1_EGR=  005257 
-    TIM1_EGR=  000007     |     TIM1_EGR=  000001     |     TIM1_EGR=  000002 
-    TIM1_EGR=  000003     |     TIM1_EGR=  000004     |     TIM1_EGR=  000005 
-    TIM1_EGR=  000006     |     TIM1_EGR=  000000     |     TIM1_ETR=  005253 
-    TIM1_ETR=  000006     |     TIM1_ETR=  000000     |     TIM1_ETR=  000001 
-    TIM1_ETR=  000002     |     TIM1_ETR=  000003     |     TIM1_ETR=  000007 
-    TIM1_ETR=  000004     |     TIM1_ETR=  000005     |     TIM1_IER=  005254 
-    TIM1_IER=  000007     |     TIM1_IER=  000001     |     TIM1_IER=  000002 
-    TIM1_IER=  000003     |     TIM1_IER=  000004     |     TIM1_IER=  000005 
-    TIM1_IER=  000006     |     TIM1_IER=  000000     |     TIM1_OIS=  00526F 
-    TIM1_PSC=  005260     |     TIM1_PSC=  005261     |     TIM1_RCR=  005264 
-    TIM1_SMC=  005252     |     TIM1_SMC=  000007     |     TIM1_SMC=  000000 
-    TIM1_SMC=  000001     |     TIM1_SMC=  000002     |     TIM1_SMC=  000004 
-    TIM1_SMC=  000005     |     TIM1_SMC=  000006     |     TIM1_SR1=  005255 
+    GPIO_CR1=  000003     |     GPIO_CR2=  000004     |     GPIO_DDR=  000002 
+    GPIO_IDR=  000001     |     GPIO_ODR=  000000     |     GPIO_SIZ=  000005 
+    GS      =  00001D     |     HORZ_MOD=  000000     |     HSECNT  =  004809 
+    I2C_BASE=  005210     |     I2C_CCRH=  00521C     |     I2C_CCRH=  000080 
+    I2C_CCRH=  0000C0     |     I2C_CCRH=  000080     |     I2C_CCRH=  000000 
+    I2C_CCRH=  000001     |     I2C_CCRH=  000000     |     I2C_CCRH=  000006 
+    I2C_CCRH=  000007     |     I2C_CCRL=  00521B     |     I2C_CCRL=  00001A 
+    I2C_CCRL=  000002     |     I2C_CCRL=  00000D     |     I2C_CCRL=  000050 
+    I2C_CCRL=  000090     |     I2C_CCRL=  0000A0     |     I2C_CR1 =  005210 
+    I2C_CR1_=  000006     |     I2C_CR1_=  000007     |     I2C_CR1_=  000000 
+    I2C_CR2 =  005211     |     I2C_CR2_=  000002     |     I2C_CR2_=  000003 
+    I2C_CR2_=  000000     |     I2C_CR2_=  000001     |     I2C_CR2_=  000007 
+    I2C_DR  =  005216     |     I2C_ERR_=  000003     |     I2C_ERR_=  000004 
+    I2C_ERR_=  000000     |     I2C_ERR_=  000001     |     I2C_ERR_=  000002 
+    I2C_ERR_=  000005     |     I2C_FAST=  000001     |     I2C_FREQ=  005212 
+    I2C_ITR =  00521A     |     I2C_ITR_=  000002     |     I2C_ITR_=  000000 
+    I2C_ITR_=  000001     |     I2C_OARH=  005214     |     I2C_OARH=  000001 
+    I2C_OARH=  000002     |     I2C_OARH=  000006     |     I2C_OARH=  000007 
+    I2C_OARL=  005213     |     I2C_OARL=  000000     |     I2C_OAR_=  000813 
+    I2C_OAR_=  000009     |     I2C_PECR=  00521E     |     I2C_PORT=  000005 
+    I2C_READ=  000001     |     I2C_SR1 =  005217     |     I2C_SR1_=  000003 
+    I2C_SR1_=  000001     |     I2C_SR1_=  000002     |     I2C_SR1_=  000006 
+    I2C_SR1_=  000000     |     I2C_SR1_=  000004     |     I2C_SR1_=  000007 
+    I2C_SR2 =  005218     |     I2C_SR2_=  000002     |     I2C_SR2_=  000001 
+    I2C_SR2_=  000000     |     I2C_SR2_=  000003     |     I2C_SR2_=  000005 
+    I2C_SR3 =  005219     |     I2C_SR3_=  000001     |     I2C_SR3_=  000007 
+    I2C_SR3_=  000004     |     I2C_SR3_=  000000     |     I2C_SR3_=  000002 
+    I2C_STAT=  000007     |     I2C_STAT=  000006     |     I2C_STD =  000000 
+    I2C_TRIS=  00521D     |     I2C_TRIS=  000005     |     I2C_TRIS=  000005 
+    I2C_TRIS=  000005     |     I2C_TRIS=  000011     |     I2C_TRIS=  000011 
+    I2C_TRIS=  000011     |     I2C_WRIT=  000000     |   7 I2cIntHa   0000DC R
+    INPUT_DI=  000000     |     INPUT_EI=  000001     |     INPUT_FL=  000000 
+    INPUT_PU=  000001     |     INT_ADC2=  000016     |     INT_AUAR=  000012 
+    INT_AWU =  000001     |     INT_CAN_=  000008     |     INT_CAN_=  000009 
+    INT_CLK =  000002     |     INT_EXTI=  000003     |     INT_EXTI=  000004 
+    INT_EXTI=  000005     |     INT_EXTI=  000006     |     INT_EXTI=  000007 
+    INT_FLAS=  000018     |     INT_I2C =  000013     |     INT_SPI =  00000A 
+    INT_TIM1=  00000C     |     INT_TIM1=  00000B     |     INT_TIM2=  00000E 
+    INT_TIM2=  00000D     |     INT_TIM3=  000010     |     INT_TIM3=  00000F 
+    INT_TIM4=  000017     |     INT_TLI =  000000     |     INT_UART=  000011 
+    INT_UART=  000015     |     INT_UART=  000014     |     INT_VECT=  008060 
+    INT_VECT=  00800C     |     INT_VECT=  008028     |     INT_VECT=  00802C 
+    INT_VECT=  008010     |     INT_VECT=  008014     |     INT_VECT=  008018 
+    INT_VECT=  00801C     |     INT_VECT=  008020     |     INT_VECT=  008024 
+    INT_VECT=  008068     |     INT_VECT=  008054     |     INT_VECT=  008000 
+    INT_VECT=  008030     |     INT_VECT=  008038     |     INT_VECT=  008034 
+    INT_VECT=  008040     |     INT_VECT=  00803C     |     INT_VECT=  008048 
+    INT_VECT=  008044     |     INT_VECT=  008064     |     INT_VECT=  008008 
+    INT_VECT=  008004     |     INT_VECT=  008050     |     INT_VECT=  00804C 
+    INT_VECT=  00805C     |     INT_VECT=  008058     |     ITC_SPR1=  007F70 
+    ITC_SPR2=  007F71     |     ITC_SPR3=  007F72     |     ITC_SPR4=  007F73 
+    ITC_SPR5=  007F74     |     ITC_SPR6=  007F75     |     ITC_SPR7=  007F76 
+    ITC_SPR8=  007F77     |     ITC_SPR_=  000001     |     ITC_SPR_=  000000 
+    ITC_SPR_=  000003     |     IWDG_KEY=  000055     |     IWDG_KEY=  0000CC 
+    IWDG_KEY=  0000AA     |     IWDG_KR =  0050E0     |     IWDG_PR =  0050E1 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 82.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-    TIM1_SR1=  000007     |     TIM1_SR1=  000001     |     TIM1_SR1=  000002 
-    TIM1_SR1=  000003     |     TIM1_SR1=  000004     |     TIM1_SR1=  000005 
-    TIM1_SR1=  000006     |     TIM1_SR1=  000000     |     TIM1_SR2=  005256 
-    TIM1_SR2=  000001     |     TIM1_SR2=  000002     |     TIM1_SR2=  000003 
-    TIM1_SR2=  000004     |     TIM2_ARR=  00530D     |     TIM2_ARR=  00530E 
-    TIM2_CCE=  005308     |     TIM2_CCE=  000000     |     TIM2_CCE=  000001 
-    TIM2_CCE=  000004     |     TIM2_CCE=  000005     |     TIM2_CCE=  005309 
-    TIM2_CCM=  005305     |     TIM2_CCM=  005306     |     TIM2_CCM=  005307 
-    TIM2_CCM=  000000     |     TIM2_CCM=  000004     |     TIM2_CCM=  000003 
-    TIM2_CCR=  00530F     |     TIM2_CCR=  005310     |     TIM2_CCR=  005311 
-    TIM2_CCR=  005312     |     TIM2_CCR=  005313     |     TIM2_CCR=  005314 
-    TIM2_CLK=  00F424     |     TIM2_CNT=  00530A     |     TIM2_CNT=  00530B 
-    TIM2_CR1=  005300     |     TIM2_CR1=  000007     |     TIM2_CR1=  000000 
-    TIM2_CR1=  000003     |     TIM2_CR1=  000001     |     TIM2_CR1=  000002 
-    TIM2_EGR=  005304     |     TIM2_EGR=  000001     |     TIM2_EGR=  000002 
-    TIM2_EGR=  000003     |     TIM2_EGR=  000006     |     TIM2_EGR=  000000 
-    TIM2_IER=  005301     |     TIM2_PSC=  00530C     |     TIM2_SR1=  005302 
-    TIM2_SR2=  005303     |     TIM3_ARR=  00532B     |     TIM3_ARR=  00532C 
-    TIM3_CCE=  005327     |     TIM3_CCE=  000000     |     TIM3_CCE=  000001 
-    TIM3_CCE=  000004     |     TIM3_CCE=  000005     |     TIM3_CCE=  000000 
-    TIM3_CCE=  000001     |     TIM3_CCM=  005325     |     TIM3_CCM=  005326 
-    TIM3_CCM=  000000     |     TIM3_CCM=  000004     |     TIM3_CCM=  000003 
-    TIM3_CCR=  00532D     |     TIM3_CCR=  00532E     |     TIM3_CCR=  00532F 
-    TIM3_CCR=  005330     |     TIM3_CNT=  005328     |     TIM3_CNT=  005329 
-    TIM3_CR1=  005320     |     TIM3_CR1=  000007     |     TIM3_CR1=  000000 
-    TIM3_CR1=  000003     |     TIM3_CR1=  000001     |     TIM3_CR1=  000002 
-    TIM3_EGR=  005324     |     TIM3_IER=  005321     |     TIM3_PSC=  00532A 
-    TIM3_SR1=  005322     |     TIM3_SR2=  005323     |     TIM4_ARR=  005346 
-    TIM4_CNT=  005344     |     TIM4_CR1=  005340     |     TIM4_CR1=  000007 
-    TIM4_CR1=  000000     |     TIM4_CR1=  000003     |     TIM4_CR1=  000001 
-    TIM4_CR1=  000002     |     TIM4_EGR=  005343     |     TIM4_EGR=  000000 
-    TIM4_IER=  005341     |     TIM4_IER=  000000     |     TIM4_PSC=  005345 
-    TIM4_PSC=  000000     |     TIM4_PSC=  000007     |     TIM4_PSC=  000004 
-    TIM4_PSC=  000001     |     TIM4_PSC=  000005     |     TIM4_PSC=  000002 
-    TIM4_PSC=  000006     |     TIM4_PSC=  000003     |     TIM4_PSC=  000000 
-    TIM4_PSC=  000001     |     TIM4_PSC=  000002     |     TIM4_SR =  005342 
-    TIM4_SR_=  000000     |     TIM_CR1_=  000007     |     TIM_CR1_=  000000 
-    TIM_CR1_=  000006     |     TIM_CR1_=  000005     |     TIM_CR1_=  000004 
-    TIM_CR1_=  000003     |     TIM_CR1_=  000001     |     TIM_CR1_=  000002 
-  7 Timer4Up   000001 R   |     UART    =  000002     |     UART1   =  000000 
-    UART1_BA=  005230     |     UART1_BR=  005232     |     UART1_BR=  005233 
-    UART1_CR=  005234     |     UART1_CR=  005235     |     UART1_CR=  005236 
-    UART1_CR=  005237     |     UART1_CR=  005238     |     UART1_DR=  005231 
-    UART1_GT=  005239     |     UART1_PO=  000000     |     UART1_PS=  00523A 
-    UART1_RX=  000004     |     UART1_SR=  005230     |     UART1_TX=  000005 
-    UART2   =  000001     |     UART3   =  000002     |     UART3_BA=  005240 
-    UART3_BR=  005242     |     UART3_BR=  005243     |     UART3_CR=  005244 
-    UART3_CR=  005245     |     UART3_CR=  005246     |     UART3_CR=  005247 
-    UART3_CR=  004249     |     UART3_DR=  005241     |     UART3_PO=  00000F 
-    UART3_RX=  000006     |     UART3_SR=  005240     |     UART3_TX=  000005 
-    UART_BRR=  005242     |     UART_BRR=  005243     |     UART_CR1=  005244 
-    UART_CR1=  000004     |     UART_CR1=  000002     |     UART_CR1=  000000 
-    UART_CR1=  000001     |     UART_CR1=  000007     |     UART_CR1=  000006 
-    UART_CR1=  000005     |     UART_CR1=  000003     |     UART_CR2=  005245 
-    UART_CR2=  000004     |     UART_CR2=  000002     |     UART_CR2=  000005 
+    IWDG_RLR=  0050E2     |     LED_BIT =  000005     |     LED_MASK=  000020 
+    LED_PORT=  00500A     |     LF      =  00000A     |     LF_HEIGH=  00000A 
+    LF_WIDTH=  000008     |     MAJOR   =  000001     |     MAP_SEG0=  0000A0 
+    MAP_SEG0=  0000A1     |     MINOR   =  000000     |     MUX_RATI=  0000A8 
+    NAFR    =  004804     |     NAK     =  000015     |     NCLKOPT =  004808 
+    NFLASH_W=  00480E     |     NHSECNT =  00480A     |     NOPT1   =  004802 
+    NOPT2   =  004804     |     NOPT3   =  004806     |     NOPT4   =  004808 
+    NOPT5   =  00480A     |     NOPT6   =  00480C     |     NOPT7   =  00480E 
+    NOPTBL  =  00487F     |     NUBC    =  004802     |     NWDGOPT =  004806 
+    NWDGOPT_=  FFFFFFFD     |     NWDGOPT_=  FFFFFFFC     |     NWDGOPT_=  FFFFFFFF 
+    NWDGOPT_=  FFFFFFFE     |   7 NonHandl   000000 R   |     OFS_UART=  000002 
+    OFS_UART=  000003     |     OFS_UART=  000004     |     OFS_UART=  000005 
+    OFS_UART=  000006     |     OFS_UART=  000007     |     OFS_UART=  000008 
+    OFS_UART=  000009     |     OFS_UART=  000001     |     OFS_UART=  000009 
+    OFS_UART=  00000A     |     OFS_UART=  000000     |     OLED_CMD=  000080 
+    OLED_DAT=  000040     |     OLED_DEV=  000078     |     OLED_FON=  000008 
+    OLED_FON=  000006     |     OLED_NOP=  0000E3     |     OPT0    =  004800 
+    OPT1    =  004801     |     OPT2    =  004803     |     OPT3    =  004805 
+    OPT4    =  004807     |     OPT5    =  004809     |     OPT6    =  00480B 
+    OPT7    =  00480D     |     OPTBL   =  00487E     |     OPTION_B=  004800 
+    OPTION_E=  00487F     |     OPTION_S=  000080     |     OUTPUT_F=  000001 
+    OUTPUT_O=  000000     |     OUTPUT_P=  000001     |     OUTPUT_S=  000000 
+    PA      =  000000     |     PAGE_MOD=  000002     |     PAG_WND =  000022 
+    PA_BASE =  005000     |     PA_CR1  =  005003     |     PA_CR2  =  005004 
+    PA_DDR  =  005002     |     PA_IDR  =  005001     |     PA_ODR  =  005000 
+    PB      =  000005     |     PB_BASE =  005005     |     PB_CR1  =  005008 
+    PB_CR2  =  005009     |     PB_DDR  =  005007     |     PB_IDR  =  005006 
+    PB_ODR  =  005005     |     PC      =  00000A     |     PC_BASE =  00500A 
+    PC_CR1  =  00500D     |     PC_CR2  =  00500E     |     PC_DDR  =  00500C 
+    PC_IDR  =  00500B     |     PC_ODR  =  00500A     |     PD      =  00000F 
+    PD_BASE =  00500F     |     PD_CR1  =  005012     |     PD_CR2  =  005013 
+    PD_DDR  =  005011     |     PD_IDR  =  005010     |     PD_ODR  =  00500F 
+    PE      =  000014     |     PE_BASE =  005014     |     PE_CR1  =  005017 
+    PE_CR2  =  005018     |     PE_DDR  =  005016     |     PE_IDR  =  005015 
+    PE_ODR  =  005014     |     PF      =  000019     |     PF_BASE =  005019 
+    PF_CR1  =  00501C     |     PF_CR2  =  00501D     |     PF_DDR  =  00501B 
+    PF_IDR  =  00501A     |     PF_ODR  =  005019     |     PG      =  00001E 
+    PG_BASE =  00501E     |     PG_CR1  =  005021     |     PG_CR2  =  005022 
+    PG_DDR  =  005020     |     PG_IDR  =  00501F     |     PG_ODR  =  00501E 
+    PH      =  000023     |     PHASE1_P=  000000     |     PHASE2_P=  000004 
+    PH_BASE =  005023     |     PH_CR1  =  005026     |     PH_CR2  =  005027 
+    PH_DDR  =  005025     |     PH_IDR  =  005024     |     PH_ODR  =  005023 
+    PI      =  000028     |     PI_BASE =  005028     |     PI_CR1  =  00502B 
+    PI_CR2  =  00502C     |     PI_DDR  =  00502A     |     PI_IDR  =  005029 
+    PI_ODR  =  005028     |     PRE_CHAR=  0000D9     |     RAM_BASE=  000000 
+    RAM_END =  0017FF     |     RAM_SIZE=  001800     |     REPCNT  =  000003 
+    REV     =  000000     |     ROP     =  004800     |     RS      =  00001E 
+    RST_SR  =  0050B3     |     RX_QUEUE=  000010     |     SCAN_REV=  0000C8 
+    SCAN_TOP=  0000C0     |     SCL_BIT =  000004     |     SCROLL_L=  000027 
+    SCROLL_R=  000026     |     SCROLL_S=  00002F     |     SCROLL_S=  00002E 
+    SCROLL_V=  00002A     |     SCROLL_V=  000029     |     SDA_BIT =  000005 
+    SEMIC   =  00003B     |     SFR_BASE=  005000     |     SFR_END =  0057FF 
+    SF_HEIGH=  000005     |     SF_WIDTH=  000004     |     SHARP   =  000023 
+    SI      =  00000F     |     SIGN    =  000001     |     SLOPE10 =  0000C3 
+    SO      =  00000E     |     SOH     =  000001     |     SOUND_BI=  000004 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 83.
 Hexadecimal [24-Bits]
 
 Symbol Table
 
-    UART_CR2=  000001     |     UART_CR2=  000000     |     UART_CR2=  000006 
-    UART_CR2=  000003     |     UART_CR2=  000007     |     UART_CR3=  000003 
-    UART_CR3=  000001     |     UART_CR3=  000002     |     UART_CR3=  000000 
-    UART_CR3=  000006     |     UART_CR3=  000004     |     UART_CR3=  000005 
-    UART_CR4=  000000     |     UART_CR4=  000001     |     UART_CR4=  000002 
-    UART_CR4=  000003     |     UART_CR4=  000004     |     UART_CR4=  000006 
-    UART_CR4=  000005     |     UART_CR5=  000003     |     UART_CR5=  000001 
-    UART_CR5=  000002     |     UART_CR5=  000004     |     UART_CR5=  000005 
-    UART_CR6=  000004     |     UART_CR6=  000007     |     UART_CR6=  000001 
-    UART_CR6=  000002     |     UART_CR6=  000000     |     UART_CR6=  000005 
-    UART_DR =  005241     |     UART_PCK=  000003     |     UART_POR=  005012 
-    UART_POR=  005013     |     UART_POR=  005011     |     UART_POR=  005010 
-    UART_POR=  00500F     |     UART_RX_=  000006     |     UART_SR =  005240 
-    UART_SR_=  000001     |     UART_SR_=  000004     |     UART_SR_=  000002 
-    UART_SR_=  000003     |     UART_SR_=  000000     |     UART_SR_=  000005 
-    UART_SR_=  000006     |     UART_SR_=  000007     |     UART_TX_=  000005 
-    UBC     =  004801     |     US      =  00001F     |     VCOMH_DS=  0000DB 
-    VCOMH_DS=  000000     |     VCOMH_DS=  000020     |     VCOMH_DS=  000030 
-    VERT_MOD=  000001     |     VERT_SCR=  0000A3     |     VT      =  00000B 
+    SOUND_PO=  00500F     |     SPACE   =  000020     |     SPI_CR1 =  005200 
+    SPI_CR1_=  000003     |     SPI_CR1_=  000000     |     SPI_CR1_=  000001 
+    SPI_CR1_=  000007     |     SPI_CR1_=  000002     |     SPI_CR1_=  000006 
+    SPI_CR2 =  005201     |     SPI_CR2_=  000007     |     SPI_CR2_=  000006 
+    SPI_CR2_=  000005     |     SPI_CR2_=  000004     |     SPI_CR2_=  000002 
+    SPI_CR2_=  000000     |     SPI_CR2_=  000001     |     SPI_CRCP=  005205 
+    SPI_DR  =  005204     |     SPI_ICR =  005202     |     SPI_RXCR=  005206 
+    SPI_SR  =  005203     |     SPI_SR_B=  000007     |     SPI_SR_C=  000004 
+    SPI_SR_M=  000005     |     SPI_SR_O=  000006     |     SPI_SR_R=  000000 
+    SPI_SR_T=  000001     |     SPI_SR_W=  000003     |     SPI_TXCR=  005207 
+    STACK_EM=  0017FF     |     STACK_SI=  000080     |     START_LI=  000040 
+    STX     =  000002     |     SUB     =  00001A     |     SWIM_CSR=  007F80 
+    SYN     =  000016     |     TAB     =  000009     |     TIB_SIZE=  000028 
+    TICK    =  000027     |     TIM1_ARR=  005262     |     TIM1_ARR=  005263 
+    TIM1_BKR=  00526D     |     TIM1_CCE=  00525C     |     TIM1_CCE=  00525D 
+    TIM1_CCM=  005258     |     TIM1_CCM=  000000     |     TIM1_CCM=  000001 
+    TIM1_CCM=  000004     |     TIM1_CCM=  000005     |     TIM1_CCM=  000006 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000003 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000004 
+    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000003 
+    TIM1_CCM=  005259     |     TIM1_CCM=  000000     |     TIM1_CCM=  000001 
+    TIM1_CCM=  000004     |     TIM1_CCM=  000005     |     TIM1_CCM=  000006 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000003 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000004 
+    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000003 
+    TIM1_CCM=  00525A     |     TIM1_CCM=  000000     |     TIM1_CCM=  000001 
+    TIM1_CCM=  000004     |     TIM1_CCM=  000005     |     TIM1_CCM=  000006 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000003 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000004 
+    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000003 
+    TIM1_CCM=  00525B     |     TIM1_CCM=  000000     |     TIM1_CCM=  000001 
+    TIM1_CCM=  000004     |     TIM1_CCM=  000005     |     TIM1_CCM=  000006 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000003 
+    TIM1_CCM=  000007     |     TIM1_CCM=  000002     |     TIM1_CCM=  000004 
+    TIM1_CCM=  000005     |     TIM1_CCM=  000006     |     TIM1_CCM=  000003 
+    TIM1_CCR=  005265     |     TIM1_CCR=  005266     |     TIM1_CCR=  005267 
+    TIM1_CCR=  005268     |     TIM1_CCR=  005269     |     TIM1_CCR=  00526A 
+    TIM1_CCR=  00526B     |     TIM1_CCR=  00526C     |     TIM1_CNT=  00525E 
+    TIM1_CNT=  00525F     |     TIM1_CR1=  005250     |     TIM1_CR2=  005251 
+    TIM1_CR2=  000000     |     TIM1_CR2=  000002     |     TIM1_CR2=  000004 
+    TIM1_CR2=  000005     |     TIM1_CR2=  000006     |     TIM1_DTR=  00526E 
+    TIM1_EGR=  005257     |     TIM1_EGR=  000007     |     TIM1_EGR=  000001 
+    TIM1_EGR=  000002     |     TIM1_EGR=  000003     |     TIM1_EGR=  000004 
+    TIM1_EGR=  000005     |     TIM1_EGR=  000006     |     TIM1_EGR=  000000 
+    TIM1_ETR=  005253     |     TIM1_ETR=  000006     |     TIM1_ETR=  000000 
+    TIM1_ETR=  000001     |     TIM1_ETR=  000002     |     TIM1_ETR=  000003 
+    TIM1_ETR=  000007     |     TIM1_ETR=  000004     |     TIM1_ETR=  000005 
+    TIM1_IER=  005254     |     TIM1_IER=  000007     |     TIM1_IER=  000001 
+    TIM1_IER=  000002     |     TIM1_IER=  000003     |     TIM1_IER=  000004 
+    TIM1_IER=  000005     |     TIM1_IER=  000006     |     TIM1_IER=  000000 
+    TIM1_OIS=  00526F     |     TIM1_PSC=  005260     |     TIM1_PSC=  005261 
+    TIM1_RCR=  005264     |     TIM1_SMC=  005252     |     TIM1_SMC=  000007 
+    TIM1_SMC=  000000     |     TIM1_SMC=  000001     |     TIM1_SMC=  000002 
+    TIM1_SMC=  000004     |     TIM1_SMC=  000005     |     TIM1_SMC=  000006 
+    TIM1_SR1=  005255     |     TIM1_SR1=  000007     |     TIM1_SR1=  000001 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 84.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    TIM1_SR1=  000002     |     TIM1_SR1=  000003     |     TIM1_SR1=  000004 
+    TIM1_SR1=  000005     |     TIM1_SR1=  000006     |     TIM1_SR1=  000000 
+    TIM1_SR2=  005256     |     TIM1_SR2=  000001     |     TIM1_SR2=  000002 
+    TIM1_SR2=  000003     |     TIM1_SR2=  000004     |     TIM2_ARR=  00530D 
+    TIM2_ARR=  00530E     |     TIM2_CCE=  005308     |     TIM2_CCE=  000000 
+    TIM2_CCE=  000001     |     TIM2_CCE=  000004     |     TIM2_CCE=  000005 
+    TIM2_CCE=  005309     |     TIM2_CCM=  005305     |     TIM2_CCM=  005306 
+    TIM2_CCM=  005307     |     TIM2_CCM=  000000     |     TIM2_CCM=  000004 
+    TIM2_CCM=  000003     |     TIM2_CCR=  00530F     |     TIM2_CCR=  005310 
+    TIM2_CCR=  005311     |     TIM2_CCR=  005312     |     TIM2_CCR=  005313 
+    TIM2_CCR=  005314     |     TIM2_CLK=  00F424     |     TIM2_CNT=  00530A 
+    TIM2_CNT=  00530B     |     TIM2_CR1=  005300     |     TIM2_CR1=  000007 
+    TIM2_CR1=  000000     |     TIM2_CR1=  000003     |     TIM2_CR1=  000001 
+    TIM2_CR1=  000002     |     TIM2_EGR=  005304     |     TIM2_EGR=  000001 
+    TIM2_EGR=  000002     |     TIM2_EGR=  000003     |     TIM2_EGR=  000006 
+    TIM2_EGR=  000000     |     TIM2_IER=  005301     |     TIM2_PSC=  00530C 
+    TIM2_SR1=  005302     |     TIM2_SR2=  005303     |     TIM3_ARR=  00532B 
+    TIM3_ARR=  00532C     |     TIM3_CCE=  005327     |     TIM3_CCE=  000000 
+    TIM3_CCE=  000001     |     TIM3_CCE=  000004     |     TIM3_CCE=  000005 
+    TIM3_CCE=  000000     |     TIM3_CCE=  000001     |     TIM3_CCM=  005325 
+    TIM3_CCM=  005326     |     TIM3_CCM=  000000     |     TIM3_CCM=  000004 
+    TIM3_CCM=  000003     |     TIM3_CCR=  00532D     |     TIM3_CCR=  00532E 
+    TIM3_CCR=  00532F     |     TIM3_CCR=  005330     |     TIM3_CNT=  005328 
+    TIM3_CNT=  005329     |     TIM3_CR1=  005320     |     TIM3_CR1=  000007 
+    TIM3_CR1=  000000     |     TIM3_CR1=  000003     |     TIM3_CR1=  000001 
+    TIM3_CR1=  000002     |     TIM3_EGR=  005324     |     TIM3_IER=  005321 
+    TIM3_PSC=  00532A     |     TIM3_SR1=  005322     |     TIM3_SR2=  005323 
+    TIM4_ARR=  005346     |     TIM4_CNT=  005344     |     TIM4_CR1=  005340 
+    TIM4_CR1=  000007     |     TIM4_CR1=  000000     |     TIM4_CR1=  000003 
+    TIM4_CR1=  000001     |     TIM4_CR1=  000002     |     TIM4_EGR=  005343 
+    TIM4_EGR=  000000     |     TIM4_IER=  005341     |     TIM4_IER=  000000 
+    TIM4_PSC=  005345     |     TIM4_PSC=  000000     |     TIM4_PSC=  000007 
+    TIM4_PSC=  000004     |     TIM4_PSC=  000001     |     TIM4_PSC=  000005 
+    TIM4_PSC=  000002     |     TIM4_PSC=  000006     |     TIM4_PSC=  000003 
+    TIM4_PSC=  000000     |     TIM4_PSC=  000001     |     TIM4_PSC=  000002 
+    TIM4_SR =  005342     |     TIM4_SR_=  000000     |     TIM_CR1_=  000007 
+    TIM_CR1_=  000000     |     TIM_CR1_=  000006     |     TIM_CR1_=  000005 
+    TIM_CR1_=  000004     |     TIM_CR1_=  000003     |     TIM_CR1_=  000001 
+    TIM_CR1_=  000002     |   7 Timer4Up   000001 R   |     UART    =  000002 
+    UART1   =  000000     |     UART1_BA=  005230     |     UART1_BR=  005232 
+    UART1_BR=  005233     |     UART1_CR=  005234     |     UART1_CR=  005235 
+    UART1_CR=  005236     |     UART1_CR=  005237     |     UART1_CR=  005238 
+    UART1_DR=  005231     |     UART1_GT=  005239     |     UART1_PO=  000000 
+    UART1_PS=  00523A     |     UART1_RX=  000004     |     UART1_SR=  005230 
+    UART1_TX=  000005     |     UART2   =  000001     |     UART3   =  000002 
+    UART3_BA=  005240     |     UART3_BR=  005242     |     UART3_BR=  005243 
+    UART3_CR=  005244     |     UART3_CR=  005245     |     UART3_CR=  005246 
+    UART3_CR=  005247     |     UART3_CR=  004249     |     UART3_DR=  005241 
+    UART3_PO=  00000F     |     UART3_RX=  000006     |     UART3_SR=  005240 
+    UART3_TX=  000005     |     UART_BRR=  005242     |     UART_BRR=  005243 
+    UART_CR1=  005244     |     UART_CR1=  000004     |     UART_CR1=  000002 
+    UART_CR1=  000000     |     UART_CR1=  000001     |     UART_CR1=  000007 
+    UART_CR1=  000006     |     UART_CR1=  000005     |     UART_CR1=  000003 
+    UART_CR2=  005245     |     UART_CR2=  000004     |     UART_CR2=  000002 
+    UART_CR2=  000005     |     UART_CR2=  000001     |     UART_CR2=  000000 
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 85.
+Hexadecimal [24-Bits]
+
+Symbol Table
+
+    UART_CR2=  000006     |     UART_CR2=  000003     |     UART_CR2=  000007 
+    UART_CR3=  000003     |     UART_CR3=  000001     |     UART_CR3=  000002 
+    UART_CR3=  000000     |     UART_CR3=  000006     |     UART_CR3=  000004 
+    UART_CR3=  000005     |     UART_CR4=  000000     |     UART_CR4=  000001 
+    UART_CR4=  000002     |     UART_CR4=  000003     |     UART_CR4=  000004 
+    UART_CR4=  000006     |     UART_CR4=  000005     |     UART_CR5=  000003 
+    UART_CR5=  000001     |     UART_CR5=  000002     |     UART_CR5=  000004 
+    UART_CR5=  000005     |     UART_CR6=  000004     |     UART_CR6=  000007 
+    UART_CR6=  000001     |     UART_CR6=  000002     |     UART_CR6=  000000 
+    UART_CR6=  000005     |     UART_DR =  005241     |     UART_PCK=  000003 
+    UART_POR=  005012     |     UART_POR=  005013     |     UART_POR=  005011 
+    UART_POR=  005010     |     UART_POR=  00500F     |     UART_RX_=  000006 
+    UART_SR =  005240     |     UART_SR_=  000001     |     UART_SR_=  000004 
+    UART_SR_=  000002     |     UART_SR_=  000003     |     UART_SR_=  000000 
+    UART_SR_=  000005     |     UART_SR_=  000006     |     UART_SR_=  000007 
+    UART_TX_=  000005     |     UBC     =  004801     |     US      =  00001F 
+    VAR_SIZE=  000003     |     VCOMH_DS=  0000DB     |     VCOMH_DS=  000000 
+    VCOMH_DS=  000020     |     VCOMH_DS=  000030     |     VERT_MOD=  000001 
+    VERT_SCR=  0000A3     |     VREF10  =  000021     |     VT      =  00000B 
     WANT_TER=  000001     |     WDGOPT  =  004805     |     WDGOPT_I=  000002 
     WDGOPT_L=  000003     |     WDGOPT_W=  000000     |     WDGOPT_W=  000001 
     WWDG_CR =  0050D1     |     WWDG_WR =  0050D2     |     XOFF    =  000013 
-    XON     =  000011     |   5 acc16      000010 GR  |   5 acc8       000011 GR
-  7 all_disp   0002AE R   |   7 app        00073D R   |   7 beep       0000B1 R
-  7 blink      0001A0 R   |   7 blink0     000198 R   |   7 blink1     00019D R
-  7 clear_di   00067A R   |   7 clock_in   00002F R   |   6 co_code    000100 R
-  7 cold_sta   0000BA R   |   7 crlf       0006AA R   |   5 cur_x      00001E R
-  5 cur_y      00001D R   |   7 cursor_r   0006D1 R   |   5 delay_ti   00000A R
-  6 disp_buf   000101 R   |   7 display_   000689 R   |   7 end_of_t   000149 R
+    XON     =  000011     |     XSAVE   =  000001     |     ZERO_OFS=  000190 
+  5 acc16      000010 GR  |   5 acc8       000011 GR  |   7 all_disp   0002AE R
+  7 app        000756 R   |   7 beep       0000B1 R   |   7 blink      0001A0 R
+  7 blink0     000198 R   |   7 blink1     00019D R   |   7 celcius    000857 R
+  7 clear_di   000693 R   |   7 clock_in   00002F R   |   6 co_code    000100 R
+  7 cold_sta   0000BA R   |   7 crlf       0006C3 R   |   5 cur_x      00001E R
+  5 cur_y      00001D R   |   7 cursor_r   0006EA R   |   5 delay_ti   00000A R
+  6 disp_buf   000101 R   |   7 display_   0006A2 R   |   7 end_of_t   000149 R
   7 evt_addr   000122 R   |   7 evt_btf    00013D R   |   7 evt_rxne   000156 R
   7 evt_sb     00011C R   |   7 evt_stop   000171 R   |   7 evt_txe    000128 R
-  7 evt_txe_   00012D R   |   7 fast       0001E9 R   |   5 flags      000014 GR
-  7 font_hex   0002F1 R   |   7 font_hex   000341 R   |   6 free_ram   000181 R
-  2 free_ram   00177E R   |   7 hello      00074F R   |   5 i2c_buf    000015 R
+  7 evt_txe_   00012D R   |   7 fahrenhe   00085A R   |   7 fast       0001E9 R
+  5 flags      000014 GR  |   7 font_hex   0002FE R   |   7 font_hex   00034E R
+  6 free_ram   000181 R   |   2 free_ram   00177E R   |   5 i2c_buf    000015 R
   5 i2c_coun   000017 R   |   5 i2c_devi   00001C R   |   7 i2c_erro   000185 R
   5 i2c_idx    000019 R   |   7 i2c_init   0001FA R   |   7 i2c_scl_   0001D3 R
   7 i2c_scl_   0001F5 R   |   7 i2c_star   000219 R   |   5 i2c_stat   00001B R
-  7 i2c_writ   0001BB R   |   7 nibble_l   00018D R   |   7 oled_cmd   0002CD R
-  7 oled_dat   0002E7 R   |   7 oled_fon   0003E1 R   |   7 oled_fon   00064B R
-  7 oled_ini   000230 GR  |   7 oled_sen   0002DA R   |   7 page_cle   00066D R
-  7 pause      000062 R   |   5 ptr16      000012 GR  |   5 ptr8       000013 R
-  7 put_byte   000720 R   |   7 put_char   0006DF R   |   7 put_hex    000726 R
-  7 put_hex_   000734 R   |   7 put_stri   00070B R   |   7 scroll_u   000660 R
-  5 seedx      00000C R   |   5 seedy      00000E R   |   7 set_page   00064B R
-  7 sound_pa   00006F R   |   5 sound_ti   00000B R   |   2 stack_fu   00177E R
-  2 stack_un   0017FE R   |   5 start_pa   00001F R   |   7 std        0001DB R
-  5 ticks      000008 R   |   7 timer2_i   00004D R   |   7 timer4_i   000034 R
-  7 tone       000088 R
+  7 i2c_writ   0001BB R   |   7 itoa       00080B R   |   7 mul16x8    0007FB R
+  7 nibble_l   00018D R   |   7 oled_cmd   0002CD R   |   7 oled_dat   0002E9 R
+  7 oled_fon   0003EE R   |   7 oled_fon   00065E R   |   7 oled_ini   000230 GR
+  7 page_cle   000686 R   |   7 pause      000062 R   |   7 prompt     000832 R
+  5 ptr16      000012 GR  |   5 ptr8       000013 R   |   7 put_byte   000739 R
+  7 put_char   0006F8 R   |   7 put_hex    00073F R   |   7 put_hex_   00074D R
+  7 put_stri   000724 R   |   7 scroll_u   000679 R   |   5 seedx      00000C R
+  5 seedy      00000E R   |   7 set_page   00065E R   |   7 sound_pa   00006F R
+  5 sound_ti   00000B R   |   2 stack_fu   00177E R   |   2 stack_un   0017FE R
+  5 start_pa   00001F R   |   7 std        0001DB R   |   5 ticks      000008 R
+  7 timer2_i   00004D R   |   7 timer4_i   000034 R   |   7 tone       000088 R
 
-ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 84.
+ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 86.
 Hexadecimal [24-Bits]
 
 Area Table
@@ -4474,5 +4628,5 @@ Area Table
    4 DATA       size      0   flags    8
    5 DATA1      size     18   flags    8
    6 DATA2      size     81   flags    8
-   7 CODE       size    75C   flags    0
+   7 CODE       size    85D   flags    0
 

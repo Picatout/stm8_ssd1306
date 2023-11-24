@@ -1,4 +1,12 @@
+### 2023-11-24
+
+* complété démo [app.asm](asm.asm). Démonstration lecture sonde de températeur avec affichage en Celcius et Fahranheit.
+
 ### 2023-11-23
+
+* Transformé app.asm en démo pour sonde de température.
+
+* Corrigé bogue dans *set_page*.
 
 * Réorganisation du code et nettoyage.
 

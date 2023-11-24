@@ -57,33 +57,6 @@
     .endm 
 
 
-;--------------------------------
-; oled commands macros 
-;----------------------------------
-
-    ; initialize cmd_buffer 
-    .macro _cmd_init 
-        BUF_OFS=0
-    .endm 
-
-    ; set oled command buffer values 
-    ; initialize BUF_OFS=0 
-    ; before using it 
-    .macro _set_cmd n
-    BUF_OFS=BUF_OFS+1 
-    mov cmd_buffer_BUF_OFS,#0x80
-    BUF_OFS=BUF_OFS+1 
-    mov cmd_buffer+BUF_OFS,#n 
-    .endm 
-
-    
-    ; send command 
-    .macro _send_cmd code 
-    ld a,#code 
-    call oled_cmd 
-    .endm 
-
-
     ; read buttons 
     .macro _read_buttons
     ld a,#BTN_PORT+GPIO_IDR 

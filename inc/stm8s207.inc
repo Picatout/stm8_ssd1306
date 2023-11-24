@@ -145,7 +145,7 @@ NFLASH_WS = NOPT7
  AFR3_TIM1    = BIT3
  AFR2_CCO     = BIT2
  AFR1_TIM2    = BIT1
- AFR0_ADC     = BIT0
+ AFR0_ADC2    = BIT0
 
 ; device ID = (read only)
  DEVID_XL  = (0x48CD)
@@ -343,7 +343,7 @@ PI = 40
  CLK_PCKENR1_I2C = (0)
 ; CLK_PCKENR2
  CLK_PCKENR2_CAN = (7)
- CLK_PCKENR2_ADC = (3)
+ CLK_PCKENR2_ADC2 = (3)
  CLK_PCKENR2_AWU = (2)
 
 ; Clock bits
@@ -971,40 +971,34 @@ UART3_PORT=PD
  TIM4_PSCR_128 = 7
 
 ; ADC2
- ADC_CSR  = (0x5400)
- ADC_CR1  = (0x5401)
- ADC_CR2  = (0x5402)
- ADC_CR3  = (0x5403)
- ADC_DRH  = (0x5404)
- ADC_DRL  = (0x5405)
- ADC_TDRH  = (0x5406)
- ADC_TDRL  = (0x5407)
+ ADC2_CSR  = (0x5400) ; ADC control/status register
+ ADC2_CR1  = (0x5401) ; ADC configuration register 1
+ ADC2_CR2  = (0x5402) ; ADC configuration register 2
+ ADC2_CR3  = (0x5403) ; ADC configuration register 3
+ ADC2_DRH  = (0x5404) ; ADC data register high
+ ADC2_DRL  = (0x5405) ; ADC data register low 
+ ADC2_TDRH  = (0x5406) ; ADC Schmitt trigger disable register high
+ ADC2_TDRL  = (0x5407) ; ADC Schmitt trigger disable register low 
  
-; ADC bitmasks
+; ADC2 bitmasks
 
- ADC_CSR_EOC = (7)
- ADC_CSR_AWD = (6)
- ADC_CSR_EOCIE = (5)
- ADC_CSR_AWDIE = (4)
- ADC_CSR_CH3 = (3)
- ADC_CSR_CH2 = (2)
- ADC_CSR_CH1 = (1)
- ADC_CSR_CH0 = (0)
+ ADC2_CSR_EOC = (7) ; end of conversion flag 
+ ADC2_CSR_AWD = (6) ; analog watchdog flag 
+ ADC2_CSR_EOCIE = (5) ; Interrupt enable for EOC 
+ ADC2_CSR_AWDIE = (4) ; Interrupt enable for AWD 
+ ADC2_CSR_CH = (0) ; bits 3:0 channel select field 
+ 
+ ADC2_CR1_SPSEL2 = (4) ; bits 6:4 pre-scaler selection 
+ ADC2_CR1_CONT = (1) ; continuous converstion 
+ ADC2_CR1_ADON = (0) ; converter on/off 
 
- ADC_CR1_SPSEL2 = (6)
- ADC_CR1_SPSEL1 = (5)
- ADC_CR1_SPSEL0 = (4)
- ADC_CR1_CONT = (1)
- ADC_CR1_ADON = (0)
+ ADC2_CR2_EXTTRIG = (6) ; external trigger enable 
+ ADC2_CR2_EXTSEL1 = (4) ; bits 5:4 external event selection  
+ ADC2_CR2_ALIGN = (3) ; data alignment  
+ ADC2_CR2_SCAN = (1) ; scan mode eanble 
 
- ADC_CR2_EXTTRIG = (6)
- ADC_CR2_EXTSEL1 = (5)
- ADC_CR2_EXTSEL0 = (4)
- ADC_CR2_ALIGN = (3)
- ADC_CR2_SCAN = (1)
-
- ADC_CR3_DBUF = (7)
- ADC_CR3_DRH = (6)
+ ADC2_CR3_DBUF = (7) ; data buffer enable 
+ ADC2_CR3_DRH = (6)  ; overrun flag 
 
 ; beCAN
  CAN_MCR = (0x5420)

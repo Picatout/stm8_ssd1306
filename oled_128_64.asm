@@ -22,6 +22,32 @@
 
     .include "inc/ssd1306.inc"
 
+;--------------------------------
+; oled commands macros 
+;----------------------------------
+
+    ; initialize cmd_buffer 
+    .macro _cmd_init 
+        BUF_OFS=0
+    .endm 
+
+    ; set oled command buffer values 
+    ; initialize BUF_OFS=0 
+    ; before using it 
+    .macro _set_cmd n
+    BUF_OFS=BUF_OFS+1 
+    mov cmd_buffer_BUF_OFS,#0x80
+    BUF_OFS=BUF_OFS+1 
+    mov cmd_buffer+BUF_OFS,#n 
+    .endm 
+
+    
+    ; send command 
+    .macro _send_cmd code 
+    ld a,#code 
+    call oled_cmd 
+    .endm 
+
 ;----------------------------
 ; initialize OLED display
 ;----------------------------
@@ -126,19 +152,18 @@ charge_pump_switch:
 ;     A     command code  
 ;---------------------------------
 oled_cmd:
-;    ldw x,#2 
-;    _strxz i2c_count 
+    pushw x 
     _clrz i2c_count 
     mov i2c_count+1,#2
     ldw x,#co_code 
     ld (1,x),a 
     ld a,#OLED_CMD 
-oled_send:
     ld (x),a   
     _strxz i2c_buf 
     mov i2c_devid,#OLED_DEVID 
     _clrz i2c_status
     call i2c_write
+    popw x 
     ret 
 
 ;---------------------------------
@@ -148,9 +173,18 @@ oled_send:
 ;---------------------------------
 oled_data:
     incw x   
-    _strxz i2c_count 
+    _strxz i2c_count     
     ldw x,#co_code 
     ld a,#OLED_DATA 
-    jra oled_send  
+    ld (x),a 
+    _strxz i2c_buf
+    mov i2c_devid,#OLED_DEVID 
+    _clrz i2c_status
+    call i2c_write
+    ret 
+
+
+
+
 
 

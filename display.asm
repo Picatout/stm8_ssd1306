@@ -29,11 +29,14 @@
 ;    A  page {0..7}
 ;--------------------------
 set_page:
+    _clrz cur_x
+    _straz cur_y
+    _straz start_page
     add a,#0xB0 
     call oled_cmd 
     _send_cmd COL_WND 
     _send_cmd 0 
-    _send_cmd 127 
+    _send_cmd 127
     ret 
 
 ;---------------------------
