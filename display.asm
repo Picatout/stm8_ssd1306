@@ -53,12 +53,12 @@ scroll_up:
 ;    ret 
 
 ;---------------------------
-;  clear page 
+;  clear line 
 ;  expect disp_buffer cleared 
 ;  input:
-;     A    page #
+;     A    line #
 ;---------------------------
-page_clear:
+line_clear:
     call set_line 
     clr disp_buffer 
     ldw x,#DISPLAY_BUFFER_SIZE 
@@ -90,7 +90,7 @@ display_clear:
     call clear_disp_buffer
     push #7
 2$: ld a,(1,sp)
-    call page_clear 
+    call line_clear 
     dec (1,sp)
     jrpl 2$ 
     _drop 1 
@@ -116,7 +116,7 @@ crlf:
     _straz line 
     call clear_disp_buffer 
     _ldaz line 
-    call page_clear
+    call line_clear
     _ldaz line 
     call set_line
     _ldaz scroll_line 
@@ -230,3 +230,118 @@ put_hex_int:
     call put_byte 
     ret 
 
+
+;----------------------------
+; copy bytes from (y) to (x)
+; input:
+;   a    count 
+;   x    destination 
+;   y    source 
+;---------------------------
+cmove:
+    tnz a  
+    jreq 9$ 
+    push a 
+1$: ld a,(y)
+    ld (x),a 
+    incw y 
+    incw x 
+    dec(1,sp)
+    jrne 1$
+    _drop 1 
+9$:    
+    ret 
+
+
+;--------------------------
+; put zoomed character 
+; at current line,col position 
+; input:
+;     Y    24 bytes font data 
+;---------------------------
+    XSAVE=1
+    LSAVE=3
+    CSAVE=4
+    BYTE_CNT=5
+    VAR_SIZE=5
+put_zoom_char:
+    _vars VAR_SIZE 
+    ldw (XSAVE,sp),x  
+    _ldxz line 
+    ldw (LSAVE,sp),x 
+    ldw x, #disp_buffer
+    ld a,#2*OLED_FONT_WIDTH
+    call cmove 
+    ldw x,#2*OLED_FONT_WIDTH
+    call oled_data
+    ld a,(LSAVE,sp)
+    inc a 
+    call set_line
+    ld a,(CSAVE,sp)
+    tnz a 
+    jreq 4$ 
+; put <col> spaces to display     
+    ld (BYTE_CNT,sp),a 
+2$: ld a,#SPACE 
+    call put_char 
+    dec (BYTE_CNT,sp)
+    jrne 2$ 
+4$: ldw x,#disp_buffer 
+    ld a,#2*OLED_FONT_WIDTH 
+    call cmove 
+    ldw x,#2*OLED_FONT_WIDTH
+    call oled_data 
+    ldw x,(XSAVE,sp)
+    _drop VAR_SIZE 
+    ret 
+
+
+;---------------------
+; zoom 6x8 character 
+; to 12x16 pixel 
+; input:
+;    A    character 
+;    Y    output_buffer
+; output:
+;    Y    *zoom data  
+;----------------------
+    BIT_CNT=1 
+    BYTE_CNT=2
+    BUFFER=3
+    VAR_SIZE=4
+zoom_char:
+    _vars VAR_SIZE 
+    ldw (BUFFER,sp),y 
+    sub a,#32 
+    ldw x,#OLED_FONT_WIDTH 
+    mul x,y 
+    addw x,#oled_font_6x8
+    ld a,#OLED_FONT_WIDTH
+    ld (BYTE_CNT,sp),a
+1$: ; byte loop 
+    ld a,#8 
+    ld (BIT_CNT,sp),a 
+    ld a,(x)
+    incw x
+2$:    
+    srl acc16 
+    rrc acc8 
+    srl acc16
+    rrc acc8 
+    srl a 
+    bccm acc16,#7 
+    bccm acc16,#6 
+    dec (BIT_CNT,sp)
+    jrne 2$ 
+    _ldaz acc8 
+    ld (y),a
+    ld (1,y),a  
+    _ldaz acc16 
+    ld (2*OLED_FONT_WIDTH,y),a
+    ld (2*OLED_FONT_WIDTH+1,y),a 
+    addw y,#2 
+    dec (BYTE_CNT,sp)
+    jrne 1$
+    ldw y,(BUFFER,sp) 
+    _drop VAR_SIZE 
+    ret 

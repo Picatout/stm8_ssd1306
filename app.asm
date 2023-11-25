@@ -15,6 +15,17 @@ app:
     call beep 
     call oled_init 
     call display_clear 
+ld a,#'a 
+ldw y,#free_ram
+call zoom_char  
+call put_zoom_char
+ld a,#4 
+call set_line 
+ld a,#'B
+ldw y,#free_ram 
+call zoom_char 
+call put_zoom_char
+jra .     
     ldw y,#prompt 
     call put_string 
     bset ADC2_CR2,#ADC2_CR2_ALIGN 

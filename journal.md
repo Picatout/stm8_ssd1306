@@ -1,5 +1,7 @@
 ### 2023-11-24
 
+* Débuté le travail pour ajouter un mode d'affichage ZOOM affichant 4 lignes de 10 caractères.
+
 * renommé certaines variables 
     * *cur_x*  renommé   *col* 
     * *cur_y*  renommé   *line* 

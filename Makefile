@@ -16,7 +16,7 @@ OBJCPY=objcpy
 CFLAGS=-mstm8 -lstm8 -L$(LIB_PATH) -I../inc
 INC=inc/
 INCLUDES=$(BOARD_INC) $(INC)gen_macros.inc $(INC)app_macros.inc config.inc 
-SRC=hardware_init.asm i2c.asm oled_128_64.asm hex_fonts.asm oled-font.asm display.asm\
+SRC=hardware_init.asm i2c.asm oled_128_64.asm oled-font.asm display.asm\
  monitor.asm $(NAME).asm
 OBJECT=$(BUILD_DIR)$(NAME).rel
 OBJECTS=$(BUILD_DIR)$(SRC:.asm=.rel)
