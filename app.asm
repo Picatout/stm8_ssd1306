@@ -68,7 +68,7 @@ MEGA_DISPLAY=1
     ldw x,#0x304
     call put_mega_string
     ldw y,#celcius 
-    ldw x,#0x3034
+    ldw x,#0x0334
     call put_mega_string  
 .else 
     pushw x  
