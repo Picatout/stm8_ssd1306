@@ -7,13 +7,13 @@
 ;  information 
 ;-----------------------
 	MAJOR=1
-	MINOR=0
+	MINOR=1
 	REV=0
 
 ; master clock frequency in Mhz 
 	FMSTR=16 
 
-DEBUG=0 ; set to 0 for final version 
+DEBUG=1 ; set to 0 for final version 
 
 WANT_TERMINAL=1 ; to have support for usart terminal  
 

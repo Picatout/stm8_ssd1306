@@ -1,3 +1,7 @@
+### 2023-11-25 
+
+* Complété le travail d'ajout de la police BIG. 
+
 ### 2023-11-24
 
 * Débuté le travail pour ajouter un mode d'affichage ZOOM affichant 4 lignes de 10 caractères.

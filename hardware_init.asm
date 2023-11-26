@@ -107,10 +107,15 @@ i2c_count: .blkw 1 ; bytes to transmit
 i2c_idx: .blkw 1 ; index in buffer
 i2c_status: .blkb 1 ; error status 
 i2c_devid: .blkb 1 ; device identifier  
-;OLED display 
-line: .blkb 1 ; text line char position {0..7} 
-col: .blkb 1 ;  text cursor column position {0..20}
-scroll_line: .blkb 1 ; display start scrolling when scroll_line==8 
+;; OLED display 
+line: .blkb 1 ; text line cursor position 
+col: .blkb 1 ;  text column cursor position
+cpl: .blkb 1 ; characters per line 
+disp_lines: .blkb 1 ; text lines per display  
+font_width: .blkb 1 ; character width in pixels 
+font_height: .blkb 1 ; character height in pixels 
+to_send: .blkb 1 ; bytes to send per character 
+disp_flags: .blkb 1 ; boolean flags 
 
 .if DEBUG 
 ; usart queue 
@@ -508,12 +513,11 @@ cold_start:
 ; take values from FLASH space 
 	ldw x,#I2cIntHandler
 	ldw seedy,x  
-	ldw x,#test_code 
-	ldw seedx,x  
-    jp test_code  	
-.else 
-	jp app 
+	ldw x,#app 
+	ldw seedx,x  	
 .endif ; DEBUG 
+	jp app 
+
 
 
 

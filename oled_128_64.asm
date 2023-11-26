@@ -81,7 +81,7 @@ oled_init::
     _send_cmd ((1<<PHASE1_PERIOD)+(15<<PHASE2_PERIOD))
 ; RAM addressing mode       
     _send_cmd ADR_MODE 
-    _send_cmd PAGE_MODE
+    _send_cmd HORZ_MODE
 ; Vcomh deselect level 0.83volt 
     _send_cmd VCOMH_DSEL 
     _send_cmd VCOMH_DSEL_83
@@ -111,6 +111,34 @@ all_display:
     _send_cmd 127
     ret 
 
+;-----------------------
+; set ram write window 
+; input:
+;     XH  col low  
+;     XL  col high
+;     YH  page low 
+;     YL  page high 
+;-----------------------
+set_window:
+    pushw x 
+    pushw y 
+call print_word 
+ld a,#SPACE 
+call putchar 
+ldw x,y 
+call print_word
+ld a,#CR 
+call putchar     
+    _send_cmd PAG_WND 
+    pop a 
+    call oled_cmd 
+    pop a 
+    call oled_cmd 
+    _send_cmd COL_WND 
+    pop a 
+    call oled_cmd 
+    pop a 
+    jp oled_cmd 
 
 .if 0
 ;------------------------

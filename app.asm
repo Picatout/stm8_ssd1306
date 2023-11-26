@@ -15,19 +15,12 @@ app:
     call beep 
     call oled_init 
     call display_clear 
-ld a,#'a 
-ldw y,#free_ram
-call zoom_char  
-call put_zoom_char
-ld a,#4 
-call set_line 
-ld a,#'B
-ldw y,#free_ram 
-call zoom_char 
-call put_zoom_char
-jra .     
+    ld a,#SMALL  
+    call select_font 
     ldw y,#prompt 
     call put_string 
+    ld a,#BIG 
+    call select_font 
     bset ADC2_CR2,#ADC2_CR2_ALIGN 
     bset ADC2_CR1,#ADC2_CR1_ADON 
     ld a,#10 ; ADC wake up delay  
@@ -71,8 +64,10 @@ jra .
 5$:
     pushw x  
     call itoa
-    ld a,#4 
-    call set_line 
+    ld a,#2 
+    _straz line
+    ld a,#2 
+    _straz col  
     call put_string 
     ldw y,#celcius 
     call put_string 
@@ -83,8 +78,10 @@ jra .
     div x,a 
     addw x,#32
     call itoa 
-    ld a,#6 
-    call set_line 
+    ld a,#3 
+    _straz line
+    ld a,#2 
+    _straz col  
     call put_string 
     ldw y,#fahrenheit
     call put_string 
@@ -111,37 +108,6 @@ mul16x8:
     rlwa x 
     addw x,(1,sp)
     _drop 2 
-    ret 
-
-;-----------------------
-; convert integer to 
-; ASCII string 
-; input:
-;   X    integer 
-;------------------------
-    SIGN=1
-itoa:
-    push #0 
-    tnzw x 
-    jrpl 1$ 
-    cpl (SIGN,SP)
-    negw x 
-1$: ldw y,#free_ram+8
-    clr(y)
-2$:
-    decw y 
-    ld a,#10 
-    div x,a 
-    add a,#'0 
-    ld (y),a 
-    tnzw x 
-    jrne 2$
-    tnz (SIGN,sp)
-    jrpl 4$
-    decw y 
-    ld a,#'-
-    ld (y),a 
-4$: _drop 1 
     ret 
 
 prompt: .asciz "demo MCP9701 sensor\nroom temperature"

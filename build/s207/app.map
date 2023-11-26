@@ -9,7 +9,6 @@ Area                                    Addr        Size        Decimal Bytes (A
       -----  --------------------------------   ------------------------
      FFFFFFFF  s_SSEG                          
      00000000  .__.ABS.                           HW_INIT
-     00000000  l_DATA                          
      00000000  l_SSEG                          
      00000000  l__CODE                         
      00000000  s_DATA1                         
@@ -17,11 +16,12 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000000  s_SSEG0                         
      00000000  s__CODE                         
      00000001  s_DATA                          
-     00000018  l_DATA1                         
+     00000007  l_DATA                          
+     00000058  l_DATA1                         
      00000080  l_HOME                          
      00000080  l_SSEG0                         
      00000081  l_DATA2                         
-     0000082C  l_CODE                          
+     00000B0A  l_CODE                          
      00008000  s_HOME                          
      00008080  s_CODE                          
 
@@ -48,7 +48,16 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-DATA1                               00000000    00000018 =          24. bytes (ABS,CON)
+DATA                                00000001    00000007 =           7. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+DATA1                               00000000    00000058 =          88. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -57,7 +66,7 @@ DATA1                               00000000    00000018 =          24. bytes (A
      00000012  ptr16                              HW_INIT
      00000014  flags                              HW_INIT
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
@@ -66,24 +75,25 @@ DATA2                               00000000    00000081 =         129. bytes (A
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                00008080    0000082C =        2092. bytes (REL,CON)
+CODE                                00008080    00000B0A =        2826. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     000082B0  oled_init                          HW_INIT
-
-ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+     00008164  prng                               HW_INIT
+     00008353  oled_init                          HW_INIT
+     000089CA  uart_getc                          HW_INIT
+ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
 
 Files Linked                              [ module(s) ]
 
 build/s207/app.rel                        [ HW_INIT ]
 
-ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
+ASxxxx Linker V03.00 + NoICE + sdld,  page 9.
 
 User Base Address Definitions
 

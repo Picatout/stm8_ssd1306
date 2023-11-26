@@ -23,46 +23,114 @@
 ;  below stack 
 ;-------------------------------
 
+; boolean flags  in 'disp_flags' 
+F_SCROLL=0 ; display scroll active 
+F_BIG=1 ; big font selected 
+
+; small font display specifications
+SMALL_CPL=21  ; character per line
+SMALL_LINES=8 ; display lines 
+SMALL_FONT_HEIGHT=OLED_FONT_HEIGHT  
+SMALL_FONT_WIDTH=OLED_FONT_WIDTH 
+SMALL_FONT_SIZE=6 ; character font bytes  
+
+; big font display specifications 
+BIG_CPL=10   ; character per line 
+BIG_LINES=4  ; display lines 
+BIG_FONT_HEIGHT=2*OLED_FONT_HEIGHT 
+BIG_FONT_WIDTH=2*OLED_FONT_WIDTH 
+BIG_FONT_SIZE=4*SMALL_FONT_SIZE ; character font bytes
+
+; zoom modes 
+SMALL=0 ; select small font 
+BIG=1 ; select big font  
+
+
 ;--------------------------
-; set text cursor line
+; select font 
 ; input:
-;    A  line {0..7}
+;    A   {SMALL,BIG}
 ;--------------------------
-set_line:
-    _clrz col
-    _straz line
-    _straz scroll_line 
-    add a,#0xB0 
-    call oled_cmd 
-    _send_cmd COL_WND 
-    _send_cmd 0 
-    _send_cmd (DISP_WIDTH-1)
+select_font:
+    tnz a 
+    jrne 2$ 
+; small font 
+    ld a,#SMALL_CPL 
+    _straz cpl 
+    ld a,#SMALL_LINES 
+    _straz disp_lines 
+    ld a,#SMALL_FONT_HEIGHT
+    _straz font_height
+    ld a,#SMALL_FONT_WIDTH
+    _straz font_width
+    ld a,#SMALL_FONT_SIZE
+    _straz to_send
+    sll line 
+    sll col
+    bres disp_flags,#F_BIG    
+    ret 
+2$: ; big font
+    _ldaz col 
+    cp a,#19
+    jrpl 9$  ; request rejected 
+    _ldaz line 
+    cp a,#7
+    jreq 9$  ; request rejected
+    ld a,#BIG_CPL 
+    _straz cpl 
+    ld a,#BIG_LINES 
+    _straz disp_lines 
+    ld a,#BIG_FONT_HEIGHT
+    _straz font_height
+    ld a,#BIG_FONT_WIDTH
+    _straz font_width
+    ld a,#BIG_FONT_SIZE
+    _straz to_send
+    btjf line,#0,4$
+    _incz line ; big font is lock step to even line  
+4$:
+    srl line 
+    btjf col,#0,6$ 
+    _incz col  ; big font is lock step to even column
+6$:
+    srl col
+9$:
+    bset disp_flags,#F_BIG    
     ret 
 
-;---------------------------
-; set display start line 
-;----------------------------
-scroll_up:
+
+;------------------------
+; set RAM window for 
+; current line 
+;-----------------------
+line_window:
+    pushw x 
+    pushw y 
+    ldw x,#0x7f ; columms: 0..127
+    _ldaz line 
+    btjf disp_flags,#F_BIG,1$ 
     sll a 
-    sll a 
-    sll a 
-    push a 
-    _send_cmd DISP_OFFSET
-    pop a  
-    jp oled_cmd
-;    ret 
+    ld yh,a 
+    inc a 
+    ld yl,a 
+1$: call set_window 
+    popw y 
+    popw x
+    ret 
+
 
 ;---------------------------
-;  clear line 
-;  expect disp_buffer cleared 
-;  input:
-;     A    line #
+;  clear current line 
 ;---------------------------
 line_clear:
-    call set_line 
-    clr disp_buffer 
+    call line_window 
+    call clear_disp_buffer
     ldw x,#DISPLAY_BUFFER_SIZE 
-    jp oled_data
+    call oled_data
+    btjf disp_flags,#F_BIG,9$
+    ldw x,#DISPLAY_BUFFER_SIZE
+    call oled_data 
+9$: ret 
 
 ;----------------------
 ; zero's display buffer 
@@ -87,21 +155,36 @@ clear_disp_buffer:
 ;--------------------------
 display_clear:
     push a 
+    pushw x 
+    call all_display 
     call clear_disp_buffer
-    push #7
-2$: ld a,(1,sp)
-    call line_clear 
+    push #8
+1$: ldw x,#DISPLAY_BUFFER_SIZE
+    call oled_data
     dec (1,sp)
-    jrpl 2$ 
+    jrne 1$ 
     _drop 1 
-    clr a 
-    _straz col
-    _straz line
-    _straz scroll_line  
-    call set_line
-    clr a 
-    call scroll_up 
+    _clrz line 
+    _clrz col
+    bres disp_flags,#F_SCROLL  
+    popw x
     pop a 
+    ret 
+
+;---------------------------
+; set display start line 
+;----------------------------
+scroll_up:
+    call line_clear 
+    _ldaz line 
+    ld xl,a 
+    ld a,font_height 
+    mul x,a 
+    ld a,xl 
+    push a 
+    _send_cmd DISP_OFFSET
+    pop a  
+    call oled_cmd
     ret 
 
 ;-----------------------
@@ -110,25 +193,19 @@ display_clear:
 ;------------------------
 crlf:
     _clrz col 
+    btjt disp_flags,#F_SCROLL,2$
     _ldaz line
-    inc a 
-    and a,#7 
-    _straz line 
-    call clear_disp_buffer 
-    _ldaz line 
-    call line_clear
-    _ldaz line 
-    call set_line
-    _ldaz scroll_line 
-    inc a  
-    cp a,#8
-    jrmi 6$ 
-    _ldaz line
-    inc a   
-    call scroll_up 
-    ret 
-6$: _straz scroll_line  
-    ret 
+    inc a
+    cp a,disp_lines 
+    jrpl 1$
+    _straz line
+    ret
+1$: bset disp_flags,#F_SCROLL
+    _clrz line       
+2$:
+    jp scroll_up     
+ 
+
 
 ;-----------------------
 ; move cursor right 
@@ -139,7 +216,7 @@ cursor_right:
     _ldaz col 
     add a,#1  
     _straz col 
-    cp a,#21 
+    cp a,cpl  
     jrmi 9$
     call crlf 
 9$: ret 
@@ -152,22 +229,44 @@ cursor_right:
 put_char:
     pushw x
     pushw y 
-	sub a,#32
-	ldw x,#OLED_FONT_WIDTH
-	mul x,a 
-	addw x,#oled_font_6x8
-    ldw y,x 
-    ldw x,#disp_buffer
-    push #OLED_FONT_WIDTH
+    push a 
+    _ldaz line
+    btjf disp_flags,#F_BIG,0$ 
+    sll a
+    ld yh,a 
+    inc a 
+    ld yl,a
+    jra 1$  
+0$: 
+    ld yl,a 
+    ld yh,a 
 1$:
-    ld a,(y)
-    ld (x),a 
-    incw x 
-    incw y 
-    dec (1,sp)
-    jrne 1$ 
-    _drop 1
-    ldw x,#OLED_FONT_WIDTH
+    _ldaz col 
+    ld xl,a 
+    _ldaz font_width
+    mul x,a 
+    ld a,xl 
+    ld xh,a 
+    add a,font_width 
+    dec a 
+    ld xl,a 
+    call set_window
+    pop a 
+ 	sub a,#SPACE 
+	ld yl,a  
+    ld a,#OLED_FONT_WIDTH  
+	mul y,a 
+	addw y,#oled_font_6x8
+    btjf disp_flags,#F_BIG,2$ 
+    call zoom_char
+    jra 3$  
+2$:
+    ldw x,#disp_buffer
+    _ldaz to_send  
+    call cmove 
+3$: clrw x 
+    _ldaz to_send  
+    ld xl,a 
     call oled_data 
     call cursor_right 
     popw y
@@ -195,6 +294,51 @@ put_string:
     jra 1$
 
 9$:  
+    ret 
+
+;-----------------------
+; convert integer to 
+; ASCII string 
+; input:
+;   X    integer 
+; output:
+;   Y     *string 
+;------------------------
+    SIGN=1
+itoa:
+    push #0 
+    tnzw x 
+    jrpl 1$ 
+    cpl (SIGN,SP)
+    negw x 
+1$: ldw y,#free_ram+8
+    clr(y)
+2$:
+    decw y 
+    ld a,#10 
+    div x,a 
+    add a,#'0 
+    ld (y),a 
+    tnzw x 
+    jrne 2$
+    tnz (SIGN,sp)
+    jrpl 4$
+    decw y 
+    ld a,#'-
+    ld (y),a 
+4$: _drop 1 
+    ret 
+
+;--------------------------
+; put integer to display
+; input:
+;    X   integer 
+;------------------------
+put_int:
+    pushw y 
+    call itoa 
+    call put_string 
+    popw y 
     ret 
 
 ;-------------------
@@ -252,77 +396,26 @@ cmove:
 9$:    
     ret 
 
-
-;--------------------------
-; put zoomed character 
-; at current line,col position 
-; input:
-;     Y    24 bytes font data 
-;---------------------------
-    XSAVE=1
-    LSAVE=3
-    CSAVE=4
-    BYTE_CNT=5
-    VAR_SIZE=5
-put_zoom_char:
-    _vars VAR_SIZE 
-    ldw (XSAVE,sp),x  
-    _ldxz line 
-    ldw (LSAVE,sp),x 
-    ldw x, #disp_buffer
-    ld a,#2*OLED_FONT_WIDTH
-    call cmove 
-    ldw x,#2*OLED_FONT_WIDTH
-    call oled_data
-    ld a,(LSAVE,sp)
-    inc a 
-    call set_line
-    ld a,(CSAVE,sp)
-    tnz a 
-    jreq 4$ 
-; put <col> spaces to display     
-    ld (BYTE_CNT,sp),a 
-2$: ld a,#SPACE 
-    call put_char 
-    dec (BYTE_CNT,sp)
-    jrne 2$ 
-4$: ldw x,#disp_buffer 
-    ld a,#2*OLED_FONT_WIDTH 
-    call cmove 
-    ldw x,#2*OLED_FONT_WIDTH
-    call oled_data 
-    ldw x,(XSAVE,sp)
-    _drop VAR_SIZE 
-    ret 
-
-
 ;---------------------
 ; zoom 6x8 character 
 ; to 12x16 pixel 
+; put data in disp_buffer 
 ; input:
-;    A    character 
-;    Y    output_buffer
-; output:
-;    Y    *zoom data  
+;    Y   character font address  
 ;----------------------
     BIT_CNT=1 
     BYTE_CNT=2
-    BUFFER=3
-    VAR_SIZE=4
+    VAR_SIZE=2
 zoom_char:
     _vars VAR_SIZE 
-    ldw (BUFFER,sp),y 
-    sub a,#32 
-    ldw x,#OLED_FONT_WIDTH 
-    mul x,y 
-    addw x,#oled_font_6x8
     ld a,#OLED_FONT_WIDTH
     ld (BYTE_CNT,sp),a
+    ldw x,#disp_buffer 
 1$: ; byte loop 
     ld a,#8 
     ld (BIT_CNT,sp),a 
-    ld a,(x)
-    incw x
+    ld a,(y)
+    incw y
 2$:    
     srl acc16 
     rrc acc8 
@@ -334,14 +427,15 @@ zoom_char:
     dec (BIT_CNT,sp)
     jrne 2$ 
     _ldaz acc8 
-    ld (y),a
-    ld (1,y),a  
+    ld (x),a
+    ld (1,x),a  
     _ldaz acc16 
-    ld (2*OLED_FONT_WIDTH,y),a
-    ld (2*OLED_FONT_WIDTH+1,y),a 
-    addw y,#2 
+    ld (2*OLED_FONT_WIDTH,x),a
+    ld (2*OLED_FONT_WIDTH+1,x),a 
+    addw x,#2 
     dec (BYTE_CNT,sp)
     jrne 1$
-    ldw y,(BUFFER,sp) 
     _drop VAR_SIZE 
     ret 
+
+
