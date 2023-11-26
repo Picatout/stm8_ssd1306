@@ -122,13 +122,6 @@ all_display:
 set_window:
     pushw x 
     pushw y 
-call print_word 
-ld a,#SPACE 
-call putchar 
-ldw x,y 
-call print_word
-ld a,#CR 
-call putchar     
     _send_cmd PAG_WND 
     pop a 
     call oled_cmd 

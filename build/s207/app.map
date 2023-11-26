@@ -21,7 +21,7 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000080  l_HOME                          
      00000080  l_SSEG0                         
      00000081  l_DATA2                         
-     00000B0A  l_CODE                          
+     00000AF9  l_CODE                          
      00008000  s_HOME                          
      00008080  s_CODE                          
 
@@ -80,13 +80,13 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                00008080    00000B0A =        2826. bytes (REL,CON)
+CODE                                00008080    00000AF9 =        2809. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00008164  prng                               HW_INIT
      00008353  oled_init                          HW_INIT
-     000089CA  uart_getc                          HW_INIT
+     000089B9  uart_getc                          HW_INIT
 ASxxxx Linker V03.00 + NoICE + sdld,  page 8.
 
 Files Linked                              [ module(s) ]
