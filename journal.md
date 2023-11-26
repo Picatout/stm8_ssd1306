@@ -1,5 +1,7 @@
 ### 2023-11-26
 
+* Readme update 
+
 * Corrigé [readme.md](readme.md)
 
 * Création de la méga fonte 24x32 pixels.

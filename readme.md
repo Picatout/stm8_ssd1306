@@ -15,6 +15,9 @@ Voir [display.asm](display.asm) pour l'interface de programmation application.
 * **display_clear** Efface l'affichage et déplace le curseur en haut à gauche.
 * **put_byte** Affiche un entier octet en hexadécimal à la position courante du curseur. L'octet est passé dans **A''  
 * **put_hex_int** Affiche un entier en hexadécimal à la position courante du curseur. L'entier est  passé dans **X**.
+* **put_mega_char** Affiche les caractères avec une police de 24x32 pixels. Cette police ne permet que 2 lignes de 5 caractères. Les coordonnées du coin supérieur gauche {page,colonne} doivent-être fournies dans le registre **X**, **XH**=PAGE, **XL**=COL. **A** contient le caractère à afficher. 
+* **put_mega_string** Affiche une chaîne ASCII en utilisant la police mega-font. Les coordonnées du coin supérieur gauche {page,colonne} doivent-être fournies dans le registre **X**, **XH**=PAGE, **XL**=COL. **Y** contient le pointeur vers la chaîne de caractère. 
+* **itoa** converti l'entier dans **X** en chaîne ASCII. Retourne le pointeur vers la chaîne dans **Y**.
 
 ## fichiers 
 
@@ -47,9 +50,26 @@ See [display.asm](display.asm) for text diplay API.
 * [tools/rotate-font.c](tools/rotate-font.c) source code of tool surd to rotate font [font.asm](font.asm) to [oled-font.asm](oled-font.asm).
 * [app.asm](app.asm) Demo application. Display room temperature in Celcius and Fahrahneit.
 
+## **display** functions. 
 
-## photo demo temperature sensor 
+* **put_char** Display character at actual cursor position and update cursor position. Character  in **A**.
+* **put_string** Display ASCII string at current cursor position and update cursor position. Pointer to string  in **Y**.
+* **select_font** Select active font, **A**= {SMALL,BIG}.
+* **crlf** Move cursor to beginning of next line.
+* **display_clear** Clear display and move cursor to top left corner.
+* **put_byte** Display byte in **A** in hexadecimal at cursor position. Cursor position updated.  
+* **put_hex_int** Display integer in **X** in hexadecimal at cursor position. Cursor position updated.
+* **put_mega_char** Display character in **A** at position given by **XH**=PAGE, **XL**=COL using mega-font of 24x32 pixels. 
+* **put_mega_string** Display ASCII string pointed by **Y** at position given by **XH**=PAGE, **XL**=COL using mega-font of 24x32 pixels.
+* **itoa** convert integer in **X** in ASCII string. Return string pointer in **Y**.
 
-Showing the 2 fonts size 
+## photos demo temperature sensor 
 
-![docs/photo-demo.jpg](docs/photo-demo.jpg)
+This demo mix small font and big font to display temperature in Celcius and Fahrahneit. 
+
+![docs/demo-big-font.jpg](docs/demo-big-font.jpg)
+
+This demo mix small font and mega font to display temperature in Celcius only 
+
+![docs/demo-mega-font.jpg](docs/demo-mega-font.jpg)
+

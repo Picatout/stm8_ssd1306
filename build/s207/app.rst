@@ -4420,7 +4420,7 @@ Hexadecimal [24-Bits]
       008B22 CD 87 4E         [ 4]   17     call display_clear 
       008B25 A6 00            [ 1]   18     ld a,#SMALL  
       008B27 CD 86 AE         [ 4]   19     call select_font 
-      008B2A 90 AE 8B BD      [ 2]   20     ldw y,#prompt 
+      008B2A 90 AE 8B DF      [ 2]   20     ldw y,#prompt 
       008B2E CD 88 03         [ 4]   21     call put_string 
       008B31 A6 01            [ 1]   22     ld a,#BIG 
       008B33 CD 86 AE         [ 4]   23     call select_font 
@@ -4439,18 +4439,18 @@ Hexadecimal [24-Bits]
       008B58 C6 54 04         [ 1]   36     ld a,ADC2_DRH 
       008B5B 95               [ 1]   37     ld xh,a 
       008B5C A6 21            [ 1]   38     ld a,#VREF10 ; 3.3*10 ref. voltage 
-      008B5E CD 8B AD         [ 4]   39     call mul16x8
+      008B5E CD 8B CF         [ 4]   39     call mul16x8
       008B61 90 AE 04 00      [ 2]   40     ldw y,#1024 
       008B65 65               [ 2]   41     divw x,y
       008B66                         42 2$:
       008B66 A6 0A            [ 1]   43     ld a,#10
-      008B68 CD 8B AD         [ 4]   44     call mul16x8  
+      008B68 CD 8B CF         [ 4]   44     call mul16x8  
       008B6B 1F 01            [ 2]   45     ldw (XSAVE,sp),x
       008B6D 0A 03            [ 1]   46     dec (REPCNT,sp)
       008B6F 27 10            [ 1]   47     jreq 4$    
       008B71 93               [ 1]   48     ldw x,y
       008B72 A6 0A            [ 1]   49     ld a,#10 
-      008B74 CD 8B AD         [ 4]   50     call mul16x8  
+      008B74 CD 8B CF         [ 4]   50     call mul16x8  
       008B77 90 AE 04 00      [ 2]   51     ldw y,#1024 
       008B7B 65               [ 2]   52     divw x,y
       008B7C 72 FB 01         [ 2]   53     addw x,(XSAVE,sp)
@@ -4470,80 +4470,84 @@ Hexadecimal [24-Bits]
       008B8F 2B 01            [ 1]   62     jrmi 5$
       008B91 5C               [ 1]   63     incw x
       008B92                         64 5$:
-                           000001    65 MEGA_DISPLAY=1
-                           000001    66 .if MEGA_DISPLAY
-      008B92 CD 88 18         [ 4]   67     call itoa
-      008B95 AE 03 04         [ 2]   68     ldw x,#0x304
-      008B98 CD 89 30         [ 4]   69     call put_mega_string
-      008B9B 90 AE 8B E2      [ 2]   70     ldw y,#celcius 
-      008B9F AE 03 34         [ 2]   71     ldw x,#0x0334
-      008BA2 CD 89 30         [ 4]   72     call put_mega_string  
-                           000000    73 .else 
-                                     74     pushw x  
-                                     75     call itoa
-                                     76     ld a,#2 
-                                     77     _straz line
-                                     78     ld a,#2 
-                                     79     _straz col  
-                                     80     call put_string 
-                                     81     ldw y,#celcius 
-                                     82     call put_string 
-                                     83     popw x 
-                                     84     ld a,#9
-                                     85     mul x,a 
-                                     86     ld a,#5 
-                                     87     div x,a 
-                                     88     addw x,#32
-                                     89     call itoa 
-                                     90     ld a,#3 
-                                     91     _straz line
-                                     92     ld a,#2 
-                                     93     _straz col  
-                                     94     call put_string 
-                                     95     ldw y,#fahrenheit
-                                     96     call put_string 
+                           000000    65 MEGA_FONT=0
+                           000000    66 .if MEGA_FONT
+                                     67     call itoa
+                                     68     ldw x,#0x304
+                                     69     call put_mega_string
+                                     70     ldw y,#celcius 
+                                     71     ldw x,#0x0334
+                                     72     call put_mega_string  
+                           000001    73 .else 
+      008B92 89               [ 2]   74     pushw x  
+      008B93 CD 88 18         [ 4]   75     call itoa
+      008B96 A6 02            [ 1]   76     ld a,#2 
+      000B18                         77     _straz line
+      008B98 B7 1D                    1     .byte 0xb7,line 
+      008B9A A6 02            [ 1]   78     ld a,#2 
+      000B1C                         79     _straz col  
+      008B9C B7 1E                    1     .byte 0xb7,col 
+      008B9E CD 88 03         [ 4]   80     call put_string 
+      008BA1 90 AE 8C 04      [ 2]   81     ldw y,#celcius 
+      008BA5 CD 88 03         [ 4]   82     call put_string 
+      008BA8 85               [ 2]   83     popw x 
+      008BA9 A6 09            [ 1]   84     ld a,#9
+      008BAB 42               [ 4]   85     mul x,a 
+      008BAC A6 05            [ 1]   86     ld a,#5 
+      008BAE 62               [ 2]   87     div x,a 
+      008BAF 1C 00 20         [ 2]   88     addw x,#32
+      008BB2 CD 88 18         [ 4]   89     call itoa 
+      008BB5 A6 03            [ 1]   90     ld a,#3 
+      000B37                         91     _straz line
+      008BB7 B7 1D                    1     .byte 0xb7,line 
+      008BB9 A6 02            [ 1]   92     ld a,#2 
+      000B3B                         93     _straz col  
+      008BBB B7 1E                    1     .byte 0xb7,col 
+      008BBD CD 88 03         [ 4]   94     call put_string 
+      008BC0 90 AE 8C 07      [ 2]   95     ldw y,#fahrenheit
+      008BC4 CD 88 03         [ 4]   96     call put_string 
                                      97 .endif 
-      008BA5 A6 32            [ 1]   98     ld a,#50 
-      008BA7 CD 80 E2         [ 4]   99     call pause 
-      008BAA CC 8B 43         [ 2]  100     jp 1$  
+      008BC7 A6 32            [ 1]   98     ld a,#50 
+      008BC9 CD 80 E2         [ 4]   99     call pause 
+      008BCC CC 8B 43         [ 2]  100     jp 1$  
                                     101 
                                     102 
                                     103 ;------------------------
                                     104 ; input:
                                     105 ;    x   
-                                    106 ;    a 
-                                    107 ; output:
-                                    108 ;    X   X*A 
-                                    109 ;------------------------
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 83.
 Hexadecimal [24-Bits]
 
 
 
-      008BAD                        110 mul16x8:
-      000B2D                        111     _strxz acc16 
-      008BAD BF 10                    1     .byte 0xbf,acc16 
-      008BAF 42               [ 4]  112     mul x,a 
-      008BB0 89               [ 2]  113     pushw x 
-      000B31                        114     _ldxz acc16 
-      008BB1 BE 10                    1     .byte 0xbe,acc16 
-      008BB3 5E               [ 1]  115     swapw x 
-      008BB4 42               [ 4]  116     mul x,a 
-      008BB5 4F               [ 1]  117     clr a 
-      008BB6 02               [ 1]  118     rlwa x 
-      008BB7 72 FB 01         [ 2]  119     addw x,(1,sp)
-      000B3A                        120     _drop 2 
-      008BBA 5B 02            [ 2]    1     addw sp,#2 
-      008BBC 81               [ 4]  121     ret 
+                                    106 ;    a 
+                                    107 ; output:
+                                    108 ;    X   X*A 
+                                    109 ;------------------------
+      008BCF                        110 mul16x8:
+      000B4F                        111     _strxz acc16 
+      008BCF BF 10                    1     .byte 0xbf,acc16 
+      008BD1 42               [ 4]  112     mul x,a 
+      008BD2 89               [ 2]  113     pushw x 
+      000B53                        114     _ldxz acc16 
+      008BD3 BE 10                    1     .byte 0xbe,acc16 
+      008BD5 5E               [ 1]  115     swapw x 
+      008BD6 42               [ 4]  116     mul x,a 
+      008BD7 4F               [ 1]  117     clr a 
+      008BD8 02               [ 1]  118     rlwa x 
+      008BD9 72 FB 01         [ 2]  119     addw x,(1,sp)
+      000B5C                        120     _drop 2 
+      008BDC 5B 02            [ 2]    1     addw sp,#2 
+      008BDE 81               [ 4]  121     ret 
                                     122 
-      008BBD 64 65 6D 6F 20 4D 43   123 prompt: .asciz "demo MCP9701 sensor\nroom temperature"
+      008BDF 64 65 6D 6F 20 4D 43   123 prompt: .asciz "demo MCP9701 sensor\nroom temperature"
              50 39 37 30 31 20 73
              65 6E 73 6F 72 0A 72
              6F 6F 6D 20 74 65 6D
              70 65 72 61 74 75 72
              65 00
-      008BE2 87 43 00               124 celcius: .byte DEGREE,'C',0  
-      008BE5 87 46 00               125 fahrenheit: .byte DEGREE,'F',0 
+      008C04 87 43 00               124 celcius: .byte DEGREE,'C',0  
+      008C07 87 46 00               125 fahrenheit: .byte DEGREE,'F',0 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 84.
 Hexadecimal [24-Bits]
 
@@ -4736,7 +4740,7 @@ Symbol Table
     IWDG_PR =  0050E1     |     IWDG_RLR=  0050E2     |     KPAD    =  000001 
     LED_BIT =  000005     |     LED_MASK=  000020     |     LED_PORT=  00500A 
     LF      =  00000A     |     MAJOR   =  000001     |     MAP_SEG0=  0000A0 
-    MAP_SEG0=  0000A1     |     MEGA_CPL=  000005     |     MEGA_DIS=  000001 
+    MAP_SEG0=  0000A1     |     MEGA_CPL=  000005     |     MEGA_FON=  000000 
     MEGA_FON=  000020     |     MEGA_FON=  000060     |     MEGA_FON=  000018 
     MEGA_LIN=  000002     |     MINOR   =  000001     |     MUX_RATI=  0000A8 
     NAFR    =  004804     |     NAK     =  000015     |     NCLKOPT =  004808 
@@ -4945,7 +4949,7 @@ Symbol Table
     ZERO_OFS=  000190     |   5 acc16      000010 GR  |   5 acc8       000011 GR
   7 all_disp   000351 R   |   7 app        000A9A R   |   7 beep       0000B1 R
   7 blink      000243 R   |   7 blink0     00023B R   |   7 blink1     000240 R
-  7 celcius    000B62 R   |   7 clear_di   0006BF R   |   7 cli        0008CC R
+  7 celcius    000B84 R   |   7 clear_di   0006BF R   |   7 cli        0008CC R
   7 clock_in   00002F R   |   7 cmove      0007E7 R   |   6 co_code    000100 R
   5 col        00001E R   |   7 cold_sta   000146 R   |   5 count      00005F R
   5 cpl        00001F R   |   7 crlf       000705 R   |   7 cursor_r   000720 R
@@ -4954,7 +4958,7 @@ Symbol Table
   7 end_of_t   0001EC R   |   7 evt_addr   0001C5 R   |   7 evt_btf    0001E0 R
   7 evt_rxne   0001F9 R   |   7 evt_sb     0001BF R   |   7 evt_stop   000214 R
   7 evt_txe    0001CB R   |   7 evt_txe_   0001D0 R   |   7 exam_blo   000944 R
-  7 fahrenhe   000B65 R   |   7 fast       00028C R   |   5 flags      000014 GR
+  7 fahrenhe   000B87 R   |   7 fast       00028C R   |   5 flags      000014 GR
   5 font_hei   000022 R   |   5 font_wid   000021 R   |   6 free_ram   000181 R
   2 free_ram   00177E R   |   7 getline    0009F8 R   |   5 i2c_buf    000015 R
   5 i2c_coun   000017 R   |   5 i2c_devi   00001C R   |   7 i2c_erro   000228 R
@@ -4963,7 +4967,7 @@ Symbol Table
   7 i2c_writ   00025E R   |   7 itoa       000798 R   |   7 key        00011B R
   4 last       000005 R   |   5 line       00001D R   |   7 line_cle   0006A7 R
   7 line_win   00068D R   |   4 mode       000000 R   |   7 modify     00092A R
-  7 mul16x8    000B2D R   |   7 new_row    000948 R   |   7 next_cha   0008DF R
+  7 mul16x8    000B4F R   |   7 new_row    000948 R   |   7 next_cha   0008DF R
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 91.
 Hexadecimal [24-Bits]
 
@@ -4974,7 +4978,7 @@ Symbol Table
   7 parse01    0008F1 R   |   7 parse_he   00096B R   |   7 pause      000062 R
   7 print_ad   000996 R   |   7 print_by   0009B0 R   |   7 print_di   0009B6 R
   7 print_me   00099E R   |   7 print_wo   0009A7 R   |   7 prng       0000E4 GR
-  7 prompt     000B3D R   |   5 ptr16      000012 GR  |   5 ptr8       000013 R
+  7 prompt     000B5F R   |   5 ptr16      000012 GR  |   5 ptr8       000013 R
   7 put_byte   0007CA R   |   7 put_char   00072F R   |   7 put_hex    0007D0 R
   7 put_hex_   0007DE R   |   7 put_int    0007BF R   |   7 put_mega   00083B R
   7 put_mega   0008B0 R   |   7 put_stri   000783 R   |   7 putchar    0009EF R
@@ -5002,5 +5006,5 @@ Area Table
    4 DATA       size      7   flags    8
    5 DATA1      size     58   flags    8
    6 DATA2      size     81   flags    8
-   7 CODE       size    B68   flags    0
+   7 CODE       size    B8A   flags    0
 

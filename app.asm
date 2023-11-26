@@ -62,8 +62,8 @@ app:
     jrmi 5$
     incw x
 5$:
-MEGA_DISPLAY=1
-.if MEGA_DISPLAY
+MEGA_FONT=0
+.if MEGA_FONT
     call itoa
     ldw x,#0x304
     call put_mega_string
