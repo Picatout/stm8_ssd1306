@@ -62,6 +62,15 @@ app:
     jrmi 5$
     incw x
 5$:
+MEGA_DISPLAY=1
+.if MEGA_DISPLAY
+    call itoa
+    ldw x,#0x304
+    call put_mega_string
+    ldw y,#celcius 
+    ldw x,#0x3034
+    call put_mega_string  
+.else 
     pushw x  
     call itoa
     ld a,#2 
@@ -85,6 +94,7 @@ app:
     call put_string 
     ldw y,#fahrenheit
     call put_string 
+.endif 
     ld a,#50 
     call pause 
     jp 1$  

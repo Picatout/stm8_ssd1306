@@ -1,3 +1,10 @@
+### 2023-11-26
+
+* Corrigé [readme.md](readme.md)
+
+* Création de la méga fonte 24x32 pixels.
+
+
 ### 2023-11-25 
 
 * Complété le travail d'ajout de la police BIG. 

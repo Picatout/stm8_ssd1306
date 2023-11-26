@@ -41,6 +41,13 @@ BIG_FONT_HEIGHT=2*OLED_FONT_HEIGHT
 BIG_FONT_WIDTH=2*OLED_FONT_WIDTH 
 BIG_FONT_SIZE=4*SMALL_FONT_SIZE ; character font bytes
 
+; mega font specifications 
+MEGA_CPL=5 
+MEGA_LINES=2 
+MEGA_FONT_HEIGHT=4*OLED_FONT_HEIGHT 
+MEGA_FONT_WIDTH=4*OLED_FONT_WIDTH 
+MEGA_FONT_SIZE=16*SMALL_FONT_SIZE 
+
 ; zoom modes 
 SMALL=0 ; select small font 
 BIG=1 ; select big font  
@@ -438,4 +445,112 @@ zoom_char:
     _drop VAR_SIZE 
     ret 
 
+;------------------------------
+; magnify character 4X 
+; resulting in 24x32 pixels font  
+; font size 96 bytes 
+; input:
+;    Y   character font address 
+;------------------------------
+    BIT_CNT=1 
+    BYTE_CNT=2
+    SHIFT_CNT=3 
+    BYTE=4
+    VAR_SIZE=4
+mega_char:
+    _vars VAR_SIZE 
+    ld a,#OLED_FONT_WIDTH
+    ld (BYTE_CNT,sp),a 
+    ldw x,#disp_buffer 
+1$: ; byte loop 
+    ld a,#8 
+    ld (BIT_CNT,sp),a 
+    ld a,(y)
+    ld (BYTE,sp),a 
+    incw y
+2$: ; bit loop 
+    ld a,#3 
+    ld (SHIFT_CNT,sp),a
+    srl (BYTE,sp)
+    rrc (x)  
+    rrc (24,x)
+    rrc (48,x)
+    rrc (72,x)
+3$: ; shift loop     
+    sra (x) 
+    rrc (24,x)
+    rrc (48,x)
+    rrc (72,x)
+    dec (SHIFT_CNT,sp)
+    jrne 3$ 
+    dec (BIT_CNT,sp)
+    jrne 2$ 
+    ld a,#3
+    ld (SHIFT_CNT,sp),a 
+4$: ; copy bytes in width 
+    ld a,(x)
+    ld (1,x),a 
+    ld a,(24,x)
+    ld (25,x),a 
+    ld a,(48,x)
+    ld (49,x),a 
+    ld a,(72,x)
+    ld (73,x),a 
+    incw x 
+    dec (SHIFT_CNT,sp)
+    jrne 4$ 
+    dec (BYTE_CNT,sp)
+    jrne 1$
+    _drop VAR_SIZE 
+    ret 
+
+;--------------------
+; put mega character 
+; string 
+;     XH   top page   
+;     XL   left column  
+;     Y    *string 
+;--------------------
+    PAGE=1 
+    COL=2 
+    VAR_SIZE=2 
+put_mega_string:
+    _vars VAR_SIZE 
+    ldw (PAGE,sp),x 
+; set page window
+    _send_cmd PAG_WND 
+    ld a,(PAGE,sp) 
+    call oled_cmd 
+    ld a,(PAGE,sp)
+    add a,#MEGA_FONT_HEIGHT/8-1 
+    call oled_cmd 
+1$: ; character loop 
+; set column window for this character 
+    _send_cmd COL_WND 
+    ld a,(COL,sp)
+    call oled_cmd
+    ld a,(COL,sp)
+    add a,#MEGA_FONT_WIDTH
+    ld (COL,sp),a 
+    dec a 
+    call oled_cmd 
+    ld a,(y)
+    jreq 8$
+    incw y 
+    sub a,#32 
+    clrw x 
+    ld xl,a
+    ld a,#OLED_FONT_WIDTH 
+    mul x,a  
+    addw x,#oled_font_6x8
+    pushw y 
+    ldw y,x 
+    call mega_char
+    ldw x,#MEGA_FONT_SIZE
+    call oled_data  
+    popw y 
+    jra 1$
+8$: 
+    _drop VAR_SIZE 
+    ret 
 
