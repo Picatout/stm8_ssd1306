@@ -12,7 +12,9 @@ VREF10=33 ; ADC Vref*10
     VAR_SIZE=3
 app:
     _vars VAR_SIZE 
-    call beep 
+    _led_on 
+    call beep
+    _led_off 
     call oled_init 
     call display_clear 
     ld a,#SMALL  
@@ -21,19 +23,20 @@ app:
     call put_string 
     ld a,#BIG 
     call select_font 
-    bset ADC2_CR2,#ADC2_CR2_ALIGN 
-    bset ADC2_CR1,#ADC2_CR1_ADON 
+    bset ADC_CR2,#ADC_CR2_ALIGN 
+    bset ADC_CR1,#ADC_CR1_ADON 
     ld a,#10 ; ADC wake up delay  
     call pause 
+    mov ADC_CSR,#ADC_CHANNEL
 1$: ; start conversion 
-    bset ADC2_CR1,#ADC2_CR1_ADON 
-    btjf ADC2_CSR,#ADC2_CSR_EOC,. 
-    bres ADC2_CSR,#ADC2_CSR_EOC
+    bset ADC_CR1,#ADC_CR1_ADON 
+    btjf ADC_CSR,#ADC_CSR_EOC,. 
+    bres ADC_CSR,#ADC_CSR_EOC
     ld a,#3
     ld (REPCNT,sp),a 
-    ld a,ADC2_DRL
+    ld a,ADC_DRL
     ld xl,a 
-    ld a,ADC2_DRH 
+    ld a,ADC_DRH 
     ld xh,a 
     ld a,#VREF10 ; 3.3*10 ref. voltage 
     call mul16x8

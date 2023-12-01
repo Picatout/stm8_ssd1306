@@ -157,36 +157,42 @@ GPIO_CR1 = (3)
 GPIO_CR2 = (4)
 
 ; GPIO
+ PA_BASE = (0x5000)
  PA_ODR  = (0x5000)
  PA_IDR  = (0x5001)
  PA_DDR  = (0x5002)
  PA_CR1  = (0x5003)
  PA_CR2  = (0x5004)
 
+ PB_BASE = (0x5005)
  PB_ODR  = (0x5005)
  PB_IDR  = (0x5006)
  PB_DDR  = (0x5007)
  PB_CR1  = (0x5008)
  PB_CR2  = (0x5009)
 
+ PC_BASE = (0x500A)
  PC_ODR  = (0x500A)
  PC_IDR  = (0x500B)
  PC_DDR  = (0x500C)
  PC_CR1  = (0x500D)
  PC_CR2  = (0x500E)
 
+ PD_BASE = (0x500F)
  PD_ODR  = (0x500F)
  PD_IDR  = (0x5010)
  PD_DDR  = (0x5011)
  PD_CR1  = (0x5012)
  PD_CR2  = (0x5013)
 
+ PE_BASE = (0x5014)
  PE_ODR  = (0x5014)
  PE_IDR  = (0x5015)
  PE_DDR  = (0x5016)
  PE_CR1  = (0x5017)
  PE_CR2  = (0x5018)
 
+ PF_BASE = (0x5019)
  PF_ODR  = (0x5019)
  PF_IDR  = (0x501A)
  PF_DDR  = (0x501B)
@@ -451,6 +457,7 @@ B460800=8
 B921600=9
 
 ; UART1
+UART1 = 0x5230 
  UART1_SR    = (0x5230)
  UART1_DR    = (0x5231)
  UART1_BRR1  = (0x5232)
@@ -752,16 +759,41 @@ TIM1_OISR_OSN4=7
  TIM2_CCER1  = (0x530A)
  TIM2_CCER2  = (0x530B)
  TIM2_CNTRH  = (0x530C)
- TIM2_CNTRL  = (0x530C)
+ TIM2_CNTRL  = (0x530D)
  TIM2_PSCR  = (0x530E)
  TIM2_ARRH  = (0x530F)
- TIM2_ARRL  = (0x5319)
+ TIM2_ARRL  = (0x5310)
  TIM2_CCR1H  = (0x5311)
  TIM2_CCR1L  = (0x5312)
  TIM2_CCR2H  = (0x5313)
  TIM2_CCR2L  = (0x5314)
  TIM2_CCR3H  = (0x5315)
  TIM2_CCR3L  = (0x5316)
+
+; TIM2_CR1 bitfields
+ TIM2_CR1_CEN=(0) ; Counter enable
+ TIM2_CR1_UDIS=(1) ; Update disable
+ TIM2_CR1_URS=(2) ; Update request source
+ TIM2_CR1_OPM=(3) ; One-pulse mode
+ TIM2_CR1_ARPE=(7) ; Auto-reload preload enable
+
+; TIMER2_CCMR bitfields 
+ TIM2_CCMR_CCS=(0) ; input/output select
+ TIM2_CCMR_OCPE=(3) ; preload enable
+ TIM2_CCMR_OCM=(4)  ; output compare mode 
+
+; TIMER2_CCER1 bitfields
+ TIM2_CCER1_CC1E=(0)
+ TIM2_CCER1_CC1P=(1)
+ TIM2_CCER1_CC2E=(4)
+ TIM2_CCER1_CC2P=(5)
+
+; TIMER2_EGR bitfields
+ TIM2_EGR_UG=(0) ; update generation
+ TIM2_EGR_CC1G=(1) ; Capture/compare 1 generation
+ TIM2_EGR_CC2G=(2) ; Capture/compare 2 generation
+ TIM2_EGR_CC3G=(3) ; Capture/compare 3 generation
+ TIM2_EGR_TG=(6); Trigger generation
 
 ; Timer 4
  TIM4_CR1  = (0x5340)

@@ -498,6 +498,10 @@ cold_start:
 ; set sound output 	
 	bset SOUND_PORT+GPIO_DDR,#SOUND_BIT 
 	bset SOUND_PORT+GPIO_CR1,#SOUND_BIT 
+; led output 
+	bset LED_PORT+GPIO_DDR,#LED_BIT 
+	bset LED_PORT+GPIO_CR1,#LED_BIT
+	_led_off 
 .if DEBUG 
 	call uart_init 
 .endif ;DEBUG 	

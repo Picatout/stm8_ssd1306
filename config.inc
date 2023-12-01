@@ -23,6 +23,10 @@ TIB_SIZE=40
 SOUND_PORT=PD_BASE 
 SOUND_BIT=4 
 
+LED_PORT=PD_BASE 
+LED_BIT=2
+
+
 BTN_PORT=PC_BASE 
 BTN_IDR=PC_IDR
 BTN_A=1
@@ -47,8 +51,19 @@ ALL_KEY_UP=(1<<BTN_A)|(1<<BTN_B)|(1<<BTN_UP)|(1<<BTN_DOWN)|(1<<BTN_LEFT)|(1<<BTN
 ; ss1306 device ID 
 	OLED_DEVID = 0x78 
 	.include "inc/ascii.inc"
+
+S207=0
+.if S207
+S103=0	
     .include "inc/stm8s207.inc"
 	.include "inc/nucleo_8s207.inc" 
+.else 
+S103=1
+.endif
+.if S103 
+	.include "inc/stm8s103f3.inc"
+	.include "inc/stm8s103f3_config.inc" 
+.endif 
 	.include "inc/gen_macros.inc" 
 	.include "app_macros.inc" 
 

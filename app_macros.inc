@@ -91,3 +91,21 @@
     cp a,#ALL_KEY_UP 
     jrne loop 
     .endm 
+
+;------------------------
+; LED control 
+;-----------------------
+
+    .macro _led_on 
+    bset LED_PORT+GPIO_ODR,#LED_BIT 
+    .endm 
+
+    .macro _led_off 
+    bres LED_PORT+GPIO_ODR,#LED_BIT
+    .endm 
+
+    .macro _led_toggle 
+    bcpl LED_PORT+GPIO_ODR,#LED_BIT
+    .endm 
+
+    
